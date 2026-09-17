@@ -7,7 +7,8 @@
  * re-planning after a wave costs one command instead of an editing session.
  *
  * Ownership is partitioned by SOURCE ID, because the demo files are named per
- * source (`demos/group-*/source-NN*.ts`). Two lanes never touch one file.
+ * source: each demo file is named for the source it shows. Two lanes never
+ * touch one file.
  *
  *   node plan-night.mjs --lanes 4
  */
@@ -44,9 +45,35 @@ for (const group of readdirSync(demoDir)) {
   }
 }
 
-const failedIds = new Set(
-  report.results.filter((r) => r.verdict !== 'DREW SOMETHING').map((r) => r.sourceId),
-);
+/**
+ * Recompute the tier from the raw stats rather than trusting the verdict string
+ * in the report, which may have been written by an older scoring pass. Only
+ * BLOCKING tiers become work; LOOSE framing is advisory and must not consume a
+ * lane's budget while things are still BLANK.
+ */
+function tier(s) {
+  const m = s.modalToneShare ?? 0;
+  const e = s.edgeDensity ?? 0;
+  if ((s.distinctColours ?? 0) <= 2) return 'BLANK';
+  if ((s.maxLuma ?? 0) < 24) return 'BLACK';
+  if (m > 0.85) return 'UNFRAMED';
+  if (m > 0.60 && e < 0.04) return 'UNFRAMED';
+  if (e < 0.02) return 'FLAT';
+  if (m > 0.60) return 'LOOSE';
+  return 'OK';
+}
+const BLOCKING = new Set(['BLANK', 'BLACK', 'UNFRAMED', 'FLAT']);
+
+const tiers = new Map();
+for (const r of report.results) {
+  if (r.sourceId == null) continue;
+  const t = tier(r);
+  // A source with several demos takes its worst tier.
+  const rank = ['OK', 'LOOSE', 'FLAT', 'UNFRAMED', 'BLACK', 'BLANK'];
+  const prev = tiers.get(r.sourceId);
+  if (!prev || rank.indexOf(t) > rank.indexOf(prev)) tiers.set(r.sourceId, t);
+}
+const failedIds = new Set([...tiers].filter(([, t]) => BLOCKING.has(t)).map(([id]) => id));
 
 /* ------------------------------------------------------------- the worklist */
 
@@ -57,7 +84,7 @@ for (const source of catalog.sources) {
   const blocked = Boolean(source.blocker?.reason);
 
   if (failedIds.has(id)) {
-    work.push({ id, kind: 'FIX', title: source.title, status: source.status, blocked,
+    work.push({ id, kind: 'FIX', tier: tiers.get(id), title: source.title, status: source.status, blocked,
                 files: [...(entry?.files ?? [])] });
   } else if (!entry?.hasFactory && !blocked && source.status !== 'alias') {
     work.push({ id, kind: 'BUILD', title: source.title, status: source.status, blocked,
@@ -91,7 +118,7 @@ capture harness you now have and how to iterate against it.
 
 ## Your assignment
 
-${items.map((it) => `- **${it.kind} source ${it.id}** — ${it.title}${it.blocked ? '  _(catalogue records a blocker — read it before assuming you can build this)_' : ''}`).join('\n')}
+${items.map((it) => `- **${it.kind} source ${it.id}**${it.tier ? ` _(captured: ${it.tier})_` : ''} — ${it.title}${it.blocked ? '  _(catalogue records a blocker — read it before assuming you can build this)_' : ''}`).join('\n')}
 
 ## Files you own
 

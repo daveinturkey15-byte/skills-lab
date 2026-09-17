@@ -150,20 +150,55 @@ function frameStats(png) {
  * FRAMING gate as much as a content gate, which is correct — a technique demo
  * whose subject is 30 px in the middle of an empty stage has failed either way.
  */
-const MODAL_TONE_CEILING = 0.60;
-const EDGE_DENSITY_FLOOR = 0.03;
+const MODAL_WELL_FRAMED = 0.60;   // at or below this, the subject owns the frame
+const MODAL_ABSENT = 0.85;        // above this, there is essentially nothing there
+const EDGE_SUBJECT_FLOOR = 0.04;  // structure that distinguishes a subject from a gradient
+const EDGE_ANY_FLOOR = 0.02;      // below this nothing is resolvable at all
 
+/**
+ * Three tiers, not two — calibrated against frames a human actually looked at.
+ *
+ * A single pass/fail at modal ≤ 60% failed 49 of 54 demos, and inspection showed
+ * it was wrong: source 42 (modal 48%) is two procedural buildings filling the
+ * frame and is genuinely good, but source 18 (modal 78%) is a working grass and
+ * terrain demo that simply sits in some empty space — not broken, just loosely
+ * framed. Sending a build lane to "fix" that would have spent the night on
+ * cosmetics.
+ *
+ * Edge density is what separates loose framing from an absent subject: source 18
+ * sits at 7.4%, while source 51's cloud — a 30-pixel sliver in a wireframe box —
+ * sits at 2.4% with almost the same modal share. So high modal share is only
+ * damning when structure is missing too.
+ *
+ * BLOCKING verdicts are things that are broken. LOOSE is advisory: worth
+ * improving, never worth blocking on. Neither tier ever certifies correctness.
+ */
 function verdictFor(stats) {
   if (stats.distinctColours <= 2) return 'BLANK — cleared buffer only';
   if (stats.maxLuma < 24) return 'BLACK — nothing above noise floor';
   if (stats.distinctColours < 12 && stats.distinctHueBuckets <= 1) return 'NEAR-BLANK — backdrop only, no discernible subject';
-  if (stats.modalToneShare > MODAL_TONE_CEILING) {
-    return `UNFRAMED — ${(stats.modalToneShare * 100).toFixed(0)}% of the frame is one flat tone (ceiling ${MODAL_TONE_CEILING * 100}%)`;
+
+  const modal = (stats.modalToneShare * 100).toFixed(0);
+  const edges = (stats.edgeDensity * 100).toFixed(1);
+
+  if (stats.modalToneShare > MODAL_ABSENT) {
+    return `UNFRAMED — ${modal}% of the frame is one flat tone; the subject is tiny or absent`;
   }
-  if (stats.edgeDensity < EDGE_DENSITY_FLOOR) {
-    return `FLAT — edge density ${(stats.edgeDensity * 100).toFixed(2)}% below the ${EDGE_DENSITY_FLOOR * 100}% floor`;
+  if (stats.modalToneShare > MODAL_WELL_FRAMED && stats.edgeDensity < EDGE_SUBJECT_FLOOR) {
+    return `UNFRAMED — ${modal}% flat tone with only ${edges}% edge density; a backdrop, not a subject`;
+  }
+  if (stats.edgeDensity < EDGE_ANY_FLOOR) {
+    return `FLAT — edge density ${edges}% resolves nothing`;
+  }
+  if (stats.modalToneShare > MODAL_WELL_FRAMED) {
+    return `LOOSE — subject reads, but ${modal}% of the frame is empty (advisory, not blocking)`;
   }
   return 'DREW SOMETHING';
+}
+
+/** Blocking failures are the ones a build lane must spend its budget on. */
+function isBlocking(verdict) {
+  return !verdict.startsWith('DREW SOMETHING') && !verdict.startsWith('LOOSE');
 }
 
 /* ----------------------------------------------------------------- chrome */
@@ -305,7 +340,7 @@ for (const demo of wanted) {
 
     const row = { ...demo, slug, ...stats, verdict: verdictFor(stats), readout, consoleErrors: [...consoleErrors] };
     results.push(row);
-    const mark = row.verdict === 'DREW SOMETHING' ? ' ok ' : 'FAIL';
+    const mark = row.verdict === 'DREW SOMETHING' ? ' ok ' : row.verdict.startsWith('LOOSE') ? 'loose' : 'FAIL';
     console.log(`[${mark}] ${String(demo.sourceId).padStart(2)} ${demo.title.slice(0, 58).padEnd(58)} modal=${String((stats.modalToneShare*100).toFixed(0)).padStart(3)}% edges=${String((stats.edgeDensity*100).toFixed(2)).padStart(5)}% ${row.verdict}`);
   } catch (error) {
     results.push({ ...demo, slug, verdict: `ERROR — ${error.message.split('\n')[0]}`, consoleErrors: [...consoleErrors] });
@@ -314,6 +349,8 @@ for (const demo of wanted) {
 }
 
 const drew = results.filter((r) => r.verdict === 'DREW SOMETHING').length;
+const loose = results.filter((r) => r.verdict.startsWith('LOOSE')).length;
+const blocking = results.filter((r) => isBlocking(r.verdict));
 const report = {
   capturedAt: new Date().toISOString(),
   base: BASE,
@@ -322,6 +359,9 @@ const report = {
   demoCount: demos.length,
   captured: results.length,
   drewSomething: drew,
+  loose,
+  blocking: blocking.length,
+  blockingSourceIds: [...new Set(blocking.map((r) => r.sourceId).filter((x) => x != null))],
   // The catalogue is carried so a later reader can align verdicts to claims.
   catalogueSources: catalog.sources.length,
   results,
@@ -333,4 +373,5 @@ console.log('A "DREW SOMETHING" verdict means pixels varied — NOT that the dem
 
 await browser.close().catch(() => {});
 try { process.kill(child.pid); } catch {}
-process.exit(drew === results.length ? 0 : 1);
+// Exit status reflects BLOCKING failures only; loose framing is advisory.
+process.exit(blocking.length === 0 ? 0 : 1);

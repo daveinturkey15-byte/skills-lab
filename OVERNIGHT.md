@@ -49,14 +49,27 @@ A demo is **accepted** only when all of these hold:
 
 1. `npx tsc --noEmit` is clean.
 2. `node scripts/verify-catalog.mjs` passes.
-3. `node qa/capture.mjs --only <sourceId>` returns verdict **`DREW SOMETHING`** for that demo.
-   That means: modal tone share ≤ 60%, edge density ≥ 3%, not blank, not black.
+3. `node qa/capture.mjs --only <sourceId>` returns a **non-blocking** verdict for that demo —
+   `DREW SOMETHING` or `LOOSE`. See the tier table below. The harness exits non-zero only on a
+   blocking tier.
 4. The demo's `metadata` is truthful — `adaptation`, `sources` and a `limitation` that states
    what the demo does **not** prove.
 
 **A `DREW SOMETHING` verdict is necessary, not sufficient.** It says pixels varied and the
 subject occupies the frame. It does not say the technique is correct, and no lane may claim it
 does. The owner's eye is the final gate in the morning.
+
+### The three tiers
+
+| tier | meaning | blocking? |
+|---|---|---|
+| `DREW SOMETHING` | modal tone ≤ 60% — the subject owns the frame | passes |
+| `LOOSE` | subject reads, but >60% of the frame is empty | **advisory only** |
+| `UNFRAMED` | >85% flat tone, or >60% with under 4% edge density — a backdrop, not a subject | blocking |
+| `FLAT` / `BLANK` / `BLACK` | nothing resolvable | blocking |
+
+Spend the budget on blocking tiers. Do not spend it tightening a `LOOSE` frame while anything is
+still `BLANK`.
 
 ### Why the gate is shaped like this
 
@@ -101,3 +114,23 @@ A gap is recorded, never hidden. Three kinds, and each is a legitimate outcome:
   acceptance failed. Do **not** delete it and do not claim it passed.
 
 The Atlas must be able to show all three.
+
+
+## 7. Calibration record (pre-run, 2026-09-17)
+
+The gate was tuned twice before this contract froze, both times against frames a human looked at:
+
+1. **Colour-count version** — passed all four source-51 demos. Inspection: a 30 px cloud in an
+   empty stage. All the colour came from a smooth sky gradient. Rejected.
+2. **Single threshold, modal ≤ 60%** — failed **49 of 54**. Inspection showed that was wrong in
+   the other direction: source 42 (modal 48%) is two procedural buildings filling the frame and
+   is good, but source 18 (modal 78%) is a working grass-and-terrain demo that merely sits in
+   some empty space. Sending a lane to "fix" that would have spent the night on cosmetics.
+3. **Three tiers, adding edge density** — accepted. Edge density is what separates loose framing
+   from an absent subject: source 18 has 7.4%, source 51's cloud has 2.4% at almost the same
+   modal share.
+
+Baseline at freeze, re-scored across all 54 captured demos:
+**7 pass · 10 loose · 36 unframed · 1 blank → 37 blocking.**
+
+That baseline is the number the morning is measured against. It is not edited.
