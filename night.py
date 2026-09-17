@@ -32,7 +32,7 @@ LOGS = ROOT / "logs"
 STATE = LOGS / "night-state.json"
 
 BUILD_LANES = ["N1", "N2", "N3", "N4"]
-ANALYSIS_LANES = ["R", "S"]          # launched once, in wave 1, alongside the builders
+ANALYSIS_LANES: list[str] = []       # R and S were launched by hand in wave 1; adopted, not relaunched
 MAX_WAVES = 4
 MAX_CONCURRENT = 6
 STOP_HOUR = 7                        # 07:00 local
@@ -55,7 +55,6 @@ def run(cmd: list[str], **kw) -> subprocess.CompletedProcess:
 def capture() -> dict:
     """Full capture on a real adapter. Returns the parsed report (or an error dict)."""
     print("  capture: running against a real WebGPU adapter ...", flush=True)
-    proc = run([sys.executable.replace("python.exe", "python.exe"), "-c", "pass"])  # noop, keep shape
     proc = subprocess.run(
         ["node", "qa/capture.mjs", "--base", "http://localhost:5183", "--settle", "2500"],
         cwd=str(ROOT), capture_output=True, text=True,
@@ -128,6 +127,18 @@ def main() -> None:
 
     state = {"startedAt": datetime.now().isoformat(timespec="seconds"),
              "stopAt": deadline.isoformat(timespec="seconds"), "waves": []}
+
+    # Wave 1 may already have been launched by hand. Adopt it rather than
+    # starting a duplicate wave on top of lanes that are mid-edit.
+    if (LOGS / "manifest.json").exists():
+        existing = json.loads((LOGS / "manifest.json").read_text())
+        live = [r for r in existing if alive(r["pid"])]
+        if live:
+            print(f"adopting {len(live)} lane(s) already running: "
+                  f"{', '.join(sorted({r['lane'] for r in live}))}", flush=True)
+            state["adopted"] = sorted({r["lane"] for r in live})
+            save(state)
+            wait_for(live, deadline)
 
     for wave in range(1, MAX_WAVES + 1):
         if datetime.now() >= deadline:

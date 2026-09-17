@@ -17,3 +17,11 @@ spark.py
 # QA harness output and its throwaway Chrome profile.
 qa/captures/
 qa/node_modules/
+
+# Agent-fleet orchestration. Kept local: these reference absolute paths into the
+# operational vault and the AKP passport, and they drive a private model fleet.
+# The repository publishes the lab, its evidence harness and the run contract.
+night.py
+run-night.cmd
+plan-night.mjs
+logs/
