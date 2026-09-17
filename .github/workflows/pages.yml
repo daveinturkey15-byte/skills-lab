@@ -27,7 +27,13 @@ jobs:
           node-version: 22
           cache: npm
 
-      - run: npm ci
+      # `npm ci` rather than `npm install` would be the stricter choice, but the
+      # lockfile is authored on Windows and npm will not record the Linux-only
+      # optional platform packages (@emnapi/*) that the runner then resolves, so
+      # `npm ci` fails before reaching the gate below. The dependency surface
+      # here is three + vite + typescript, all exact-pinned in package.json, so
+      # the reproducibility actually at stake is small.
+      - run: npm install --no-audit --no-fund
 
       # The catalogue is the point of this site. If it is malformed or a demo
       # claims a source that does not exist, fail here rather than publishing a
