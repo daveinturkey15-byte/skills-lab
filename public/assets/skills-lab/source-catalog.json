@@ -2840,11 +2840,16 @@
      "inspectedAt": "2026-09-17",
      "observation": "The \"MakeHuman CC0\" attribution is the POSTER'S claim: MakeHuman's own licence page returned HTTP 404 and the repository README carries no licence statement when probed 2026-09-17 — the base-mesh licence remains UNVERIFIED.",
      "url": "https://github.com/makehumancommunity/makehuman"
+    },
+    {
+     "inspectedAt": "2026-09-17",
+     "observation": "dermis-cuda @ 6c7c598 (MIT — LICENSE read at pin: \"Copyright (c) 2026 SamG-Coder and CUDA WebShader contributors\"). Its README states the work is \"not a scan or a claim of photorealism\". Source read finds no image input path: the only \"capture\" is a button writing the framebuffer out to PNG. The head is one fixed CC0 MakeHuman male, sha256-pinned in provenance.json, subdivided to 73,369 verts, with exactly one blendshape channel (blink). This supports, rather than weakens, the NOT-a-likeness finding.",
+     "url": "https://github.com/SamG-Coder/dermis-cuda"
     }
    ],
    "limitations": [
-    "EXPLICITLY NOT A FACE-CAPTURE OR LIKENESS ROUTE: a procedural human renderer on a MakeHuman base. Must not be re-read as identity capture.",
-    "No DERMIS repository or write-up located; pipeline claims (100,000 scalp strands, CUDA-authored) come from the post.",
+    "EXPLICITLY NOT A FACE-CAPTURE OR LIKENESS ROUTE: a procedural human renderer on a fixed MakeHuman base. Must not be re-read as identity capture. Confirmed by the located repository: no image input path, one fixed base head, a single blink channel — there is nothing here that could take a likeness.",
+    "Repository located since first record: SamG-Coder/dermis-cuda @ 6c7c598 (MIT, licence file read at pin). Pipeline claims now pinned to a source read (framebuffer-PNG capture only; 73,369-vert subdivided MakeHuman male; one blink channel), not just the post.",
     "MakeHuman base-mesh licence claim unverified from MakeHuman’s own licence text."
    ],
    "method": "No portable implementation. Comparator atoms: compute-authored scalp strands with per-strand length limits and breeze; procedural skin and iris detail; live expression editing; diagnostic views; a chaptered live-demo presentation with an on-screen GPU capture badge.",
@@ -2863,6 +2868,11 @@
      "kind": "owner-post",
      "label": "Owner-shared author post (frames extracted from the 120 s video)",
      "url": "https://x.com/samgcoder/status/2100145265235923015"
+    },
+    {
+     "kind": "repo",
+     "label": "dermis-cuda @ 6c7c598 (MIT, licence file read at pin)",
+     "url": "https://github.com/SamG-Coder/dermis-cuda"
     }
    ]
   },
@@ -3032,9 +3042,9 @@
    "limitations": [
     "UNRELEASED work-in-progress: no repository, no download, no licence.",
     "COMMERCIAL-GAME CONTENT: the frames show Call of Duty-derived assets (weapon viewmodel track names, a \"CoD Shader\" tab). Such imported assets are private-use only and must never be redistributed.",
-    "What \"AGR\" abbreviates is not established from the frames."
+    "\"AGR\" is now partly established and deliberately left OPEN: \"AdvancedFX Game Recording\" (advancedfx/advancedfx) names a real format, but that repo's hook DLLs cover GoldSrc, Source 1 and Source 2 only — not Call of Duty — while the CoD scene built its own analogue T6GR (\"T6 Game Recording\", T6 = Black Ops 2) and the C2M support Discord is itself named \"AGR TechSupport\". The name may mean the format or the community; not resolved here."
    ],
-   "method": "No portable implementation. Comparator atoms: per-entity Sequencer tracks with Animation and Visibility sub-tracks from a captured session; a separate export-assets tree (Animations vs Models); a project-wide \"CoD Shader\" material treatment; a 5,400-actor Highrise map as the importer’s stress target.",
+   "method": "No portable implementation. Comparator atoms: per-entity Sequencer tracks with Animation and Visibility sub-tracks from a captured session; a separate export-assets tree (Animations vs Models); a project-wide \"CoD Shader\" material treatment; a 5,400-actor Highrise map as the importer’s stress target. On \"AGR\": the format reading is AdvancedFX Game Recording (advancedfx/advancedfx @ 79886f0, MIT, licence file read at pin) — but its hook DLLs cover GoldSrc, Source 1 and Source 2 only, not Call of Duty, whose scene built its own analogue T6GR (\"T6 Game Recording\", T6 = Black Ops 2); the C2M support Discord is itself named \"AGR TechSupport\". So the \"AGR\" in AGRPLUGIN stays ambiguous between the format and the community. Falsifier: the first 14 bytes of whatever it ingests, afxGameRecord\\0 or not.",
    "skillMappings": [
     {
      "relation": "candidate",
@@ -3050,6 +3060,11 @@
      "kind": "owner-post",
      "label": "Owner-shared author post (frames extracted from the 44.5 s video)",
      "url": "https://x.com/mallowed/status/2097393452497453238"
+    },
+    {
+     "kind": "repo",
+     "label": "advancedfx @ 79886f0 (MIT, licence file read at pin)",
+     "url": "https://github.com/advancedfx/advancedfx"
     }
    ]
   }

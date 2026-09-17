@@ -115,10 +115,10 @@ export function createDemo(context: DemoContext): DemoInstance {
 
   const metadata: DemoMetadata & { counters: Record<string, number> } = {
     sourceId: 51,
-    title: 'Anvil cumulonimbus: CPU-baked raymarch with light march and HG rim',
+    title: 'Cumulus congestus turret-stack: CPU-baked raymarch with light march and HG rim',
     method:
-      'Layered value/Worley density written for this demo, eroded flat at the '
-      + 'anvil cap, marched front-to-back with Beer-Lambert extinction, a '
+      'Layered value/Worley density written for this demo, marched '
+      + 'front-to-back with Beer-Lambert extinction, a '
       + `${CLOUD_PARAMS.lightSteps}-step light march toward a low warm sun at each occupied `
       + 'sample, and a Henyey-Greenstein phase term that silvers thin forward-lit '
       + 'edges. The bake is shown as a billboard inside a wire frame of the exact '
@@ -132,7 +132,11 @@ export function createDemo(context: DemoContext): DemoInstance {
       + 'advection of the static bake. Step count and density are construction constants '
       + '(exported CLOUD_PARAMS), not live controls — the host offers no per-demo parameter '
       + 'surface. A live fragment version holds 60fps only at a reduced step count this lane '
-      + 'could not measure, so no such claim is made here.',
+      + 'could not measure, so no such claim is made here. Shaping mismatch owned: the density '
+      + 'field still flares to a flat anvil cap (column radius more than triples above y≈4.4 '
+      + 'with a flat top cut) while the reference frames show a cumulus congestus turret-stack '
+      + 'of roughly constant width with no anvil spread — the silhouette reads as an anvil, '
+      + 'not the referenced stack.',
     comparison,
     counters: {
       bakeWidth: BAKE_WIDTH,

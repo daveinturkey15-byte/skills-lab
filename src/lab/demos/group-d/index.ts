@@ -21,10 +21,10 @@ const SOURCES_51 = ['https://x.com/zackontopx/status/2100183743436890237'];
 export const manifest: DemoManifestEntry[] = [
   {
     sourceId: 51,
-    title: 'Anvil cumulonimbus: CPU-baked raymarch with light march and HG rim',
+    title: 'Cumulus congestus turret-stack: CPU-baked raymarch with light march and HG rim',
     method:
-      'Layered value/Worley density written for this demo, eroded flat at the '
-      + 'anvil cap, marched front-to-back with Beer-Lambert extinction, a 5-step '
+      'Layered value/Worley density written for this demo, marched '
+      + 'front-to-back with Beer-Lambert extinction, a 5-step '
       + 'light march toward a low warm sun at each occupied sample, and a '
       + 'Henyey-Greenstein phase term for thin forward-lit edges.',
     adaptation: 'adapted',
@@ -32,7 +32,9 @@ export const manifest: DemoManifestEntry[] = [
     limitation:
       'CPU bake at 96x128 texels and 32 view steps, not a live GPU raymarch; '
       + 'motion is whole-tower advection of the static bake. Step count and density '
-      + 'are construction constants, not live controls.',
+      + 'are construction constants, not live controls. Shaping mismatch owned: the field '
+      + 'still flares to a flat anvil cap while the reference is a cumulus congestus '
+      + 'turret-stack with no anvil spread.',
     createDemo: createCloud,
   },
   {
