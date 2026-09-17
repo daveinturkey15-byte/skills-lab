@@ -1,0 +1,23 @@
+{
+  "name": "skills-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A browsable atlas and live WebGPU exhibit hall for the game-development techniques this workspace has studied, adapted or rejected.",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "build:nocheck": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "check": "tsc --noEmit",
+    "verify": "node scripts/verify-catalog.mjs"
+  },
+  "dependencies": {
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "@types/three": "0.185.0",
+    "typescript": "6.0.3",
+    "vite": "8.1.3"
+  }
+}

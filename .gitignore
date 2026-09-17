@@ -1,0 +1,15 @@
+node_modules/
+dist/
+logs/
+.vite/
+tmp-*.mjs
+probe.mjs
+bak-*/
+
+# Build scaffolding for the delegated lanes. Kept local: these reference
+# absolute paths into the operational vault and the AKP passport, which have
+# no business in a public repository.
+briefs/
+CONTEXT.md
+spark.py
+.claude/
