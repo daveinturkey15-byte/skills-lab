@@ -13,3 +13,7 @@ briefs/
 CONTEXT.md
 spark.py
 .claude/
+
+# QA harness output and its throwaway Chrome profile.
+qa/captures/
+qa/node_modules/

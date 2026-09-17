@@ -1,0 +1,11 @@
+{
+  "name": "skills-lab-qa",
+  "private": true,
+  "type": "module",
+  "description": "WebGPU capture harness. Separate from the site's package.json so the Pages build never installs Playwright.",
+  "scripts": { "capture": "node capture.mjs" },
+  "dependencies": {
+    "playwright-core": "1.61.1",
+    "pngjs": "7.0.0"
+  }
+}
