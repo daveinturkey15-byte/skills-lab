@@ -52,8 +52,31 @@ const BASE = (arg('base') ?? 'http://localhost:5183').replace(/\/?$/, '/');
 const OUT = arg('out') ?? join(ROOT, 'qa', 'captures');
 const ONLY = arg('only');
 const HEADED = flag('headed');
-const PORT = Number(arg('port', '9412'));
 const SETTLE_MS = Number(arg('settle', '4000'));
+
+/**
+ * Several build lanes run this harness concurrently against the same checkout.
+ * A fixed debug port, a shared Chrome profile and a single report.json would
+ * make them silently clobber each other — the kind of failure that looks like a
+ * flaky demo rather than a collision. So: take a free port from the OS, give
+ * each run its own profile, and never overwrite the full-run report from a
+ * single-source run.
+ */
+async function freePort() {
+  const { createServer } = await import('node:net');
+  return new Promise((resolve, reject) => {
+    const s = createServer();
+    s.on('error', reject);
+    s.listen(0, '127.0.0.1', () => {
+      const { port } = s.address();
+      s.close(() => resolve(port));
+    });
+  });
+}
+
+const PORT = Number(arg('port')) || (await freePort());
+const RUN_ID = `${process.pid}-${Date.now().toString(36)}`;
+const REPORT_NAME = ONLY ? `report-source-${ONLY}.json` : 'report.json';
 
 /* ------------------------------------------------------------- blankness */
 
@@ -146,7 +169,8 @@ function verdictFor(stats) {
 /* ----------------------------------------------------------------- chrome */
 
 async function launchChrome(chromium) {
-  const profile = join(OUT, '.chrome-profile');
+  // Per-run profile: a shared user-data-dir makes concurrent Chromes fight.
+  const profile = join(OUT, `.chrome-profile-${RUN_ID}`);
   mkdirSync(profile, { recursive: true });
   const args = [
     `--remote-debugging-port=${PORT}`,
@@ -218,14 +242,35 @@ console.log(`WebGPU adapter: ${adapter.vendor} / ${adapter.architecture}  (headl
 // The host exposes every mounted demo; read the list from the page rather than
 // guessing it from the catalogue, so a demo that failed to register is visible
 // as missing rather than silently skipped.
+// The gallery rows are `button.tl-item`, whose text runs the id, the title and
+// the state together, e.g. "01Mocap to in-game animationloaded2026-09-12". An
+// earlier version of this matched only the grouped sub-demo buttons a later
+// lane added, found 4 of 54, and reported that as a complete run — so index the
+// gallery itself and assert the count against the host's own "N of M" line.
 const demos = await page.evaluate(`(() => {
-  const out = [];
-  for (const b of document.querySelectorAll('button')) {
-    const m = (b.getAttribute('aria-label') || b.textContent || '').match(/^\\s*Source\\s+(\\d+)\\s*,\\s*(.+?)\\s*$/);
-    if (m) out.push({ sourceId: Number(m[1]), title: m[2] });
-  }
-  return out;
+  const rows = [...document.querySelectorAll('button.tl-item')];
+  return rows.map((b, index) => {
+    const raw = (b.textContent || '').replace(/\\s+/g, ' ').trim();
+    const m = raw.match(/^(\\d+)\\s*(.*?)\\s*(loaded|missing|blocked|absent)?\\s*(\\d{4}-\\d{2}-\\d{2})?$/i);
+    return {
+      index,
+      sourceId: m ? Number(m[1]) : null,
+      title: m ? m[2] : raw.slice(0, 80),
+      state: m && m[3] ? m[3].toLowerCase() : null,
+    };
+  });
 })()`);
+
+const hostCount = await page.evaluate(`(() => {
+  const m = document.body.innerText.match(/Showing\\s+(\\d+)\\s+of\\s+(\\d+)\\s+demos/i);
+  return m ? { showing: Number(m[1]), total: Number(m[2]) } : null;
+})()`);
+if (hostCount && demos.length !== hostCount.showing) {
+  console.error(`DISCOVERY MISMATCH: indexed ${demos.length} rows but the host says it is showing ${hostCount.showing} of ${hostCount.total}. Refusing to report a partial run as complete.`);
+  await browser.close().catch(() => {});
+  try { process.kill(child.pid); } catch {}
+  process.exit(4);
+}
 
 const wanted = ONLY ? demos.filter((d) => String(d.sourceId) === String(ONLY)) : demos;
 console.log(`${demos.length} demos exposed by the host; capturing ${wanted.length}\n`);
@@ -235,12 +280,15 @@ for (const demo of wanted) {
   consoleErrors.length = 0;
   const slug = `${demo.sourceId}-${demo.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60)}`;
   try {
+    // Click by index, not by title text: several demos share a source and two
+    // share a title prefix, so text matching selects the wrong row.
     await page.evaluate(`(() => {
-      for (const b of document.querySelectorAll('button')) {
-        const t = (b.getAttribute('aria-label') || b.textContent || '');
-        if (t.includes(${JSON.stringify(demo.title)})) { b.click(); return true; }
-      }
-      return false;
+      const rows = [...document.querySelectorAll('button.tl-item')];
+      const row = rows[${demo.index}];
+      if (!row) return false;
+      row.scrollIntoView({ block: 'center' });
+      row.click();
+      return true;
     })()`);
     await page.waitForTimeout(SETTLE_MS);
 
@@ -278,9 +326,9 @@ const report = {
   catalogueSources: catalog.sources.length,
   results,
 };
-writeFileSync(join(OUT, 'report.json'), JSON.stringify(report, null, 1));
+writeFileSync(join(OUT, REPORT_NAME), JSON.stringify(report, null, 1));
 
-console.log(`\n${drew}/${results.length} drew something. PNGs + report.json in ${OUT}`);
+console.log(`\n${drew}/${results.length} drew something. PNGs + ${REPORT_NAME} in ${OUT}`);
 console.log('A "DREW SOMETHING" verdict means pixels varied — NOT that the demo is correct.');
 
 await browser.close().catch(() => {});
