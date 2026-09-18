@@ -26,11 +26,11 @@
  *   node qa/capture.mjs --only 51 --headed                      # one source
  *   node qa/capture.mjs --base https://<user>.github.io/skills-lab/
  */
-import { spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { launchChrome, killTree } from './chrome-lifecycle.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..');
@@ -203,27 +203,17 @@ function isBlocking(verdict) {
 
 /* ----------------------------------------------------------------- chrome */
 
-async function launchChrome(chromium) {
+async function connectChrome(chromium) {
   // Per-run profile: a shared user-data-dir makes concurrent Chromes fight.
   const profile = join(OUT, `.chrome-profile-${RUN_ID}`);
   mkdirSync(profile, { recursive: true });
-  const args = [
-    `--remote-debugging-port=${PORT}`,
-    `--user-data-dir=${profile}`,
-    '--no-first-run', '--no-default-browser-check',
-    // Without these the adapter is absent even on a discrete NVIDIA GPU.
-    '--enable-unsafe-webgpu', '--ignore-gpu-blocklist', '--enable-gpu',
-    '--autoplay-policy=no-user-gesture-required',
-    HEADED ? '--window-position=2560,0' : '--headless=new',
-    '--window-size=1600,1000',
-    'about:blank',
-  ];
-  const child = spawn(CHROME, args, { detached: true, stdio: 'ignore', windowsHide: true });
-  child.unref();
+  const chromePid = launchChrome({
+    port: PORT, profile, headed: HEADED, chrome: CHROME,
+  });
 
   for (let i = 0; i < 60; i += 1) {
     try {
-      return { browser: await chromium.connectOverCDP(`http://127.0.0.1:${PORT}`, { timeout: 2000 }), child };
+      return { browser: await chromium.connectOverCDP(`http://127.0.0.1:${PORT}`, { timeout: 2000 }), chromePid };
     } catch {
       await new Promise((r) => setTimeout(r, 500));
     }
@@ -248,7 +238,7 @@ mkdirSync(OUT, { recursive: true });
 const catalogPath = join(ROOT, 'public/assets/skills-lab/source-catalog.json');
 const catalog = JSON.parse(readFileSync(catalogPath, 'utf8'));
 
-const { browser, child } = await launchChrome(chromium);
+const { browser, chromePid } = await connectChrome(chromium);
 const ctx = browser.contexts()[0] ?? (await browser.newContext());
 const page = await ctx.newPage();
 page.setDefaultTimeout(120000);
@@ -277,7 +267,7 @@ if (!adapter.adapter) {
   console.error('\nNO WEBGPU ADAPTER — refusing to record acceptance from a fallback backend.');
   console.error(JSON.stringify(adapter));
   await browser.close().catch(() => {});
-  try { process.kill(child.pid); } catch {}
+  killTree(chromePid);
   process.exit(3);
 }
 console.log(`WebGPU adapter: ${adapter.vendor} / ${adapter.architecture}  (headless=${!HEADED})\n`);
@@ -311,7 +301,7 @@ const hostCount = await page.evaluate(`(() => {
 if (hostCount && demos.length !== hostCount.showing) {
   console.error(`DISCOVERY MISMATCH: indexed ${demos.length} rows but the host says it is showing ${hostCount.showing} of ${hostCount.total}. Refusing to report a partial run as complete.`);
   await browser.close().catch(() => {});
-  try { process.kill(child.pid); } catch {}
+  killTree(chromePid);
   process.exit(4);
 }
 
@@ -380,6 +370,6 @@ console.log(`\n${drew}/${results.length} drew something. PNGs + ${REPORT_NAME} i
 console.log('A "DREW SOMETHING" verdict means pixels varied — NOT that the demo is correct.');
 
 await browser.close().catch(() => {});
-try { process.kill(child.pid); } catch {}
+killTree(chromePid);
 // Exit status reflects BLOCKING failures only; loose framing is advisory.
 process.exit(blocking.length === 0 ? 0 : 1);

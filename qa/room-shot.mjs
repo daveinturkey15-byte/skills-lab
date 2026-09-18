@@ -16,11 +16,11 @@
  *   node qa/room-shot.mjs --base http://localhost:5199/skills-lab/ --source 3
  *   node qa/room-shot.mjs --base ... --all
  */
-import { spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { launchChrome, killTree } from './chrome-lifecycle.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..');
@@ -49,13 +49,10 @@ async function freePort() {
 const PORT = await freePort();
 const RUN = `${process.pid}-${Date.now().toString(36)}`;
 
-const child = spawn(process.env.QA_CHROME ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe', [
-  `--remote-debugging-port=${PORT}`, `--user-data-dir=${join(OUT, `.profile-${RUN}`)}`,
-  '--no-first-run', '--no-default-browser-check',
-  '--enable-unsafe-webgpu', '--ignore-gpu-blocklist', '--enable-gpu',
-  '--headless=new', '--window-size=1600,900', 'about:blank',
-], { detached: true, stdio: 'ignore', windowsHide: true });
-child.unref();
+const chromePid = launchChrome({
+  port: PORT,
+  profile: join(OUT, `.profile-${RUN}`),
+});
 
 let browser;
 for (let i = 0; i < 60; i += 1) {
@@ -80,7 +77,7 @@ const adapter = await page.evaluate(`(async () => {
 })()`);
 if (!adapter.adapter) {
   console.error('NO WEBGPU ADAPTER — refusing to judge a room from a fallback backend.');
-  await browser.close().catch(() => {}); try { process.kill(child.pid); } catch {}
+  await browser.close().catch(() => {}); killTree(chromePid);
   process.exit(3);
 }
 
@@ -150,5 +147,5 @@ console.log('PRESENT means something is there and it is big enough to see. It is
 if (errors.length) console.log(`console errors: ${[...new Set(errors)].slice(0, 3).join(' | ')}`);
 
 await browser.close().catch(() => {});
-try { process.kill(child.pid); } catch {}
+killTree(chromePid);
 process.exit(ok === results.length ? 0 : 1);
