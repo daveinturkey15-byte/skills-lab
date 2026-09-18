@@ -43,10 +43,12 @@ export const room: RoomDefinition = {
     };
 
     const halfX = 3.4;
-    const halfZ = 1.4;
+    // Plots sit forward of centre: from the door the pair reads as two
+    // 1.7 m figures, not two distant boxes. Nothing else moves.
+    const halfZ = -1.0;
 
-    const heroMat = track(new T.MeshStandardMaterial({ color: 0xb46a3f, roughness: 0.6 }));
-    const groundMat = track(new T.MeshStandardMaterial({ color: 0x53614a, roughness: 0.95 }));
+    const heroMat = track(new T.MeshStandardMaterial({ color: 0xc47a48, roughness: 0.6, emissive: 0x2a1408 }));
+    const groundMat = track(new T.MeshStandardMaterial({ color: 0x6a7a5c, roughness: 0.95 }));
     const propMat = track(new T.MeshStandardMaterial({ color: 0x6d5b46, roughness: 0.9 }));
     const verbMat = track(new T.MeshBasicMaterial({ color: 0xe0c15a, side: T.DoubleSide, toneMapped: false }));
 
@@ -106,13 +108,14 @@ export const room: RoomDefinition = {
     const naiveHero = buildHero();
     naivePlot.add(naiveHero);
     // Framing honesty: the as-generated hero is ~30x too tall and would collapse
-    // any shared frame onto one half. Normalise ONLY its scale by the same
-    // measured factor the full pass applies, so both halves read; pivot and
-    // facing stay exactly as generated (sunk and sideways).
+    // any shared frame onto one half. Scale RELATIVE by the measured factor —
+    // the factor was measured against the 30x build, so setting it absolute
+    // shrinks the authored 1.9 m body to centimetres (probed: 6 cm heroes).
+    // Pivot and facing stay exactly as generated (sunk and sideways).
     const naiveBounds = new T.Box3().setFromObject(naiveHero);
     const naiveSize = new T.Vector3();
     naiveBounds.getSize(naiveSize);
-    naiveHero.scale.setScalar(CHARACTER_HEIGHT / Math.max(1e-6, naiveSize.y));
+    naiveHero.scale.multiplyScalar(CHARACTER_HEIGHT / Math.max(1e-6, naiveSize.y));
     naiveHero.updateMatrixWorld(true);
 
     const fixedHero = buildHero();
@@ -121,7 +124,7 @@ export const room: RoomDefinition = {
     const bounds = new T.Box3().setFromObject(fixedHero);
     const size = new T.Vector3();
     bounds.getSize(size);
-    fixedHero.scale.setScalar(CHARACTER_HEIGHT / Math.max(1e-6, size.y));
+    fixedHero.scale.multiplyScalar(CHARACTER_HEIGHT / Math.max(1e-6, size.y));
     fixedHero.updateMatrixWorld(true);
     const scaled = new T.Box3().setFromObject(fixedHero);
     fixedHero.position.y -= scaled.min.y;
@@ -130,12 +133,13 @@ export const room: RoomDefinition = {
     // +Z; here the mark sits door-side, so the sign matters.
     fixedHero.rotation.y = Math.PI / 2;
 
+
     return {
       root,
       update: (time: number) => {
         // Both heroes walk toward their verb mark. Only the harmonised one
         // arrives standing on the ground and facing it.
-        const t = (Math.sin(time * 0.6) + 1) / 2;
+        const t = (Math.sin(time * 1.1) + 1) / 2;
         naiveHero.position.z = -t * 1.5;
         fixedHero.position.z = -t * 1.5;
       },

@@ -8,11 +8,9 @@ import type { RoomContext, RoomDefinition, RoomInstance } from '../contract';
  * compound, two-plus destruction groups, declared budgets), the same
  * `sculptRuntime` hierarchy on `root.userData`, and the same action-ready
  * gate. What changed is address: the demo's half-metre pair becomes two
- * 5x jerry cans (~2.3 m) on plinths, with the declared sockets drawn as
- * brass markers, the collider as a wire volume, and the gate verdict as two
- * verdict bars — green PASS against red FAIL — tall enough to read from the
- * door. The reusable atom was never "a mesh from a picture"; it is the gate
- * that refuses a good-looking model a game cannot use.
+ * 3x jerry cans (~1.4 m) on plinths set toward the back wall, with the
+ * declared sockets drawn as brass markers, the collider as a wire volume,
+ * and the gate verdict as two verdict bars tall enough to read from the door.
  */
 
 type ComponentSpec = {
@@ -45,7 +43,7 @@ const SOCKETS: readonly SocketSpec[] = [
 ];
 
 const COLLIDER = { half: [0.17, 0.23, 0.09] as [number, number, number], at: [0, 0.23, 0] as [number, number, number] };
-const PROP_SCALE = 5;
+const PROP_SCALE = 3;
 
 const TINT = { steel: 0x9aa0a6, rubber: 0x2b2b2d, paint: 0x557a41 } as const;
 
@@ -97,8 +95,8 @@ export const room: RoomDefinition = {
       new T.MeshStandardMaterial({ color: 0x000000, emissive: 0x2f8f5b, emissiveIntensity: 1.6, roughness: 0.6 }),
     );
 
-    const halfX = 3.1;
-    const halfZ = 1.8;
+    const halfX = 2.6;
+    const halfZ = 3.6;
     const plinthGeo = track(new T.BoxGeometry(2.6, 0.5, 2.2));
     const barGeo = track(new T.BoxGeometry(0.5, 3.4, 0.5));
     const markerGeo = track(new T.SphereGeometry(0.09, 10, 8));
@@ -176,9 +174,9 @@ export const room: RoomDefinition = {
     const beforeReport = gate(ungated);
     const afterReport = gate(gated);
     const failBar = new T.Mesh(barGeo, beforeReport.pass ? passMat : failMat);
-    failBar.position.set(-halfX, 1.7, halfZ + 2.6);
+    failBar.position.set(-halfX, 1.7, halfZ + 2.2);
     const passBar = new T.Mesh(barGeo, afterReport.pass ? passMat : failMat);
-    passBar.position.set(halfX, 1.7, halfZ + 2.6);
+    passBar.position.set(halfX, 1.7, halfZ + 2.2);
     root.add(failBar, passBar);
 
     for (const x of [-halfX, halfX]) {

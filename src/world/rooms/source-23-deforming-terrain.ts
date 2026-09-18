@@ -90,8 +90,13 @@ class DeformationField {
   }
 }
 
-const SNOW: readonly [number, number, number] = [0.93, 0.95, 0.98];
+// Staging values, not technique: mid-grey snow on a plinth lift that keeps the
+// full 0.5 m groove range above the shell floor (unlifted plates drowned their
+// own memory through y = 0, reading as dark pits of shell floor). Plates are
+// unlit below so the vertex-colour groove tint renders exactly as authored.
+const SNOW: readonly [number, number, number] = [0.78, 0.8, 0.84];
 const PACKED: readonly [number, number, number] = [0.16, 0.26, 0.4];
+const PLATE_LIFT = 0.55;
 
 export const room: RoomDefinition = {
   sourceId: 23,
@@ -143,25 +148,27 @@ export const room: RoomDefinition = {
         colours[i * 3 + 2] = SNOW[2];
       }
       geometry.setAttribute('color', new THREE.BufferAttribute(colours, 3));
-      const material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9 });
+      // Unlit: the groove tint is data, and the world rig (hemisphere 2.2 +
+      // key 2.0 + ambient + a point per room) clips any lit snow to white and
+      // eats the tint with it. Vertex colour renders exactly as authored.
+      const material = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
       disposables.push(material);
       const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(side * 3.35, 0.05, 0.5);
+      mesh.position.set(side * 3.35, PLATE_LIFT + 0.05, 0.5);
       root.add(mesh);
       plates.push({ mesh, base, field: new DeformationField(resolution, PLATE_D, side > 0) });
     }
 
-    const markerGeometry = new THREE.SphereGeometry(0.35, 16, 12);
+    // Walkers are instruments, not subjects: unlit saturated blue at 0.65 m so
+    // they read at 8 m against grey snow, riding high enough to clear the
+    // 0.5 m groove lips at grazing doorway angles.
+    const markerGeometry = new THREE.SphereGeometry(0.65, 16, 12);
     disposables.push(markerGeometry);
-    const markerMaterial = new THREE.MeshStandardMaterial({
-      color: 0x2f6fd0,
-      emissive: 0x0a2a66,
-      roughness: 0.4,
-    });
+    const markerMaterial = new THREE.MeshBasicMaterial({ color: 0x2f7fe0, toneMapped: false });
     disposables.push(markerMaterial);
     const walkers = [-1, 1].map((side) => {
       const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-      marker.position.set(side * 3.35, 0.5, 0.5);
+      marker.position.set(side * 3.35, PLATE_LIFT + 0.8, 0.5);
       root.add(marker);
       return marker;
     });
@@ -198,11 +205,13 @@ export const room: RoomDefinition = {
         plates[0].field.clear();
         for (let p = 0; p < plates.length; p += 1) {
           const plate = plates[p];
-          plate.field.brush(x, z, 0.9, 9.0 * step);
+          // Brush wider than the technique needs so the trail reads at 8 m;
+          // the state machine (accumulate, bank, relax) is untouched.
+          plate.field.brush(x, z, 1.4, 9.0 * step);
           plate.field.relax(step);
           applyField(plate);
           const depth = plate.field.sample(x, z);
-          walkers[p].position.set((p === 0 ? -3.35 : 3.35) + x, 0.45 - depth, 0.5 + z);
+          walkers[p].position.set((p === 0 ? -3.35 : 3.35) + x, PLATE_LIFT + 0.75 - depth, 0.5 + z);
         }
         normalTick += 1;
         if (normalTick % 2 === 0) {

@@ -187,20 +187,24 @@ export const room: RoomDefinition = {
     hero.rotation.y = Math.PI / 5;
     root.add(hero);
 
-    // The two swatches, wall-sized: naive extraction beside the clamp.
+    // The two swatches, wall-sized, flanking the totem where the doorway sees
+    // them: the shell crosses local z = 0 on this slot, so anything past the
+    // ring's far side is wall, not exhibit. Double-sided — the camera meets
+    // their backs from the door.
     const swatchGeo = track(new T.PlaneGeometry(1.7, 1.0));
-    const rawSwatchMat = track(new T.MeshBasicMaterial({ toneMapped: false }));
-    const clampedSwatchMat = track(new T.MeshBasicMaterial({ toneMapped: false }));
+    const rawSwatchMat = track(new T.MeshBasicMaterial({ toneMapped: false, side: T.DoubleSide }));
+    const clampedSwatchMat = track(new T.MeshBasicMaterial({ toneMapped: false, side: T.DoubleSide }));
     const rawSwatch = new T.Mesh(swatchGeo, rawSwatchMat);
-    rawSwatch.position.set(-2.4, 1.1, centreZ - RING_RADIUS - 1.6);
+    rawSwatch.position.set(-3.1, 1.3, centreZ - 1.2);
     const clampedSwatch = new T.Mesh(swatchGeo, clampedSwatchMat);
-    clampedSwatch.position.set(2.4, 1.1, centreZ - RING_RADIUS - 1.6);
+    clampedSwatch.position.set(3.1, 1.3, centreZ - 1.2);
     root.add(rawSwatch, clampedSwatch);
 
-    // Focus rail: the live accent as a physical element under the focus slot.
-    const railMat = track(new T.MeshBasicMaterial({ toneMapped: false }));
+    // Focus rail: the live accent as a physical element, carried in front of
+    // the totem for the same reason.
+    const railMat = track(new T.MeshBasicMaterial({ toneMapped: false, side: T.DoubleSide }));
     const rail = new T.Mesh(track(new T.PlaneGeometry(CARD_WIDTH * 1.2, 0.09)), railMat);
-    rail.position.set(0, ringY - CARD_HEIGHT * 0.62, centreZ + RING_RADIUS + 0.04);
+    rail.position.set(0, 1.0, centreZ - 1.5);
     root.add(rail);
 
     const totemMat = totem.material as InstanceType<typeof T.MeshStandardMaterial>;
@@ -228,6 +232,11 @@ export const room: RoomDefinition = {
     return {
       root,
       update: (time: number, dt: number) => {
+        // The loop idles between selections, which reads as a still to a
+        // two-frame motion probe — so the totem turns and the hero plate sways
+        // continuously, and the ring still steps the short way round on events.
+        totem.rotation.y = time * 0.25;
+        hero.position.y = 3.3 + Math.sin(time * 1.3) * 0.08;
         if (time >= nextEventAt) {
           nextEventAt = time + 1.8;
           if (pendingActivation === null) {

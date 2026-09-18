@@ -1,10 +1,11 @@
 {
- "capturedAt": "2026-09-18T14:02:00.916Z",
+ "capturedAt": "2026-09-18T14:47:22.064Z",
  "adapter": {
   "adapter": true,
   "vendor": "nvidia"
  },
  "base": "http://localhost:5199/skills-lab/",
+ "target": 0.35,
  "results": [
   {
    "sourceId": 1,
@@ -20,8 +21,13 @@
     "z": -9
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.41,
-   "inside": 0.312,
+   "doorway": 0.547,
+   "inside": 0.381,
+   "detail": 0.055,
+   "hues": 7,
+   "motion": 0.011,
+   "quality": 0.675,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -38,8 +44,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.266,
-   "inside": 0.265,
+   "doorway": 0.261,
+   "inside": 0.268,
+   "detail": 0.045,
+   "hues": 4,
+   "motion": 0.09,
+   "quality": 0.497,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -56,8 +67,13 @@
     "z": 9
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.456,
+   "doorway": 0.455,
    "inside": 0.471,
+   "detail": 0.023,
+   "hues": 7,
+   "motion": 0.032,
+   "quality": 0.58,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -74,8 +90,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.399,
-   "inside": 0.421,
+   "doorway": 0.397,
+   "inside": 0.412,
+   "detail": 0.057,
+   "hues": 10,
+   "motion": 0.03,
+   "quality": 0.595,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -92,8 +113,13 @@
     "z": -9
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.414,
-   "inside": 0.161,
+   "doorway": 0.412,
+   "inside": 0.203,
+   "detail": 0.055,
+   "hues": 4,
+   "motion": 0.039,
+   "quality": 0.551,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -110,9 +136,14 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.345,
-   "inside": 0.472,
-   "verdict": "PRESENT"
+   "doorway": 0.343,
+   "inside": 0.328,
+   "detail": 0.014,
+   "hues": 2,
+   "motion": 0,
+   "quality": 0.325,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.33 under the 0.35 target"
   },
   {
    "sourceId": 7,
@@ -128,8 +159,13 @@
     "z": 9
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.27,
-   "inside": 0.19,
+   "doorway": 0.268,
+   "inside": 0.189,
+   "detail": 0.055,
+   "hues": 7,
+   "motion": 0.006,
+   "quality": 0.458,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -146,8 +182,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.27,
-   "inside": 0.459,
+   "doorway": 0.706,
+   "inside": 0.507,
+   "detail": 0.096,
+   "hues": 7,
+   "motion": 0.013,
+   "quality": 0.791,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -164,8 +205,13 @@
     "z": -26
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.385,
+   "doorway": 0.384,
    "inside": 0.335,
+   "detail": 0.038,
+   "hues": 5,
+   "motion": 0.022,
+   "quality": 0.496,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -182,8 +228,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.166,
-   "inside": 0.634,
+   "doorway": 0.365,
+   "inside": 0.216,
+   "detail": 0.071,
+   "hues": 8,
+   "motion": 0.001,
+   "quality": 0.552,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -200,8 +251,13 @@
     "z": 26
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.205,
-   "inside": 0.319,
+   "doorway": 0.406,
+   "inside": 0.331,
+   "detail": 0.132,
+   "hues": 5,
+   "motion": 0.013,
+   "quality": 0.667,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -218,8 +274,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.388,
-   "inside": 0.328,
+   "doorway": 0.322,
+   "inside": 0.317,
+   "detail": 0.019,
+   "hues": 4,
+   "motion": 0.072,
+   "quality": 0.469,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -236,8 +297,13 @@
     "z": -26
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.126,
-   "inside": 0.263,
+   "doorway": 0.273,
+   "inside": 0.211,
+   "detail": 0.032,
+   "hues": 4,
+   "motion": 0.013,
+   "quality": 0.367,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -254,9 +320,14 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.143,
-   "inside": 0.188,
-   "verdict": "PRESENT"
+   "doorway": 0.261,
+   "inside": 0.179,
+   "detail": 0.045,
+   "hues": 3,
+   "motion": 0,
+   "quality": 0.34,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.34 under the 0.35 target"
   },
   {
    "sourceId": 15,
@@ -272,8 +343,13 @@
     "z": 26
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.069,
-   "inside": 0.191,
+   "doorway": 0.067,
+   "inside": 0.193,
+   "detail": 0.007,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.063,
+   "target": 0.35,
    "verdict": "THIN — subject is there but too small to read"
   },
   {
@@ -290,8 +366,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.189,
-   "inside": 0.327,
+   "doorway": 0.161,
+   "inside": 0.329,
+   "detail": 0.038,
+   "hues": 3,
+   "motion": 0.087,
+   "quality": 0.383,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -308,8 +389,13 @@
     "z": -43
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.348,
-   "inside": 0.609,
+   "doorway": 0.345,
+   "inside": 0.611,
+   "detail": 0.101,
+   "hues": 8,
+   "motion": 0.014,
+   "quality": 0.61,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -326,8 +412,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.203,
-   "inside": 0.45,
+   "doorway": 0.202,
+   "inside": 0.452,
+   "detail": 0.151,
+   "hues": 4,
+   "motion": 0.153,
+   "quality": 0.637,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -345,7 +436,12 @@
    },
    "facing": -1.5707963267948966,
    "doorway": 0.338,
-   "inside": 0.376,
+   "inside": 0.378,
+   "detail": 0.057,
+   "hues": 8,
+   "motion": 0.003,
+   "quality": 0.51,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -362,8 +458,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.174,
+   "doorway": 0.172,
    "inside": 0.221,
+   "detail": 0.051,
+   "hues": 6,
+   "motion": 0.004,
+   "quality": 0.355,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -380,8 +481,13 @@
     "z": -43
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.019,
-   "inside": 0.152,
+   "doorway": 0.015,
+   "inside": 0.153,
+   "detail": 0.015,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.038,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -398,8 +504,13 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.025,
-   "inside": 0.186,
+   "doorway": 0.021,
+   "inside": 0.187,
+   "detail": 0.017,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.046,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -416,9 +527,14 @@
     "z": 43
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.122,
-   "inside": 0.303,
-   "verdict": "PRESENT"
+   "doorway": 0.104,
+   "inside": 0.254,
+   "detail": 0.023,
+   "hues": 2,
+   "motion": 0.168,
+   "quality": 0.312,
+   "target": 0.35,
+   "verdict": "THIN — subject is there but too small to read"
   },
   {
    "sourceId": 24,
@@ -434,8 +550,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.029,
-   "inside": 0.188,
+   "doorway": 0.025,
+   "inside": 0.19,
+   "detail": 0.014,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.044,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -452,8 +573,13 @@
     "z": -60
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.021,
-   "inside": 0.155,
+   "doorway": 0.018,
+   "inside": 0.156,
+   "detail": 0.007,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.026,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -470,8 +596,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.148,
-   "inside": 0.429,
+   "doorway": 0.185,
+   "inside": 0.408,
+   "detail": 0.048,
+   "hues": 10,
+   "motion": 0.029,
+   "quality": 0.418,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -488,9 +619,14 @@
     "z": 60
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.164,
-   "inside": 0.313,
-   "verdict": "PRESENT"
+   "doorway": 0.212,
+   "inside": 0.262,
+   "detail": 0.048,
+   "hues": 4,
+   "motion": 0.007,
+   "quality": 0.341,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.34 under the 0.35 target"
   },
   {
    "sourceId": 28,
@@ -506,8 +642,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.345,
-   "inside": 0.176,
+   "doorway": 0.344,
+   "inside": 0.177,
+   "detail": 0.172,
+   "hues": 5,
+   "motion": 0.117,
+   "quality": 0.765,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -524,8 +665,13 @@
     "z": -60
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.454,
-   "inside": 0.147,
+   "doorway": 0.472,
+   "inside": 0.148,
+   "detail": 0.132,
+   "hues": 19,
+   "motion": 0.124,
+   "quality": 0.89,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -542,8 +688,13 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.025,
-   "inside": 0.179,
+   "doorway": 0.021,
+   "inside": 0.18,
+   "detail": 0.017,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.046,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -560,9 +711,14 @@
     "z": 60
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.021,
-   "inside": 0.145,
-   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+   "doorway": 0.128,
+   "inside": 0.146,
+   "detail": 0.043,
+   "hues": 4,
+   "motion": 0.031,
+   "quality": 0.305,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.30 under the 0.35 target"
   },
   {
    "sourceId": 32,
@@ -578,8 +734,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.029,
-   "inside": 0.179,
+   "doorway": 0.025,
+   "inside": 0.181,
+   "detail": 0.014,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.044,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -596,8 +757,13 @@
     "z": -77
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.17,
-   "inside": 0.28,
+   "doorway": 0.263,
+   "inside": 0.408,
+   "detail": 0.025,
+   "hues": 7,
+   "motion": 0,
+   "quality": 0.392,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -614,8 +780,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.491,
+   "doorway": 0.492,
    "inside": 0.373,
+   "detail": 0.058,
+   "hues": 13,
+   "motion": 0.001,
+   "quality": 0.624,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -632,9 +803,14 @@
     "z": 77
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.131,
-   "inside": 0.134,
-   "verdict": "PRESENT"
+   "doorway": 0.127,
+   "inside": 0.119,
+   "detail": 0.084,
+   "hues": 2,
+   "motion": 0.024,
+   "quality": 0.324,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.32 under the 0.35 target"
   },
   {
    "sourceId": 36,
@@ -650,8 +826,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.327,
-   "inside": 0.172,
+   "doorway": 0.326,
+   "inside": 0.174,
+   "detail": 0.059,
+   "hues": 4,
+   "motion": 0.122,
+   "quality": 0.586,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -668,8 +849,13 @@
     "z": -77
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.17,
-   "inside": 0.207,
+   "doorway": 0.164,
+   "inside": 0.205,
+   "detail": 0.032,
+   "hues": 6,
+   "motion": 0.062,
+   "quality": 0.402,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -686,8 +872,13 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.244,
-   "inside": 0.227,
+   "doorway": 0.242,
+   "inside": 0.224,
+   "detail": 0.16,
+   "hues": 6,
+   "motion": 0,
+   "quality": 0.56,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -704,8 +895,13 @@
     "z": 77
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.19,
-   "inside": 0.426,
+   "doorway": 0.186,
+   "inside": 0.427,
+   "detail": 0.036,
+   "hues": 8,
+   "motion": 0,
+   "quality": 0.354,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -722,8 +918,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.307,
-   "inside": 0.637,
+   "doorway": 0.305,
+   "inside": 0.635,
+   "detail": 0.082,
+   "hues": 5,
+   "motion": 0.047,
+   "quality": 0.553,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -740,8 +941,13 @@
     "z": -94
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.31,
-   "inside": 0.139,
+   "doorway": 0.305,
+   "inside": 0.14,
+   "detail": 0.062,
+   "hues": 10,
+   "motion": 0.062,
+   "quality": 0.582,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -758,8 +964,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.154,
+   "doorway": 0.134,
    "inside": 0.536,
+   "detail": 0.048,
+   "hues": 7,
+   "motion": 0.039,
+   "quality": 0.395,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -776,8 +987,13 @@
     "z": 94
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.128,
-   "inside": 0.371,
+   "doorway": 0.139,
+   "inside": 0.284,
+   "detail": 0.027,
+   "hues": 3,
+   "motion": 0.721,
+   "quality": 0.367,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -794,8 +1010,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.025,
-   "inside": 0.172,
+   "doorway": 0.021,
+   "inside": 0.173,
+   "detail": 0.017,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.046,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -812,9 +1033,14 @@
     "z": -94
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.124,
-   "inside": 0.412,
-   "verdict": "PRESENT"
+   "doorway": 0.115,
+   "inside": 0.42,
+   "detail": 0.047,
+   "hues": 5,
+   "motion": 0.069,
+   "quality": 0.381,
+   "target": 0.35,
+   "verdict": "THIN — subject is there but too small to read"
   },
   {
    "sourceId": 46,
@@ -830,8 +1056,13 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.247,
-   "inside": 0.387,
+   "doorway": 0.237,
+   "inside": 0.334,
+   "detail": 0.033,
+   "hues": 3,
+   "motion": 0.307,
+   "quality": 0.451,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -848,8 +1079,13 @@
     "z": 94
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.466,
-   "inside": 0.389,
+   "doorway": 0.462,
+   "inside": 0.391,
+   "detail": 0.119,
+   "hues": 3,
+   "motion": 0,
+   "quality": 0.623,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -868,6 +1104,11 @@
    "facing": 0,
    "doorway": 0.668,
    "inside": 0.156,
+   "detail": 0.153,
+   "hues": 3,
+   "motion": 0,
+   "quality": 0.764,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -884,8 +1125,13 @@
     "z": -111
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.196,
-   "inside": 0.352,
+   "doorway": 0.192,
+   "inside": 0.351,
+   "detail": 0.033,
+   "hues": 6,
+   "motion": 0.037,
+   "quality": 0.387,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -902,8 +1148,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.201,
+   "doorway": 0.199,
    "inside": 0.393,
+   "detail": 0.044,
+   "hues": 6,
+   "motion": 0.003,
+   "quality": 0.361,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -920,8 +1171,13 @@
     "z": 111
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.264,
-   "inside": 0.66,
+   "doorway": 0.269,
+   "inside": 0.644,
+   "detail": 0.05,
+   "hues": 3,
+   "motion": 0.292,
+   "quality": 0.505,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -938,8 +1194,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.215,
-   "inside": 0.308,
+   "doorway": 0.209,
+   "inside": 0.299,
+   "detail": 0.055,
+   "hues": 14,
+   "motion": 0.031,
+   "quality": 0.451,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -956,8 +1217,13 @@
     "z": -111
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.395,
-   "inside": 0.564,
+   "doorway": 0.392,
+   "inside": 0.562,
+   "detail": 0.132,
+   "hues": 7,
+   "motion": 0.016,
+   "quality": 0.704,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -974,8 +1240,13 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.171,
-   "inside": 0.198,
+   "doorway": 0.154,
+   "inside": 0.2,
+   "detail": 0.036,
+   "hues": 3,
+   "motion": 0.122,
+   "quality": 0.394,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -993,7 +1264,12 @@
    },
    "facing": 1.5707963267948966,
    "doorway": 0.015,
-   "inside": 0.055,
+   "inside": 0.057,
+   "detail": 0.007,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.024,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1010,8 +1286,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.306,
-   "inside": 0.154,
+   "doorway": 0.295,
+   "inside": 0.155,
+   "detail": 0.079,
+   "hues": 11,
+   "motion": 0.121,
+   "quality": 0.662,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1028,8 +1309,13 @@
     "z": -128
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.257,
-   "inside": 0.201,
+   "doorway": 0.193,
+   "inside": 0.202,
+   "detail": 0.045,
+   "hues": 3,
+   "motion": 0.277,
+   "quality": 0.439,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1046,8 +1332,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.275,
-   "inside": 0.117,
+   "doorway": 0.273,
+   "inside": 0.118,
+   "detail": 0.055,
+   "hues": 5,
+   "motion": 0.006,
+   "quality": 0.419,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1064,8 +1355,13 @@
     "z": 128
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.019,
+   "doorway": 0.015,
    "inside": 0.238,
+   "detail": 0.015,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.038,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1082,8 +1378,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.291,
-   "inside": 0.606,
+   "doorway": 0.297,
+   "inside": 0.603,
+   "detail": 0.051,
+   "hues": 4,
+   "motion": 0.015,
+   "quality": 0.422,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1100,8 +1401,13 @@
     "z": -128
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.04,
-   "inside": 0.18,
+   "doorway": 0.036,
+   "inside": 0.182,
+   "detail": 0.015,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.054,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1119,11 +1425,14 @@
    },
    "facing": 3.141592653589793,
    "doorway": 0.022,
-   "inside": 0.195,
+   "inside": 0.197,
+   "detail": 0.017,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.047,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   }
  ],
- "errors": [
-  "Failed to load resource: the server responded with a status of 404 (Not Found)"
- ]
+ "errors": []
 }

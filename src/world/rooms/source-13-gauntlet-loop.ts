@@ -37,16 +37,20 @@ export const room: RoomDefinition = {
     geos.push(deskGeo);
     const deskMat = new T.MeshStandardMaterial({ color: 0x4a545c, roughness: 0.85 });
     mats.push(deskMat);
+    // Front-half staging: benches just inside the door so the doorway
+    // sightline meets the comparison first. Captures showed content placed
+    // at z >= 0 reading blank from the door, so everything walk-in lives at
+    // negative z; bars and dials stay on the back wall as the inside reward.
     for (const [sx, rough] of [[-3.6, true], [-1.2, false]] as const) {
       const desk = new T.Mesh(deskGeo, deskMat);
-      desk.position.set(sx, 0.45, 0.5);
+      desk.position.set(sx, 0.45, -3.5);
       root.add(desk);
       const figGeo = rough ? new T.IcosahedronGeometry(0.55, 0) : new T.SphereGeometry(0.55, 18, 12);
       geos.push(figGeo);
       const figMat = new T.MeshStandardMaterial({ color: rough ? 0xe14b4b : 0x46c08a, roughness: 0.6, flatShading: rough });
       mats.push(figMat);
       const fig = new T.Mesh(figGeo, figMat);
-      fig.position.set(sx, 1.6, 0.5);
+      fig.position.set(sx, 1.6, -3.5);
       fig.userData.bob = sx;
       root.add(fig);
     }
@@ -57,7 +61,7 @@ export const room: RoomDefinition = {
     const boothMat = new T.MeshStandardMaterial({ color: 0x39434a, roughness: 0.9 });
     mats.push(boothMat);
     const booth = new T.Mesh(boothGeo, boothMat);
-    booth.position.set(3.8, 1.3, 0.5);
+    booth.position.set(3.8, 1.3, -3.0);
     booth.rotation.y = -Math.PI / 2;
     root.add(booth);
     const screenGeo = new T.PlaneGeometry(1.8, 1.2);
@@ -65,7 +69,7 @@ export const room: RoomDefinition = {
     const screenMat = new T.MeshBasicMaterial({ color: 0xdfe8e4 });
     mats.push(screenMat);
     const screen = new T.Mesh(screenGeo, screenMat);
-    screen.position.set(3.6, 1.7, 0.5);
+    screen.position.set(3.6, 1.7, -3.0);
     screen.rotation.y = -Math.PI / 2;
     root.add(screen);
     const penGeo = new T.BoxGeometry(0.12, 1.4, 0.12);
@@ -73,7 +77,7 @@ export const room: RoomDefinition = {
     const penMat = new T.MeshStandardMaterial({ color: 0xe14b4b, roughness: 0.5 });
     mats.push(penMat);
     const pen = new T.Mesh(penGeo, penMat);
-    pen.position.set(3.2, 1.5, 1.6);
+    pen.position.set(3.2, 1.5, -1.9);
     pen.rotation.z = 0.5;
     root.add(pen);
 

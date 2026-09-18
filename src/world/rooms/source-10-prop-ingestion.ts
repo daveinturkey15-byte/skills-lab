@@ -111,8 +111,10 @@ export const room: RoomDefinition = {
     };
 
     // The defect on display, kept deliberately in the left bay.
+    // Door half: the shell crosses local z = 0 on this slot, so everything the
+    // visitor must see stands at negative z, facing the door.
     const previewLight = new THREE.PointLight(0xffd9a0, 14, 7, 2);
-    previewLight.position.set(-2.9, 3.0, 2.4);
+    previewLight.position.set(-2.9, 3.0, -2.6);
     previewLight.name = 'before-half:pack-preview-light (retained to show the defect)';
     root.add(previewLight);
     const bulbGeometry = new THREE.SphereGeometry(0.1, 10, 8);
@@ -142,18 +144,18 @@ export const room: RoomDefinition = {
     for (const side of [-1, 1] as const) {
       const bayX = side * 2.9;
       const panel = new THREE.Mesh(panelGeometry, side < 0 ? panelBefore : panelAfter);
-      panel.position.set(bayX, 2.2, 4.6);
+      panel.position.set(bayX, 2.2, -0.4);
       panel.rotation.y = Math.PI;
       root.add(panel);
       const plinth = new THREE.Mesh(plinthGeometry, plinthMaterial);
-      plinth.position.set(bayX, 0.25, 2.6);
+      plinth.position.set(bayX, 0.25, -2.4);
       root.add(plinth);
 
       const drum = buildDrum();
-      drum.position.set(bayX - 0.8, 0.5 + 0.6, 2.6);
+      drum.position.set(bayX - 0.8, 0.5 + 0.6, -2.4);
       root.add(drum);
       const bollard = buildBollard();
-      bollard.position.set(bayX + 0.9, 0.5 + 0.5, 2.6);
+      bollard.position.set(bayX + 0.9, 0.5 + 0.5, -2.4);
       root.add(bollard);
       if (side > 0) gatedDrums.push(drum);
     }
@@ -164,7 +166,7 @@ export const room: RoomDefinition = {
     const looseMaterial = new THREE.MeshBasicMaterial({ color: 0xff6b5e, wireframe: true });
     disposables.push(looseMaterial);
     const loose = new THREE.Mesh(looseGeometry, looseMaterial);
-    loose.position.set(-3.7, 1.6, 2.6);
+    loose.position.set(-3.7, 1.6, -2.4);
     root.add(loose);
 
     // Measured from the built drum, so the placard cannot drift from the mesh.
@@ -187,7 +189,7 @@ export const room: RoomDefinition = {
       'raw install \u2014 preview light kept \u00b7 collider as-shipped',
       4.6,
     );
-    beforeBoard.position.set(-2.9, 1.15, 4.55);
+    beforeBoard.position.set(-2.9, 1.15, -0.45);
     root.add(beforeBoard);
     const declared = drumRecord.declaredSize;
     const afterBoard = textBoard(
@@ -196,7 +198,7 @@ export const room: RoomDefinition = {
       `gated \u2014 declared ${declared[0].toFixed(1)} \u00d7 ${declared[1].toFixed(1)} \u00d7 ${declared[2].toFixed(1)} m, measured ${size.x.toFixed(1)} \u00d7 ${size.y.toFixed(1)} \u00d7 ${size.z.toFixed(1)} m`,
       4.6,
     );
-    afterBoard.position.set(2.9, 1.15, 4.55);
+    afterBoard.position.set(2.9, 1.15, -0.45);
     root.add(afterBoard);
 
     return {

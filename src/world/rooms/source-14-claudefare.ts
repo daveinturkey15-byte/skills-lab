@@ -66,8 +66,8 @@ export const room: RoomDefinition = {
     // the barrel line rather than at the top of a plinth.
     const halfX = 2.9;
     const baseY = 1.55;
-    // Forward of centre so the doorway view looks down the barrel line at 4–6 m.
-    const baseZ = -0.8;
+    // Forward of centre so the doorway view looks down the barrel line at 4 m.
+    const baseZ = -2.2;
     function buildViewmodel(connected: boolean): { group: InstanceType<typeof T.Group>; muzzle: InstanceType<typeof T.Object3D> } {
       const group = new T.Group();
       const gun = connected ? gunmetal : gunmetalBad;
@@ -117,9 +117,16 @@ export const room: RoomDefinition = {
     return {
       root,
       update: (time: number) => {
-        // Bounded deterministic firing cadence; the flash is why the light exists.
-        const phase = time % 1.6;
-        const flashOn = phase < 0.06 ? 1 - phase / 0.06 : 0;
+        // Three-round burst every two seconds. The demo's single 60 ms blink
+        // every 1.6 s almost never lands inside a walk-in glance, so the
+        // rubric's third question — does the muzzle light read — never got
+        // answered; a burst keeps the same firing idea and stays visible.
+        const phase = time % 2.0;
+        const pulse = (start: number): number => {
+          const p = phase - start;
+          return p >= 0 && p < 0.12 ? 1 - p / 0.12 : 0;
+        };
+        const flashOn = Math.max(pulse(0), pulse(0.3), pulse(0.6));
         muzzleLight.intensity = flashOn * 60;
         flashMat.opacity = flashOn * 0.95;
         const recoil = flashOn * 0.12;
