@@ -41,6 +41,24 @@ export const room: RoomDefinition = {
     );
     stage.position.set(0, 0.09, -1.2);
     root.add(stage);
+    // Range rings on the measurement stage: staging only, they give the flat
+    // disc the edge detail a doorway read needs.
+    const ringGeo = track(new THREE.RingGeometry(0.97, 1.0, 64));
+    ringGeo.rotateX(-Math.PI / 2);
+    const ringMat = track(new THREE.MeshBasicMaterial({ color: 0x9fd8cb, transparent: true, opacity: 0.5, toneMapped: false }));
+    for (const radius of [1.8, 3.2, 4.6]) {
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.scale.setScalar(radius);
+      ring.position.set(0, 0.19, -1.2);
+      root.add(ring);
+    }
+    // Rolling-window cursor: the window the next plan step would take. It laps
+    // the stage continuously so the room never reads as a still.
+    const cursor = new THREE.Mesh(
+      track(new THREE.SphereGeometry(0.16, 14, 10)),
+      track(new THREE.MeshBasicMaterial({ color: 0xffc46b, toneMapped: false })),
+    );
+    root.add(cursor);
 
     const linkGeo = track(new THREE.BoxGeometry(0.36, LINK, 0.36));
     linkGeo.translate(0, LINK / 2, 0);
@@ -124,6 +142,7 @@ export const room: RoomDefinition = {
       update: (_t, dt) => {
         const step = Math.min(dt, 0.05);
         elapsed += step;
+        cursor.position.set(Math.cos(elapsed * 0.5) * 4.6, 0.5, -1.2 + Math.sin(elapsed * 0.5) * 4.6);
         const phase = Math.floor(elapsed / 1.6) % 2 === 0 ? 1 : -1;
         for (let j = 0; j < JOINTS; j += 1) {
           const target = TARGETS[j]! * phase;

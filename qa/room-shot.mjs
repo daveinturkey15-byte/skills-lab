@@ -101,6 +101,7 @@ function frameStats(png) {
   const hues = new Set();
   let n = 0;
   let edges = 0;
+  let soft = 0;
   const luma = (x, y) => {
     const i = (y * width + x) * 4;
     return data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
@@ -111,7 +112,11 @@ function frameStats(png) {
       const r = data[i], g = data[i + 1], b = data[i + 2];
       hist.set(((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4), (hist.get(((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4)) ?? 0) + 1);
       n += 1;
-      if (Math.abs(luma(x + 3, y) - luma(x - 3, y)) + Math.abs(luma(x, y + 3) - luma(x, y - 3)) > 12) edges += 1;
+      const grad = Math.abs(luma(x + 3, y) - luma(x - 3, y)) + Math.abs(luma(x, y + 3) - luma(x, y - 3));
+      if (grad > 12) edges += 1;
+      // Smooth but non-zero: a lit curved surface. A flat quad gives exactly 0,
+      // its border gives a hard edge, and neither lands in this band.
+      else if (grad > 1.5) soft += 1;
       const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
       if (mx - mn > 18) {
         let h = 0;
@@ -127,6 +132,7 @@ function frameStats(png) {
     coverage: Number(((n - top) / n).toFixed(3)),
     detail: Number((edges / n).toFixed(3)),
     hues: hues.size,
+    shading: Number((soft / n).toFixed(3)),
   };
 }
 
@@ -199,10 +205,13 @@ for (const r of wanted) {
    * is legitimately still, and should not be punished for it.
    */
   const quality = Number((
-    Math.min(d.coverage, 0.6) / 0.6 * 0.45
-    + Math.min(d.detail, 0.14) / 0.14 * 0.25
-    + Math.min(d.hues, 7) / 7 * 0.15
+    Math.min(d.coverage, 0.6) / 0.6 * 0.38
+    + Math.min(d.detail, 0.14) / 0.14 * 0.17
+    + Math.min(d.hues, 7) / 7 * 0.10
     + Math.min(motion, 0.10) / 0.10 * 0.15
+    // Shading carries real weight: it is the only term a grid of flat coloured
+    // quads cannot score on, and such a grid was outscoring a walkable jungle.
+    + Math.min(d.shading, 0.45) / 0.45 * 0.20
   ).toFixed(3));
 
   const verdict = d.coverage < 0.06 ? 'EMPTY FROM THE DOOR — subject is not readable on entry'
@@ -213,11 +222,11 @@ for (const r of wanted) {
   results.push({
     ...r,
     doorway: d.coverage, inside: i.coverage,
-    detail: d.detail, hues: d.hues, motion, quality, target: TARGET,
+    detail: d.detail, hues: d.hues, shading: d.shading, motion, quality, target: TARGET,
     verdict,
   });
   const mark = verdict === 'PRESENT' ? ' ok ' : verdict.startsWith('BELOW') ? 'bar ' : 'FAIL';
-  console.log(`[${mark}] ${String(r.sourceId).padStart(2)} ${r.title.slice(0, 40).padEnd(40)} q=${quality.toFixed(2)} cov=${(d.coverage * 100).toFixed(0)}% det=${(d.detail * 100).toFixed(0)}% hue=${d.hues} mot=${(motion * 100).toFixed(0)}%`);
+  console.log(`[${mark}] ${String(r.sourceId).padStart(2)} ${r.title.slice(0, 40).padEnd(40)} q=${quality.toFixed(2)} cov=${(d.coverage * 100).toFixed(0)}% det=${(d.detail * 100).toFixed(0)}% shd=${(d.shading * 100).toFixed(0)}% hue=${d.hues} mot=${(motion * 100).toFixed(0)}%`);
 }
 
 writeFileSync(join(OUT, ONLY ? `report-${ONLY}.json` : 'report.json'),

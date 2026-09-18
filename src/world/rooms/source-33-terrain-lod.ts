@@ -198,17 +198,29 @@ export const room: RoomDefinition = {
     }
     // Colour lives in the vertices; every section shares one unlit material.
 
-    const postGeometry = new THREE.CylinderGeometry(0.05, 0.06, 0.5, 8);
+    // Boundary posts and rail at x = 0: the room's comparison is left
+    // (seams constrained) versus right (raw), and from the doorway at grazing
+    // angle the colour change alone reads weakly. Tall gold markers make the
+    // boundary itself walk-in legible; the sections and levels are untouched.
+    const postGeometry = new THREE.CylinderGeometry(0.07, 0.08, 1.1, 8);
     disposables.push(postGeometry);
     const postMaterial = new THREE.MeshBasicMaterial({ color: 0xd8c27a, toneMapped: false });
     disposables.push(postMaterial);
     for (let row = 0; row < ROWS; row += 1) {
       const post = new THREE.Mesh(postGeometry, postMaterial);
-      post.position.set(0, 0.35, (row - (ROWS - 1) / 2) * SECTION_D + 0.5);
+      post.position.set(0, 0.67, (row - (ROWS - 1) / 2) * SECTION_D + 0.5);
       root.add(post);
     }
+    const railGeometry = new THREE.BoxGeometry(0.08, 0.07, 14);
+    disposables.push(railGeometry);
+    const rail = new THREE.Mesh(railGeometry, postMaterial);
+    rail.position.set(0, 1.25, 0.5);
+    root.add(rail);
 
-    // Legend board by the door: colour is the level map.
+    // Legend board in the door half: colour is the level map. It used to hang
+    // at x = 4.2, half a metre ahead of the door camera and 83° off-axis —
+    // invisible on entry. Now it floats over the right half at 37°, readable
+    // from the doorway next to the terrain it keys. Text and chips unchanged.
     const legend = document.createElement('canvas');
     legend.width = 512;
     legend.height = 192;
@@ -233,12 +245,12 @@ export const room: RoomDefinition = {
     const legendTexture = new THREE.CanvasTexture(legend);
     legendTexture.colorSpace = THREE.SRGBColorSpace;
     disposables.push(legendTexture);
-    const legendGeometry = new THREE.PlaneGeometry(3.4, 1.28);
+    const legendGeometry = new THREE.PlaneGeometry(2.4, 0.9);
     disposables.push(legendGeometry);
     const legendMaterial = new THREE.MeshBasicMaterial({ map: legendTexture, toneMapped: false });
     disposables.push(legendMaterial);
     const legendBoard = new THREE.Mesh(legendGeometry, legendMaterial);
-    legendBoard.position.set(4.2, 1.8, -4.5);
+    legendBoard.position.set(1.6, 1.9, -2.2);
     legendBoard.rotation.y = Math.PI;
     root.add(legendBoard);
 

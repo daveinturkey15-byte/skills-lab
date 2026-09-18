@@ -7,10 +7,12 @@
 import type { Catalog } from './catalog';
 import type { LadderSort } from './views/ladder';
 import type { SourcesState } from './views/sources';
+import type { TechniquesState } from './views/techniques';
 import { buildSkillGraph, loadCatalog } from './catalog';
 import { el, setHash } from './views/shared';
 import { renderSkills } from './views/skills';
 import { emptySourcesState, renderSources } from './views/sources';
+import { emptyTechniquesState, renderTechniques } from './views/techniques';
 import { renderLadder } from './views/ladder';
 import { renderAbout } from './views/about';
 import { renderEvidence } from './views/evidence';
@@ -20,11 +22,12 @@ export interface AtlasOptions {
   baseUrl?: string;
 }
 
-type AtlasTab = 'skills' | 'sources' | 'ladder' | 'evidence' | 'gaps' | 'about';
+type AtlasTab = 'skills' | 'sources' | 'techniques' | 'ladder' | 'evidence' | 'gaps' | 'about';
 
 const TABS: Array<{ key: AtlasTab; label: string }> = [
   { key: 'skills', label: 'Skills' },
   { key: 'sources', label: 'Sources' },
+  { key: 'techniques', label: 'Techniques' },
   { key: 'ladder', label: 'Ladder' },
   { key: 'evidence', label: 'Evidence' },
   { key: 'gaps', label: 'Gaps' },
@@ -78,6 +81,7 @@ export function mountAtlas(container: HTMLElement, options: AtlasOptions = {}): 
   let catalog: Catalog | null = null;
   let active: AtlasTab = 'skills';
   let sourcesState: SourcesState = emptySourcesState();
+  let techniquesState: TechniquesState = emptyTechniquesState();
   let ladderSort: LadderSort = 'height';
   let flashSkill: string | null = null;
   const buttons = new Map<AtlasTab, HTMLButtonElement>();
@@ -99,6 +103,8 @@ export function mountAtlas(container: HTMLElement, options: AtlasOptions = {}): 
       }, flashSkill);
     } else if (active === 'sources') {
       renderSources(panel, catalog.sources, sourcesState);
+    } else if (active === 'techniques') {
+      renderTechniques(panel, catalog.sources, techniquesState);
     } else if (active === 'ladder') {
       renderLadder(panel, catalog.sources, ladderSort, (sort) => {
         ladderSort = sort;
@@ -160,8 +166,7 @@ export function mountAtlas(container: HTMLElement, options: AtlasOptions = {}): 
     button.addEventListener('click', () => setActive(key));
     button.addEventListener('keydown', (event) => {
       if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
-      event.preventDefault();
-      const order: AtlasTab[] = ['skills', 'sources', 'ladder', 'evidence', 'gaps', 'about'];
+      const order: AtlasTab[] = ['skills', 'sources', 'techniques', 'ladder', 'evidence', 'gaps', 'about'];
       const at = order.indexOf(active);
       const next = order[(at + (event.key === 'ArrowRight' ? 1 : order.length - 1)) % order.length];
       setActive(next);

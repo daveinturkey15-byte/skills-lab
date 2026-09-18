@@ -96,7 +96,8 @@ export const room: RoomDefinition = {
     );
 
     const halfX = 2.6;
-    const halfZ = 3.6;
+    // Bays sit forward: through-door read at ~10 m, not ~16 m. Staging only.
+    const halfZ = -1.5;
     const plinthGeo = track(new T.BoxGeometry(2.6, 0.5, 2.2));
     const barGeo = track(new T.BoxGeometry(0.5, 3.4, 0.5));
     const markerGeo = track(new T.SphereGeometry(0.09, 10, 8));
@@ -189,6 +190,8 @@ export const room: RoomDefinition = {
       root,
       update: (time: number) => {
         probe.position.z = 0.3 + Math.sin(time * 1.6) * 0.25;
+        // Turntable on the gated half only; the mesh-only control stays put.
+        gated.rotation.y = time * 0.35;
       },
       dispose: () => {
         for (const d of disposables) d.dispose();

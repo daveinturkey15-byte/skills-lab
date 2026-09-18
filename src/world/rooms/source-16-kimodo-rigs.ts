@@ -44,16 +44,21 @@ export const room: RoomDefinition = {
     geos.push(jointGeo);
     const jointMat = new T.MeshBasicMaterial({ color: 0xe8e2d2 });
     mats.push(jointMat);
-    const plinthGeo = new T.CylinderGeometry(1.2, 1.35, 0.25, 18);
+    const plinthGeo = new T.CylinderGeometry(1.2, 1.4, 0.8, 18);
     geos.push(plinthGeo);
     const plinthMat = new T.MeshStandardMaterial({ color: 0x4a545c, roughness: 0.9 });
     mats.push(plinthMat);
     for (let r = 0; r < 3; r += 1) {
       const g = new T.Group();
-      g.position.set(-4 + r * 4, 0, -2.0);
+      // Near the door (3.8 m inside it) so the entry frustum fills with the
+      // march, not with empty floor. Seated: group base sits on the pedestal
+      // top, and the z-wander stays over the pedestal instead of drifting.
+      const rx = -3.6 + r * 3.6;
+      g.position.set(rx, 0.35, -4.2);
+      g.scale.setScalar(1.15);
       root.add(g);
       const joints: THREE.Object3D[] = [];
-      const mat = new T.MeshStandardMaterial({ color: cols[r], roughness: 0.6 });
+      const mat = new T.MeshStandardMaterial({ color: cols[r], roughness: 0.6, emissive: cols[r], emissiveIntensity: 0.25 });
       mats.push(mat);
       const torso = new T.Mesh(torsoGeo, mat);
       torso.position.y = 1.35;
@@ -71,13 +76,16 @@ export const room: RoomDefinition = {
         joints.push(j);
       }
       const plinth = new T.Mesh(plinthGeo, plinthMat);
-      plinth.position.set(-4 + r * 4, 0.13, -2.0);
+      plinth.position.set(rx, 0.4, -4.2);
       root.add(plinth);
-      rigs.push({ group: g, joints, phase: r * 2.1, x: -4 + r * 4 });
+      rigs.push({ group: g, joints, phase: r * 2.1, x: rx });
       void counts;
     }
 
-    // Seam wall at the back: left half jagged (hard cut), right half smooth ramp.
+    // Seam wall at the back. The world places this room with rotation.y = PI
+    // (layout outward is -Z here), so local +X reads on the visitor's LEFT.
+    // Index mirrored (j = 9 - i): the hard-cut half lands local +X and reads
+    // left on entry, matching the summary; the blend ramp reads right.
     const seamGeo = new T.BoxGeometry(0.9, 1, 0.25);
     geos.push(seamGeo);
     const seamBadMat = new T.MeshStandardMaterial({ color: 0xe14b4b, roughness: 0.6 });
@@ -85,17 +93,18 @@ export const room: RoomDefinition = {
     const seamGoodMat = new T.MeshStandardMaterial({ color: 0x46c08a, roughness: 0.6 });
     mats.push(seamGoodMat);
     for (let i = 0; i < 10; i += 1) {
-      const h = i < 5 ? (i % 2 ? 1.6 : 0.5) : 0.5 + (i - 5) * 0.28;
-      const bar = new T.Mesh(seamGeo, i < 5 ? seamBadMat : seamGoodMat);
-      bar.scale.y = h;
-      bar.position.set(-4.5 + i * 1.0, h / 2 + 2.2, 7.5);
+      const j = 9 - i;
+      const h = j < 5 ? (j % 2 ? 1.6 : 0.5) : 0.5 + (j - 5) * 0.28;
+      const bar = new T.Mesh(seamGeo, j < 5 ? seamBadMat : seamGoodMat);
+      bar.scale.set(1.25, h * 1.25, 1);
+      bar.position.set(-5.4 + i * 1.2, (h * 1.25) / 2 + 2.0, 7.5);
       root.add(bar);
     }
 
     const update = (elapsed: number): void => {
       for (const rig of rigs) {
         const t = elapsed * 1.8 + rig.phase;
-        rig.group.position.z = -2.0 + Math.sin(t * 0.5) * 1.2;
+        rig.group.position.z = -4.2 + Math.sin(t * 0.5) * 0.4;
         for (let j = 0; j < rig.joints.length; j += 1) {
           const jj = rig.joints[j] as THREE.Mesh;
           jj.position.y = 1.9 - (Math.floor(j / 2) % 4) * 0.5 + Math.sin(t * 2 + j * 0.9) * 0.12;

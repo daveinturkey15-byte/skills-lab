@@ -81,17 +81,14 @@ export const room: RoomDefinition = {
     const obstacleMat = track(new T.MeshStandardMaterial({ color: 0x6b5f4e, roughness: 0.88 }));
     const discGeo = track(new T.CircleGeometry(PLAYER_RADIUS, 16));
     discGeo.rotateX(-Math.PI / 2);
-    const passMat = track(
-      new T.MeshStandardMaterial({ color: 0x000000, emissive: 0x2f8f5b, emissiveIntensity: 0.9, roughness: 0.7 }),
-    );
-    const blockMat = track(
-      new T.MeshStandardMaterial({ color: 0x000000, emissive: 0xc0392b, emissiveIntensity: 1.2, roughness: 0.7 }),
-    );
-    const sweepGeo = track(new T.BoxGeometry(WIDTH, 0.06, 0.18));
-    const sweepMat = track(
-      new T.MeshStandardMaterial({ color: 0x000000, emissive: 0xe0c15a, emissiveIntensity: 1.4, roughness: 0.6 }),
-    );
-    const sweeps: InstanceType<typeof T.Mesh>[] = [];
+    // Per-disc materials: the audit wave lights stations up as it passes, so
+    // each disc needs its own emissive to pulse. Same base verdict colours.
+    interface PulseDisc { mat: InstanceType<typeof T.MeshStandardMaterial>; base: number; z: number }
+    const pulseDiscs: PulseDisc[] = [];
+    // Verdict beacons at the corridor entrances, computed from the stations,
+    // not painted on: a corridor with any blocked station gets red, an
+    // all-pass corridor green. Tall so the verdict reads from the doorway.
+    const beaconGeo = track(new T.CylinderGeometry(0.22, 0.28, 2.5, 12));
 
     function build(
       centreX: number,
@@ -144,15 +141,26 @@ export const room: RoomDefinition = {
         root.add(mesh);
       }
       // One disc per station at the player's own radius, coloured by the answer.
+      // Each disc owns its material so the audit wave can light it up in turn.
       for (const station of stations) {
-        const disc = new T.Mesh(discGeo, station.passable ? passMat : blockMat);
+        const glow = station.passable ? 0x2f8f5b : 0xc0392b;
+        const level = station.passable ? 0.9 : 1.2;
+        const discMat = track(
+          new T.MeshStandardMaterial({ color: 0x000000, emissive: glow, emissiveIntensity: level, roughness: 0.7 }),
+        );
+        const disc = new T.Mesh(discGeo, discMat);
         disc.position.set(centreX, 0.03, corridorZ + station.z);
         root.add(disc);
+        pulseDiscs.push({ mat: discMat, base: level, z: corridorZ + station.z });
       }
-      const sweep = new T.Mesh(sweepGeo, sweepMat);
-      sweep.position.set(centreX, 0.06, corridorZ - LENGTH / 2);
-      root.add(sweep);
-      sweeps.push(sweep);
+      // Verdict beacon at this corridor's entrance, computed from its stations.
+      const blocked = stations.some((station) => !station.passable);
+      const beaconMat = track(
+        new T.MeshBasicMaterial({ color: blocked ? 0xe05c42 : 0x46c08a, toneMapped: false }),
+      );
+      const beacon = new T.Mesh(beaconGeo, beaconMat);
+      beacon.position.set(centreX, 1.25, corridorZ - LENGTH / 2 + 0.4);
+      root.add(beacon);
     }
 
     build(-corridorX, DEFECTIVE_OBSTACLES, sweepCorridor(LENGTH, WIDTH, DEFECTIVE_OBSTACLES), 0x3a3d40);
@@ -162,10 +170,14 @@ export const room: RoomDefinition = {
     return {
       root,
       update: (_t: number, dt: number) => {
-        // The audit walking the corridor, both halves together.
+        // The audit walking the corridor: a brightness wave over the station
+        // discs, both halves together, same 6 s sweep phase as before.
         elapsed = (elapsed + dt) % 6;
         const z = corridorZ - LENGTH / 2 + (elapsed / 6) * LENGTH;
-        for (const sweep of sweeps) sweep.position.z = z;
+        for (const disc of pulseDiscs) {
+          const d = disc.z - z;
+          disc.mat.emissiveIntensity = disc.base * (1 + 1.8 * Math.exp(-(d * d) / 1.5));
+        }
       },
       dispose: () => {
         for (const d of disposables) d.dispose();

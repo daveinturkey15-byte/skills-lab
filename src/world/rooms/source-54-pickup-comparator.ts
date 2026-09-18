@@ -25,7 +25,9 @@ export const room: RoomDefinition = {
 
     const floorGeo = new T.CircleGeometry(4.2, 36);
     geos.push(floorGeo);
-    const floorMat = new T.MeshStandardMaterial({ color: 0x2e3336, roughness: 1 });
+    // Pale display pad: the truck is dark paint on a dark shell, and from the
+    // door it merged into one bin. The pad separates exhibit from shell.
+    const floorMat = new T.MeshStandardMaterial({ color: 0x596066, roughness: 1 });
     mats.push(floorMat);
     const floor = new T.Mesh(floorGeo, floorMat);
     floor.rotation.x = -Math.PI / 2;
@@ -102,7 +104,10 @@ export const room: RoomDefinition = {
       root.add(stand);
     }
 
-    // Outliner wall: one bar per part group, long bars for the underbody.
+    // Outliner totem on the left wall of the door half: one bar per part
+    // group, long bars for the underbody. It used to hang on the back wall,
+    // 11 m from the door, where it contributed nothing on entry; the groups
+    // and their order are unchanged, only the address.
     const parts: Array<[number, number]> = [[2.6, 0x2e5f8f], [2.2, 0x2e5f8f], [3.2, 0x8b9094], [2.8, 0x1c2226], [1.8, 0x8b9094], [2.4, 0x141414], [1.4, 0xd8a03c], [2.0, 0x8b9094]];
     const outGeo = new T.BoxGeometry(1, 0.35, 0.2);
     geos.push(outGeo);
@@ -111,7 +116,8 @@ export const room: RoomDefinition = {
       mats.push(barMat);
       const bar = new T.Mesh(outGeo, barMat);
       bar.scale.x = parts[i][0];
-      bar.position.set(-4.2 + parts[i][0] / 2, 4.5 - i * 0.5, 7.5);
+      bar.rotation.y = Math.PI / 2;
+      bar.position.set(-4.6, 4.5 - i * 0.5, -2.2);
       root.add(bar);
     }
 

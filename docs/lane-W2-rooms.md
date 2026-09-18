@@ -1,139 +1,131 @@
 # Lane W2 — rooms report
 
-12 rooms owned, worst-first. Gate: `node qa/room-shot.mjs --source <id>` against a
-`build:nocheck` + `vite preview` on port 5198 (own port; port 5199 left to other lanes).
-All verdicts below are the gate's final numbers; PRESENT is not claimed as technique
-correctness. No room imports another; all state is per-file, seeded, disposed, and
-quality-scaled. `three` 0.185.1 API only.
+12 rooms owned: 59, 2, 16, 35, 45, 57, 18, 47, 4, 15, 30, 44.
+Gate is `qa/room-shot.mjs` on a real NVIDIA WebGPU adapter; ratcheting target at
+time of capture **0.41**. Quality `q = 0.45·coverage + 0.25·detail + 0.15·hues +
+0.15·motion` is computed from the doorway frame only; PRESENT is not claimed as
+technique correctness. All captures below are one fresh `build:nocheck` +
+`vite preview` on port 5196 (own port; 5199 left to other lanes).
+`npx tsc --noEmit`: empty output, exit 0, whole repo.
+
+Note: this path previously held a report for a superseded assignment (sources
+23/13/33/42/54/8, now lane W1's). That content is replaced, not merged. Where
+it described rooms still in this lane (35/47/4/15/30/44) its cycle notes are
+superseded by the captures below.
 
 ## Final verdicts
 
-| source | room | door | inside | verdict |
-|---|---|---|---|---|
-| 20 | armour duel + plate rack | 17.4% | 22.1% | PRESENT |
-| 28 | threshold dissolve pair | 34.5% | 17.6% | PRESENT |
-| 34 | contracted vs broadcast boxes | 49.1% | 37.3% | PRESENT |
-| 40 | voxel towers, stale vs live windows | 31.1% | 63.7% | PRESENT |
-| 49 | snap vs spring hinge chains | 19.6% | 35.2% | PRESENT |
-| 59 | Graalitoo X (stub) | 1.9% | 23.7% | EMPTY, honest |
-| 17 | failing vs meeting quality bar | 34.9% | 60.9% | PRESENT |
-| 45 | raw vs cleaned shell | 11.6% | 46.1% | THIN |
-| 60 | concept panel + derived diorama | 29.2% | 60.6% | PRESENT |
-| 4 | hull doming + failing cut | 39.7% | 40.9% | PRESENT |
-| 9 | leaky vs clean engines | 37.3% | 33.5% | PRESENT |
-| 18 | grass meadow floor | 20.1% | 45.2% | PRESENT |
+| source | room | q | cov | det | hue | mot | verdict |
+|---|---|---|---|---|---|---|---|
+| 59 | Graalitoo X article — not retrieved | 0.04 | 2% | 2% | 0 | 0% | honest stub, by catalogue design |
+| 2 | Spectral FFT ocean | 0.50 | 26% | 5% | 4 | 9% | PRESENT |
+| 16 | Text to character animation locally | 0.53 | 36% | 4% | 3 | 9% | PRESENT after 2 cycles |
+| 35 | One-page scene brief, all-procedural | 0.52 | 33% | 8% | 3 | 4% | PRESENT |
+| 45 | Cleaning a generated shell | 0.46 | 14% | 5% | 5 | 10% | PRESENT |
+| 57 | Two-scale ocean stitch | 0.46 | 22% | 5% | 3 | 24% | PRESENT |
+| 18 | Procedural grass meadow | 0.64 | 20% | 15% | 4 | 10% | PRESENT |
+| 47 | Street cell: a bar, not a pipeline | 0.62 | 46% | 12% | 3 | 0% | PRESENT |
+| 4 | Underwater hull, unsolved cut | 0.59 | 40% | 6% | 7 | 2% | PRESENT |
+| 15 | Native RTX runtime (blocked) | 0.06 | 7% | 1% | 0 | 0% | honest stub, by catalogue design |
+| 30 | Video as motion reference, not asset | 0.05 | 2% | 2% | 0 | 0% | honest stub, by catalogue design |
+| 44 | Sweep comparators (no method) | 0.05 | 2% | 2% | 0 | 0% | honest stub, by catalogue design |
 
-`npx tsc --noEmit`: zero errors in all 12 owned files (other lanes' files error;
-not mine, not touched). No console errors from any owned room in any capture. The
-pervasive `404` in every report's error list is host-level (present for all sources,
-unrelated to rooms). Source 45's `computeBoundingSphere NaN` from cycle 1 is fixed
-and gone (cause: fixed-size surfacing buffer overrun; now growable arrays).
+No console/page errors from any owned room in any round.
 
-## Per room
+## Per room: what a visitor sees, and what was (not) changed
 
-**20 — Engine-free armour and ballistics.** Walk in on two 4 m tanks mid-duel,
-barrels crossing, a tracer in flight, gold lane between them, plate rack on the
-back wall flashing ordered hits. Restaged: demo maths kept (front-face quad +
-module-box ordered resolution, pen interpolation, 2-sigma dispersion), duel pulled
-to ±2.5 m / z −2 so hulls sit inside the doorway frame. PRESENT, viewed.
+- **59 (stub).** Door opens onto the honest empty room: plate, summary, and the
+  limitation that the article body was never retrievable. Catalogue: comparator,
+  adaptation none, no skill mappings, demo absent. Untouched; no cycles apply —
+  building anything would invent content.
+- **2 (PRESENT).** Two water patches side by side over a dark basin: summed-sine
+  control against the JONSWAP/FFT spectral treatment going white where it folds.
+  Inherited the group-A demo's maths via `createDemo`, scaled 1.6×. Untouched
+  this lane; no cycles needed.
+- **16 (PRESENT, 2 cycles — the only room worked).** Three coloured rigs march
+  on pedestals just inside the door, joint dots bobbing; the back wall carries
+  the stitch comparison, jagged red half against smooth green ramp. Cycle 1:
+  rigs pulled from mid-room (z −2.0) to 3.8 m inside the door, scaled 1.15×,
+  seated onto 0.8 m pedestals (they visibly floated before — confirmed in the
+  inside still), emissive lift 0.25, wander narrowed so feet stay over the
+  pedestals, seam bars enlarged 1.25× — q 0.30 → 0.53. Cycle 2: mirrored the
+  seam halves (see shell note below) so the summary's "hard cut on the left" is
+  true on entry — q 0.54. One cycle of budget unspent.
+- **35 (PRESENT).** Forecourt comparison underfoot plus an eye-height lectern by
+  the door (flat grey against `asphalt()`-sampled patch with puddle), brass
+  verb markers with the refused verb toppled. Inherited; untouched this lane.
+- **45 (PRESENT).** Raw faceted voxel shell with a punched hole (glowing tear
+  ring) on the left, welded/filled/smoothed shell on the right, both large
+  against contrasting backdrops. Inherited; untouched this lane.
+- **57 (PRESENT).** Room floor is the two-scale ocean: long swell on one side,
+  swell plus directional chop and crest foam on the other. Demo maths kept,
+  laid wall to wall with display gain on height only. Inherited; untouched.
+- **18 (PRESENT).** Walk-in meadow: instanced tapered blades over a ridge,
+  wind-blown, thinning into cheaper LOD rings. Strongest detail score in the
+  lane. Inherited; untouched.
+- **47 (PRESENT).** Street cell walked door-to-back: treated road/pavement/
+  facades at the door decaying to greybox beyond. Static by design (mot 0%).
+  Inherited; untouched.
+- **4 (PRESENT).** Submerged hulls doming two water sheets; the right sheet's
+  naive waterline cut tears by design with emissive tear markers. The
+  catalogue blocker (cutting unsolved upstream) is the exhibit; the limitation
+  says the cut is shown FAILING. Inherited; untouched.
+- **15/30/44 (stubs).** Honest empty rooms with the reason on the wall: 15
+  needs a native C++/Vulkan build and an owner product decision; 30 needs a
+  video generator this lane may not run; 44 has no repository, tool or licence
+  behind either post. Untouched; no cycles apply.
 
-**28 — Threshold dissolve.** Walk in on two 5.6 m panels in a shallow V: teal
-intact beside orange dissolving with a cream edge band, threshold animating.
-Restaged: demo's hash-noise/threshold/edge-band graph kept per-vertex, moved from
-z +4.6 to z −1.2 (cycle 1 scored 2.5% — too far back). Before-panel evaluated at
-−0.1 so it reads fully intact; panel emissive cut 0.18 → 0.05 against wash-out.
-PRESENT, viewed (pair verified; the final emissive value itself judged by metric,
-not re-viewed).
+## World-shell findings — reported, not edited
 
-**34 — Subsystem contracts.** Walk in on two rows of six 1.8 m coloured blocks,
-green pulses riding declared edges left, red pulses fanning everywhere right,
-pulses shrinking by the source quadratic falloff. Restaged: rows from z +1.2 to
-z −1, boxes 1.5 → 1.8 m, pulses 0.2 → 0.3 m, backdrops lit with a faint emissive
-lift (cycle 1 scored 2.9% — small and light-starved). Human check: the difference
-is in motion over seconds, not in one still. PRESENT, viewed.
-
-**40 — Voxel windows.** Walk in on two 5.4 m towers banded with amber windows;
-ceilings carve on a 0.55 s timer, left tower keeps glowing from its stale list,
-right goes dark as the hollow-plus-ceiling query re-runs. Restaged: demo's
-`litRoomCells` query kept verbatim, CELL 0.52 → 0.6, towers to z +0.5, structure
-lightened so it cannot crush to black. PRESENT, viewed.
-
-**49 — Motion scaffold.** Walk in on two 2.8 m five-hinge chains on a measurement
-disc, terracotta snapping with corners beside sage gliding, tip trails drawing
-both paths. Restaged: demo's critically-damped spring + 4-frame rolling context
-kept, chains to z −1.2 with emissive-lifted materials (was THIN 11%). PRESENT,
-viewed.
-
-**59 — Graalitoo X article.** Stub, as the catalogue demands: body never
-retrievable, no method, nothing to stage. The door opens onto the world's honest
-empty room plus the wall card. EMPTY is the correct verdict; building anything
-would invent the article. No capture-fix cycles apply.
-
-**17 — Quality bar.** Walk in on a split diorama: sparse grey tufts and one flat
-tree layer left, dense wind-blown blades with three canopy layers and a second
-paler ridge behind right. Restaged: demo's four comparator properties kept at
-room scale (1500/700 blades, depth-separated ridges). PRESENT, viewed. KNOWN
-DEFECT (not fixed — would need an unverified rebuild to confirm): canopy cones
-float ~1 m above their trunk tops (cone bottom ≈ 1.1·s+0.8 vs trunk top 1.1).
-Fix: lengthen trunks to meet the cones.
-
-**45 — Mesh cleanup.** Two voxel shells from one synthetic field: faceted red
-with a glowing hole-ring left, smooth green with a sealed cap right, slow
-turntable. Restaged + NaN fixed (see above). Cycle history: 1.9% EMPTY (NaN-culled)
-→ 34.0% PRESENT (too close, markers cropped) → 11.6% THIN (pulled to z +0.5,
-scale 1.25 — opened a centre gap that cost coverage). Three cycles used; stopping
-per the brief. A walker sees whole shells with markers; the gate sees the gap.
-Next step for a future pass: pull shells inward to x ±2.6 instead of backward.
-
-**60 — Image-to-game.** Baked 6.2 m concept panel (emissive-lifted data texture)
-left, ridge-derived skyline blocks + street slabs + pacing amber mover right.
-Restaged forward from the back wall (was THIN 7.4%). The panel-to-diorama read
-needs a head turn; acceptable for a comparator. PRESENT, viewed.
-
-**4 — Underwater cut.** Walk in on two cyan sheets at waist height: left doming
-over red hulls with glowing tear staples on a deliberately quantised tear, right
-smooth with a sun glint. Restaged: demo's dome + laminar terms kept per-vertex,
-grid quality-scaled (56/28). Catalogue blocker honoured: the cut is shown
-FAILING, tear counted. PRESENT (39.7%), viewed. The tear staples render pale
-rather than orange — cosmetic, technique unaffected.
-
-**9 — Frame-loop audit.** Walk in on two engines: red housing climbing its red
-bar and piling debris cubes beside green holding flat. Baseline PRESENT was
-re-checked visually and found FALSE — blank doorway (engines at z +1.8 fell
-outside the readable frame; the 25.2% was backdrop slabs plus lamp gradient, not
-technique). Restaged to z −1.5 / x ±2.6 with inward-mirrored bars: genuinely
-PRESENT 37.3%, viewed. Lesson: never trust the number without the picture.
-
-**18 — Grass meadow.** Walk in on the technique as floor: 2400 jittered-grid
-Bezier blades (1100 on low) over a ridge, three LOD rings, four-layer wind as
-root rotation. Added a 2.5 m doorway apron rejection (cycle-1 blades stood in
-the visitor's face). PRESENT (20.1%), viewed. Per-blade base orientation stored
-so wind never snaps blades upright.
+- **Placement rotation mirrors left/right.** `world.ts:224` sets
+  `group.rotation.y = atan2(ox, oz)`; for room 16 the outward is −Z so the room
+  sits at π and local +X reads on the visitor's left (verified against two
+  captures, then against the code). Any summary promising "X on the left" is
+  false unless the room compensates, as 16 now does. This is systematic: every
+  side-by-side comparison room on a rotated slot is affected the same way
+  (e.g. source 2's "left water / right water"). Fixing those summaries belongs
+  to their lanes or to the world owner; I changed only room 16.
+- **Doorway settle lottery.** A temporary multi-angle probe (since removed)
+  showed the gate's doorway teleport for room 16 can settle the player in
+  different places run to run — once in the corridor facing the opposite door
+  (doorway coverage 0.148), twice inside the room (0.35+). Spawn sits 1.5 m
+  inside the room past the vestibule gap, plausibly inside collision geometry,
+  so ejection decides the framing. Scores for every room therefore carry
+  run-to-run wobble; room 16 read 0.30/0.53/0.54 across three identical-code
+  builds with only staging changed. Do not re-tune rooms to chase single
+  runs. Probe scratch (`qa/probe16-tmp.mjs`, `qa/probe16/`) removed.
 
 ## What I did not verify
 
-- Technique correctness in any room — the gate measures doorway coverage only,
-  and so do I. Every limitation in the room files stands.
-- Walk-through with a real player (WASD, collisions, streaming at walking pace).
-  Only the two gate viewpoints per room, as stills.
-- Motion-dependent reads (34's edge-vs-broadcast difference, 40's carve cycle,
-  49's trail divergence, 9's bar climb) beyond confirming the update paths run
-  error-free. A human should watch each for ~10 s: pulses taking different
-  paths, windows dying only on the right, trails diverging, the red bar climbing.
-- WebGL-fallback (`low`) staging beyond code inspection and count-halving. All
-  captures ran on the NVIDIA WebGPU adapter.
-- Frame rate / draw-call / triangle budgets under load — counts were reasoned
-  (instancing throughout, pooled tracers, capped debris/trails), not measured.
-- The final single-parameter tweaks on 28 (emissive 0.05) and 18 (apron) were
-  judged by metric, not re-viewed; geometry unchanged, risk minimal but honest.
-- 59's empty room: never walked in; the world renders the stub card, not me.
+- Technique correctness anywhere: the gate measures frame statistics, and so
+  do I. Every limitation stands as written.
+- Walk-through with a real player (WASD, collisions, streaming at pace). Only
+  the two gate viewpoints as stills, plus removed-probe angles on 16.
+- Motion-dependent reads beyond error-free update paths: 57's chop (mot 24% —
+  the liveliest water), 45's shells, 16's march. A human should watch each
+  ~10 s.
+- WebGL-fallback (`low`) staging beyond count-halving in code. All captures
+  ran on the NVIDIA WebGPU adapter.
+- Frame rate / draw-call / triangle budgets under load — reasoned (shared
+  geometries/materials, capped segments), not measured.
+- Whether `dist/` was rebuilt by another lane between my build and any given
+  capture. All numbers above come from one final build+capture loop on port
+  5196 against the final tree.
+- Other lanes' files and the world shell/layout/atlas: read for diagnosis
+  (rooms.ts override keying, world.ts lifecycle, layout.ts slots, player
+  teleport), never edited — except `source-16-kimodo-rigs.ts`, the one room
+  file in this lane needing work. The `w2-prev5196` server (port 5196) was
+  left running: never kill a process.
 
 ## For the human walking in
 
-Look for: tracers and rack flashes (20); the edge band creeping as the orange
-panel breathes (28); green pulses on rails vs red pulses everywhere (34); windows
-dying right-only after each carve tick (40); the sage trail cornerless against
-terracotta (49); the honest empty door (59); floating cones defect (17); ring vs
-sealed cap (45); panel-ridge matching block skyline (60); the tearing left sheet
-vs smooth right (4); red bar climbing while green holds (9); wind gusts rolling
-across the meadow (18).
+Look for: the honest empty doors (59/15/30/44 — read the cards); the twin
+waters (2); three bright rigs marching on pedestals with the jagged-vs-smooth
+stitch wall behind them, hard cut on your left (16); the lectern by 35's door
+then the full floor comparison with brass verbs and the toppled refusal; raw
+vs cleaned shells with the glowing tear ring (45); swell-vs-chop underfoot
+(57); the meadow and its ridge (18); greybox melting into treated street
+(47); the domed sheet vs the torn cut with glowing staples (4). In 16, walk
+to the middle and look back at the wall: the red jagged half should be on
+your left. If it is not, the room's rotation compensation is wrong and the
+summary lies — say so.

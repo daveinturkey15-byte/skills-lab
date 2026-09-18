@@ -1,19 +1,31 @@
 /**
  * Source 23 — hand-written GLSL combat sim with deforming terrain.
  *
- * Restages the lab demo's comparison at room scale: two snow plates fill the
- * room, and a walker drives the same lissajous path into both. The left plate
- * clears its field every frame; the right plate remembers, so the path
- * accumulates into a tinted groove. Field, brush and banked recovery are
- * restated from the demo; the source's texel-snapped toroidal follow window
- * is not shown because a room floor never follows anyone — stated, not
- * smuggled.
+ * Restages the lab demo's comparison at room scale: two snow plates face the
+ * door as tilted drafting tables, and a walker drives the same lissajous path
+ * into both. The left plate clears its field every frame; the right plate
+ * remembers, so the path accumulates into a tinted groove. The tilt is pure
+ * staging for the doorway sightline — a flat floor foreshortens to a sliver
+ * from a 1.6 m eye — while field, brush, banked recovery and path run in the
+ * plate's own frame, untouched. The source's texel-snapped toroidal follow
+ * window is not shown because a room floor never follows anyone — stated,
+ * not smuggled.
  */
 import type * as THREE from 'three';
 import type { RoomContext, RoomDefinition } from '../contract';
-
 const PLATE_W = 6.2;
-const PLATE_D = 12;
+const PLATE_D = 8;
+// The doorway camera stands at local z = -4 (4 m inside the door wall) at
+// 1.6 m eye height, and this wing's world shell carries a full-height
+// barrier at local z = 0: everything past the room's middle never reaches
+// the door (the flat floor read as a sliver because only its near 2 m are
+// door-side of the wall). So both plates live entirely in the door half,
+// tilted 34° toward the door as drafting tables, bottom edge 2.8 m ahead of
+// the camera. Staging only; field, brush, bank and path below run in
+// plate-local coordinates and never know about the tilt or the address.
+const EXHIBIT_Z = -3.5;
+const TILT = 0.6;
+const PIVOT_Y = 0.3;
 const MAX_DEPTH = 0.5;
 const RELAX_STEP = 0.4;
 const RELAX_RATE = 0.05;
@@ -96,7 +108,6 @@ class DeformationField {
 // unlit below so the vertex-colour groove tint renders exactly as authored.
 const SNOW: readonly [number, number, number] = [0.78, 0.8, 0.84];
 const PACKED: readonly [number, number, number] = [0.16, 0.26, 0.4];
-const PLATE_LIFT = 0.55;
 
 export const room: RoomDefinition = {
   sourceId: 23,
@@ -111,8 +122,9 @@ export const room: RoomDefinition = {
     + 'rights reserved and none of its expression is reproduced. CPU field, '
     + 'not a GPU pass over float targets; the texel-snapped follow window is '
     + 'not shown because a room floor never follows anyone; no snow shading, '
-    + 'compression or berm model. The groove is pre-rolled to its steady '
-    + 'state so it reads on entry — watch a while to see the true relax rate.',
+    + 'compression or berm model. The plates are tilted toward the door as '
+    + 'staging so the groove reads on entry. The groove is pre-rolled to its '
+    + 'steady state so it reads on entry — watch a while to see the true relax rate.',
   create: (ctx: RoomContext) => {
     const { THREE } = ctx;
     const disposables: Array<{ dispose(): void }> = [];
@@ -124,6 +136,8 @@ export const room: RoomDefinition = {
     const rng = mulberry32(ctx.seed ^ 0x970b);
 
     interface Plate {
+      side: -1 | 1;
+      pivot: THREE.Group;
       mesh: THREE.Mesh;
       base: Float32Array;
       field: DeformationField;
@@ -155,24 +169,25 @@ export const room: RoomDefinition = {
       const material = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
       disposables.push(material);
       const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(side * 3.35, PLATE_LIFT + 0.05, 0.5);
-      root.add(mesh);
-      plates.push({ mesh, base, field: new DeformationField(resolution, PLATE_D, side > 0) });
+      // Rigid tilt only: the geometry, field and path stay in plate frame.
+      const pivot = new THREE.Group();
+      pivot.position.set(side * 3.35, PIVOT_Y, EXHIBIT_Z);
+      pivot.rotation.x = -TILT;
+      pivot.add(mesh);
+      plates.push({ side, pivot, mesh, base, field: new DeformationField(resolution, PLATE_D, side > 0) });
     }
 
-    // Walkers are instruments, not subjects: human-scale blue balls riding
-    // just above the plates so they read at 8 m against the snow. A probe
-    // with giant red balls proved the walkers and the groove tint render
-    // fine — earlier captures simply caught them at the path extremes, out
-    // of the doorway frustum. Colour and size are staging; the driven path
-    // below is the technique's lissajous, unchanged in kind.
+    // Walkers are instruments, not subjects: human-scale blue balls riding the
+    // tilted surface so they read against the snow from the door. Placement
+    // maps the plate-local path point through the pivot, so the rigid tilt
+    // never leaks into field coordinates. Colour and size are staging; the
+    // driven path below is the technique's lissajous, unchanged in kind.
     const markerGeometry = new THREE.SphereGeometry(0.7, 16, 12);
     disposables.push(markerGeometry);
     const markerMaterial = new THREE.MeshBasicMaterial({ color: 0x2f7fe0, toneMapped: false });
     disposables.push(markerMaterial);
-    const walkers = [-1, 1].map((side) => {
+    const walkers = [-1, 1].map(() => {
       const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-      marker.position.set(side * 3.35, PLATE_LIFT + 0.85, 0.5);
       root.add(marker);
       return marker;
     });
@@ -196,7 +211,18 @@ export const room: RoomDefinition = {
       position.needsUpdate = true;
       colour.needsUpdate = true;
     };
-
+    // Walker placement through the pivot: the plate-local path point plus the
+    // analytic surface height (base undulation minus field depth; the seeded
+    // jitter is ±0.015 and safely ignored) mapped to the room by the tilt.
+    const HOVER = 0.78;
+    const tmp = new THREE.Vector3();
+    const placeWalker = (p: number, x: number, z: number): void => {
+      const plate = plates[p]!;
+      const surf =
+        0.12 * Math.sin(x * 0.9 + plate.side) * Math.cos(z * 0.7) - plate.field.sample(x, z);
+      plate.pivot.updateWorldMatrix(true, false);
+      walkers[p]!.position.copy(plate.pivot.localToWorld(tmp.set(x, surf + HOVER, z)));
+    };
     // Deterministic lissajous path, kept tight around the plate centres so
     // walker and groove stay inside the doorway sightline at all times. The
     // first staging used the full plate width and the trail spent itself at
@@ -218,6 +244,12 @@ export const room: RoomDefinition = {
       }
     }
     for (const plate of plates) applyField(plate);
+    // Initial walker poses match the path start, so frame zero already reads.
+    root.updateMatrixWorld(true);
+    for (let p = 0; p < plates.length; p += 1) {
+      const [ix, iz] = pathAt(0);
+      placeWalker(p, ix, iz);
+    }
     let normalTick = 0;
      return {
        root,
@@ -232,8 +264,7 @@ export const room: RoomDefinition = {
           plate.field.brush(x, z, 1.4, 9.0 * step);
           plate.field.relax(step);
           applyField(plate);
-          const depth = plate.field.sample(x, z);
-          walkers[p].position.set((p === 0 ? -3.35 : 3.35) + x, PLATE_LIFT + 0.85 - depth, 0.5 + z);
+          placeWalker(p, x, z);
         }
         normalTick += 1;
         if (normalTick % 2 === 0) {
