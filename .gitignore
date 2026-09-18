@@ -49,3 +49,6 @@ qa/*
 !qa/room-shot.mjs
 !qa/package.json
 !qa/package-lock.json
+
+__pycache__/
+*.pyc
