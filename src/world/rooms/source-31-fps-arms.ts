@@ -41,12 +41,12 @@ export const room: RoomDefinition = {
     const stage = new THREE.Group();
     stage.name = 'source-31-room-stage';
     demo.root.scale.setScalar(3);
+    stage.add(demo.root);
     stage.rotation.y = Math.PI;
-    // A stride from the door, not at the back wall — cycle 3 tried double
-    // scale and the spawn camera ended up inside the bones, scoring worse.
-    // Scale 3 at z=-1 measured 7.9% (THIN), the best of three cycles, and is
-    // kept; the remaining gap is recorded, not ground out.
-    stage.position.set(0, 1.35, -1.0);
+    // Doorway framing: at z=-1 the tripled rig overflowed the frame and read
+    // as pipework. Pulled to the back half so both full arms and the handle
+    // fit from the door; lowered so the reach sits near eye height.
+    stage.position.set(0, 1.0, 2.0);
 
     const root = new THREE.Group();
     root.name = 'source-31-fps-arms-room';
