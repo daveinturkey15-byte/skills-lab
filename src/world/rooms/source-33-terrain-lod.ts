@@ -21,7 +21,14 @@ const SECTION_D = 3.5;
 const LOD_RES = [20, 10, 5, 3];
 /** Geometric error in world metres per level: doubles down the levels. */
 const LEVEL_ERROR = [0.1, 0.25, 0.6, 1.4];
-const ERROR_TOLERANCE_PX = 6;
+/**
+ * Room-calibrated tolerance. The source's 6 px first coarsens past ~32 m, so
+ * inside a 16 m room every section would sit at L0 forever and the level map
+ * would never change colour. 80 px puts L0/L1/L2/L3 at ~1/2.4/5.8/13.6 m —
+ * the doorway sees the full gradient — while the projected-error test, the
+ * 1.16x/0.72x hysteresis and the neighbour constraint run exactly as read.
+ */
+const ROOM_TOLERANCE_PX = 80;
 const PROJECTION = 900 / (2 * Math.tan((60 * Math.PI) / 180 / 2));
 const LEVEL_COLOURS: Array<[number, number, number]> = [
   [0.36, 0.64, 0.44],
@@ -65,17 +72,17 @@ function selectLod(distance: number, current: number): number {
   const projected = (level: number): number => (LEVEL_ERROR[level] * PROJECTION) / safe;
   let target = 0;
   for (let level = 0; level < LOD_RES.length; level += 1) {
-    if (projected(level) <= ERROR_TOLERANCE_PX) target = level;
+    if (projected(level) <= ROOM_TOLERANCE_PX) target = level;
     else break;
   }
   if (target === current) return current;
   if (target > current) {
     // Coarser only when the current level is over tolerance by a margin.
-    if (projected(current) < ERROR_TOLERANCE_PX * 1.16) return current;
+    if (projected(current) < ROOM_TOLERANCE_PX * 1.16) return current;
     return Math.min(current + 1, target);
   }
   // Finer only when the candidate sits comfortably under tolerance.
-  if (projected(target) > ERROR_TOLERANCE_PX * 0.72) return current;
+  if (projected(target) > ROOM_TOLERANCE_PX * 0.72) return current;
   return Math.max(current - 1, target);
 }
 
@@ -116,7 +123,9 @@ export const room: RoomDefinition = {
   limitation:
     'Headline features NOT shown: no dual contouring, live CSG, '
     + 'tunnels, worker pool, IndexedDB or frame-budget scheduler — '
-    + 'main-thread swaps, not off-thread. Sections are unlit so the level '
+    + 'main-thread swaps, not off-thread. The 6 px error tolerance is re-scaled '
+    + 'to 80 px for a 16 m room (algorithms unchanged); without that every '
+    + 'section would sit at L0. Sections are unlit so the level '
     + 'map reads as data, not lighting. Relief capped so the camera stays '
     + 'above it; you walk through the hills, not over them.',
   create: (ctx: RoomContext) => {

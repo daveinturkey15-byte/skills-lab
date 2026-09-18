@@ -16,7 +16,7 @@
  *   node qa/room-shot.mjs --base http://localhost:5199/skills-lab/ --source 3
  *   node qa/room-shot.mjs --base ... --all
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
@@ -86,66 +86,162 @@ const wanted = ALL ? rooms : rooms.filter((r) => String(r.sourceId) === String(O
 if (wanted.length === 0) { console.error(`no room for source ${ONLY}`); process.exit(2); }
 console.log(`adapter ${adapter.vendor} · ${wanted.length} room(s)\n`);
 
-/** Coverage of the frame by anything that is not wall, floor or ceiling. */
-function subjectShare(png) {
+/**
+ * Coverage, colour and detail in one pass.
+ *
+ * Coverage alone cannot tell a good room from a bad one, and I have the pair
+ * that proves it: source 48 (a lit interior with dust, grime and a lit/unlit
+ * split) and source 51 (a pale water plane under a black sky, no cloud, no rain)
+ * both passed a coverage-only gate. What separates them is that 48 has colour
+ * variety and fine detail and 51 has neither.
+ */
+function frameStats(png) {
   const { width, height, data } = png;
   const hist = new Map();
+  const hues = new Set();
   let n = 0;
-  for (let y = 0; y < height; y += 3) {
-    for (let x = 0; x < width; x += 3) {
+  let edges = 0;
+  const luma = (x, y) => {
+    const i = (y * width + x) * 4;
+    return data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+  };
+  for (let y = 3; y < height - 3; y += 3) {
+    for (let x = 3; x < width - 3; x += 3) {
       const i = (y * width + x) * 4;
-      const k = ((data[i] >> 4) << 8) | ((data[i + 1] >> 4) << 4) | (data[i + 2] >> 4);
-      hist.set(k, (hist.get(k) ?? 0) + 1);
+      const r = data[i], g = data[i + 1], b = data[i + 2];
+      hist.set(((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4), (hist.get(((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4)) ?? 0) + 1);
+      n += 1;
+      if (Math.abs(luma(x + 3, y) - luma(x - 3, y)) + Math.abs(luma(x, y + 3) - luma(x, y - 3)) > 12) edges += 1;
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+      if (mx - mn > 18) {
+        let h = 0;
+        if (mx === r) h = ((g - b) / (mx - mn)) % 6;
+        else if (mx === g) h = (b - r) / (mx - mn) + 2;
+        else h = (r - g) / (mx - mn) + 4;
+        hues.add(Math.round(((h * 60) + 360) % 360 / 20));
+      }
+    }
+  }
+  const top = [...hist.values()].sort((a, b) => b - a).slice(0, 3).reduce((s, v) => s + v, 0);
+  return {
+    coverage: Number(((n - top) / n).toFixed(3)),
+    detail: Number((edges / n).toFixed(3)),
+    hues: hues.size,
+  };
+}
+
+/** Fraction of sampled pixels that changed between two frames of the same view. */
+function motionBetween(a, b) {
+  const { width, height, data: d1 } = a;
+  const d2 = b.data;
+  let moved = 0;
+  let n = 0;
+  for (let y = 3; y < height - 3; y += 4) {
+    for (let x = 3; x < width - 3; x += 4) {
+      const i = (y * width + x) * 4;
+      if (Math.abs(d1[i] - d2[i]) + Math.abs(d1[i + 1] - d2[i + 1]) + Math.abs(d1[i + 2] - d2[i + 2]) > 14) moved += 1;
       n += 1;
     }
   }
-  // The shell is a handful of flat greys; whatever is not in the top three
-  // buckets is, near enough, the thing the room is for.
-  const top = [...hist.values()].sort((a, b) => b - a).slice(0, 3).reduce((s, v) => s + v, 0);
-  return Number(((n - top) / n).toFixed(3));
+  return Number((moved / n).toFixed(3));
 }
+
+
+/**
+ * THE RATCHET.
+ *
+ * A fixed threshold stops driving improvement the moment everything clears it,
+ * and the owner's instruction was explicitly that things must keep improving
+ * rather than be "integrated basically". So the target is stored beside the
+ * report and steps up whenever the world's median quality overtakes it.
+ *
+ * It only ever rises, and it rises from measured median quality rather than
+ * from a number I chose — a gate I could lower is not a gate. Raising a bar is
+ * the opposite of the forbidden move, which is loosening one to obtain a pass.
+ */
+const TARGET_FILE = join(OUT, 'target.json');
+const TARGET_FLOOR = 0.35;
+const TARGET_STEP = 0.03;
+
+function readTarget() {
+  try { return Number(JSON.parse(readFileSync(TARGET_FILE, 'utf8')).target) || TARGET_FLOOR; }
+  catch { return TARGET_FLOOR; }
+}
+const TARGET = readTarget();
 
 const results = [];
 for (const r of wanted) {
-  const shots = {};
-  for (const [name, x, z] of [
-    ['doorway', r.spawn.x, r.spawn.z],
-    ['inside', r.room.x, r.room.z],
-  ]) {
+  const shot = async (name, x, z) => {
     await page.evaluate(`window.__worldTeleport(${x}, ${z}, ${r.facing})`);
-    await page.waitForTimeout(1800);
+    await page.waitForTimeout(1600);
     const buf = await page.locator('canvas').first().screenshot();
-    const slug = `${r.sourceId}-${name}`;
-    writeFileSync(join(OUT, `${slug}.png`), buf);
-    shots[name] = subjectShare(PNG.sync.read(buf));
-  }
-  // From the doorway the technique must be visible at all; inside it must be
-  // substantial. An empty room scores near zero from both.
-  // Calibrated against a frame a human looked at, not against a guess. Source 1
-  // (the mocap room) reads as "small but visible" from the doorway and scores
-  // 14.6%; rooms at 2-3% are effectively empty from the door even though
-  // something is technically drawn there. The first thresholds called 59 of 62
-  // PRESENT, which flattered exactly the defect I had already seen with my own
-  // eyes — the adapted demos are stage-scaled and tiny.
-  //
-  // Doorway coverage is the number that matters. Inside coverage barely moves
-  // between a good room and a bad one, because wall shading fills the frame
-  // either way.
-  const verdict = shots.doorway < 0.06 ? 'EMPTY FROM THE DOOR — subject is not readable on entry'
-    : shots.doorway < 0.12 ? 'THIN — subject is there but too small to read'
-      : 'PRESENT';
-  results.push({ ...r, ...shots, verdict });
-  console.log(`[${verdict === 'PRESENT' ? ' ok ' : 'FAIL'}] ${String(r.sourceId).padStart(2)} ${r.title.slice(0, 44).padEnd(44)} door=${(shots.doorway * 100).toFixed(1)}% inside=${(shots.inside * 100).toFixed(1)}%  ${verdict}`);
+    writeFileSync(join(OUT, `${r.sourceId}-${name}.png`), buf);
+    return PNG.sync.read(buf);
+  };
+
+  const door = await shot('doorway', r.spawn.x, r.spawn.z);
+  // Second frame from the same spot, a beat later. A room whose update() does
+  // nothing is a photograph, and a photograph of a technique is not a
+  // demonstration of it.
+  await page.waitForTimeout(1300);
+  const doorAgain = PNG.sync.read(await page.locator('canvas').first().screenshot());
+  const inside = await shot('inside', r.room.x, r.room.z);
+
+  const d = frameStats(door);
+  const i = frameStats(inside);
+  const motion = motionBetween(door, doorAgain);
+
+  /**
+   * One score, so the loop has something to raise rather than a threshold to
+   * scrape past. Coverage dominates because a subject you cannot see fails
+   * regardless; detail and colour separate a real exhibit from a flat plane;
+   * motion is capped because not every technique should move — a shape grammar
+   * is legitimately still, and should not be punished for it.
+   */
+  const quality = Number((
+    Math.min(d.coverage, 0.6) / 0.6 * 0.45
+    + Math.min(d.detail, 0.14) / 0.14 * 0.25
+    + Math.min(d.hues, 7) / 7 * 0.15
+    + Math.min(motion, 0.10) / 0.10 * 0.15
+  ).toFixed(3));
+
+  const verdict = d.coverage < 0.06 ? 'EMPTY FROM THE DOOR — subject is not readable on entry'
+    : d.coverage < 0.12 ? 'THIN — subject is there but too small to read'
+      : quality < TARGET ? `BELOW BAR — quality ${quality.toFixed(2)} under the ${TARGET.toFixed(2)} target`
+        : 'PRESENT';
+
+  results.push({
+    ...r,
+    doorway: d.coverage, inside: i.coverage,
+    detail: d.detail, hues: d.hues, motion, quality, target: TARGET,
+    verdict,
+  });
+  const mark = verdict === 'PRESENT' ? ' ok ' : verdict.startsWith('BELOW') ? 'bar ' : 'FAIL';
+  console.log(`[${mark}] ${String(r.sourceId).padStart(2)} ${r.title.slice(0, 40).padEnd(40)} q=${quality.toFixed(2)} cov=${(d.coverage * 100).toFixed(0)}% det=${(d.detail * 100).toFixed(0)}% hue=${d.hues} mot=${(motion * 100).toFixed(0)}%`);
 }
 
 writeFileSync(join(OUT, ONLY ? `report-${ONLY}.json` : 'report.json'),
-  JSON.stringify({ capturedAt: new Date().toISOString(), adapter, base: BASE, results, errors: [...new Set(errors)] }, null, 1));
+  JSON.stringify({
+    capturedAt: new Date().toISOString(), adapter, base: BASE, target: TARGET,
+    results, errors: [...new Set(errors)],
+  }, null, 1));
 
-const ok = results.filter((r) => r.verdict === 'PRESENT').length;
-console.log(`\n${ok}/${results.length} rooms have the technique present.`);
-console.log('PRESENT means something is there and it is big enough to see. It is not a claim that the technique is correct.');
+const ok = results.filter((x) => x.verdict === 'PRESENT').length;
+const med = results.length
+  ? [...results].map((x) => x.quality).sort((a, b) => a - b)[Math.floor(results.length / 2)]
+  : 0;
+console.log(`\n${ok}/${results.length} rooms at or above the ${TARGET.toFixed(2)} quality target. Median quality ${med.toFixed(2)}.`);
+console.log('Quality is coverage, detail, colour variety and motion. It is a floor, not a judgement:');
+console.log('a room can clear it and still be wrong, which is why every frame is published.');
 if (errors.length) console.log(`console errors: ${[...new Set(errors)].slice(0, 3).join(' | ')}`);
+
+if (ALL && med > TARGET) {
+  const next = Number(Math.min(med, TARGET + TARGET_STEP).toFixed(3));
+  writeFileSync(TARGET_FILE, JSON.stringify({ target: next, raisedFrom: TARGET, median: med, at: new Date().toISOString() }, null, 1));
+  console.log(`target raised ${TARGET.toFixed(2)} -> ${next.toFixed(2)} (median beat it).`);
+}
 
 await browser.close().catch(() => {});
 killTree(chromePid);
 process.exit(ok === results.length ? 0 : 1);
+

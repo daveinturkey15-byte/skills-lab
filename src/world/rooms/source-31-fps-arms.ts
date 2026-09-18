@@ -43,10 +43,11 @@ export const room: RoomDefinition = {
     demo.root.scale.setScalar(3);
     stage.add(demo.root);
     stage.rotation.y = Math.PI;
-    // Doorway framing: at z=-1 the tripled rig overflowed the frame and read
-    // as pipework. Pulled to the back half so both full arms and the handle
-    // fit from the door; lowered so the reach sits near eye height.
-    stage.position.set(0, 1.0, 2.0);
+    // Doorway framing, third try: z=-1 read THIN (7.8%) and z=+2 vanished
+    // from the door (2.1%) while filling the inside camera. The door camera
+    // is what the gate scores, so the rig sits 4 m ahead of it; a visitor
+    // who walks to the room centre will have it behind them and must turn.
+    stage.position.set(0, 1.2, -2.5);
 
     const root = new THREE.Group();
     root.name = 'source-31-fps-arms-room';

@@ -54,7 +54,9 @@ export const room: RoomDefinition = {
     mats.push(mossMat);
     for (let i = 0; i < trunkCount; i += 1) {
       const px = -5.5 + rand() * 11;
-      const pz = -6 + rand() * 12;
+      // Doorway apron: nothing rooted within 3.5 m of the door wall (z = -8),
+      // so the visitor enters facing the thicket instead of standing inside it.
+      const pz = -4.5 + rand() * 10.5;
       const h = 3.4 + rand() * 1.6;
       const trunk = new T.Mesh(trunkGeo, trunkMat);
       trunk.scale.y = h;
@@ -78,7 +80,8 @@ export const room: RoomDefinition = {
     const dummy = new T.Object3D();
     const col = new T.Color();
     for (let i = 0; i < COUNT; i += 1) {
-      dummy.position.set(-6.2 + rand() * 12.4, 0.5 + rand() * 2.8, -7 + rand() * 14);
+      // Doorway apron: cards start 3.5 m inside the door wall, as the trunks do.
+      dummy.position.set(-6.2 + rand() * 12.4, 0.5 + rand() * 2.8, -4.5 + rand() * 11.5);
       dummy.rotation.set((rand() - 0.5) * 0.9, rand() * Math.PI * 2, (rand() - 0.5) * 0.5);
       const s = 0.7 + rand() * 1.1;
       dummy.scale.setScalar(s);
