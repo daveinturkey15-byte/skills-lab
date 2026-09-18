@@ -22,6 +22,7 @@ import {
   ROOM_WIDTH, ROOM_DEPTH, VESTIBULE, type DoorSlot,
 } from './layout';
 import { DEFAULT_BOUNDS, type RoomDefinition, type RoomInstance } from './contract';
+import { atlasDeepLink } from './venue';
 
 /** Rooms nearer than this are built; beyond it they are disposed. */
 const STREAM_IN = 26;
@@ -208,6 +209,11 @@ export async function mountWorld(
     if (def.limitation) cardLines.push(`Not shown: ${def.limitation}`);
     if (def.kind === 'external') cardLines.push(`Runs outside the browser — ${def.launcher?.label ?? 'launcher'}`);
     if (def.kind === 'stub') cardLines.push('Not built yet. This door is honest about that.');
+    // A document is authoritative where it can be read and searched. The door
+    // still opens; it just says where the full version lives.
+    if (def.venue === 'browser') {
+      cardLines.push(`Authoritative in the Atlas — ${atlasDeepLink(def.sourceId)}`);
+    }
     const card = textPlane(cardLines, 6, { size: 30, colour: '#b9d4d0' });
     card.position.set(slot.room.x + ox * (ROOM_DEPTH / 2 - 0.3), 2.5, slot.room.z + oz * (ROOM_DEPTH / 2 - 0.3));
     card.lookAt(card.position.x - ox, card.position.y, card.position.z - oz);

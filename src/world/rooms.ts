@@ -16,6 +16,7 @@
  * catalogue in a world rather than in a table.
  */
 import type { RoomContext, RoomDefinition, RoomInstance } from './contract';
+import { venueFor } from './venue';
 
 interface DemoManifestEntry {
   sourceId: number;
@@ -150,6 +151,14 @@ export async function collectRooms(baseUrl: string): Promise<RoomDefinition[]> {
       launcher: ext,
       limitation: src.blocker?.reason ?? src.limitations?.[0],
     });
+  }
+
+  // Venue is decided in one place from the catalogue, not per room: a hand
+  // authored file cannot then forget to set it and silently become a world
+  // room when what it holds is a document.
+  for (const room of rooms.values()) {
+    const src = byId.get(room.sourceId);
+    if (src) room.venue = venueFor(src).venue;
   }
 
   // Stable order so a door does not move between visits.
