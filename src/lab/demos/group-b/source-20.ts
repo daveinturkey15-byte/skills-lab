@@ -354,7 +354,17 @@ export function createDemo(context: DemoContext): Demo {
     strip.name = 'apron-edge';
     root.add(strip);
   }
-  disposables.push(apronGeometry, apronMaterial, stripGeometry, stripMaterial);
+  // Range markings: thin light bars across the lane so the apron carries edges
+  // rather than one flat tone; presentational only, outside the resolver.
+  const markingGeometry = new THREE.BoxGeometry(1.9, 0.015, 0.07);
+  const markingMaterial = new THREE.MeshBasicMaterial({ color: 0x9aa0a8 });
+  for (const z of [-0.9, -0.2, 0.5, 1.2]) {
+    const marking = new THREE.Mesh(markingGeometry, markingMaterial);
+    marking.position.set(0, 0.005, z);
+    marking.name = 'lane-marking';
+    root.add(marking);
+  }
+  disposables.push(apronGeometry, apronMaterial, stripGeometry, stripMaterial, markingGeometry, markingMaterial);
 
   // Impact markers: pooled small boxes colored by resolution (red pen, blue bounce).
   const markerGeometry = new THREE.BoxGeometry(0.16, 0.16, 0.16);

@@ -166,7 +166,9 @@ export function createDemo(context: DemoContext): Demo {
   // comparison reads as a keying failure. Both halves keep identical scale.
   const root = sideBySide(THREE, registry, before, after, 1.9);
   root.name = 'source-05:sprite-atlas-from-clip';
-  root.rotation.y = (rng() - 0.5) * 0.02;
+  // Host camera looks from azimuth 45 deg (dir 1,*,1); quads face +Z, so face
+  // them to the camera or they foreshorten to slivers and the gate sees void.
+  root.rotation.y = Math.PI / 4 + (rng() - 0.5) * 0.02;
   // Atlas filmstrip: the packed extremes shown whole with a playhead, so the
   // packing step is visible rather than asserted. The billboard above stays
   // the timing demonstration; this strip is its annotation.

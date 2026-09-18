@@ -129,13 +129,16 @@ export function worstVelocityJump(clip: Clip): number {
  *  stand-in rig needs; a real retarget also needs rest-pose correspondence. */
 function buildRig(THREE: ThreeNamespace, registry: DisposalRegistry, _joints: number, tint: number) {
   const group = new THREE.Group();
-  const boneGeometry = registry.track(new THREE.BoxGeometry(0.12, 0.22, 0.12));
+  // Capture-measured: 0.12-wide links read as a thin stick the framing gate
+  // cannot see (modal 96%). Thicker links and beads are exhibit readability
+  // only; the clip data, stride and stitch are untouched.
+  const boneGeometry = registry.track(new THREE.BoxGeometry(0.2, 0.22, 0.2));
   const material = registry.track(new THREE.MeshStandardMaterial({ color: tint, roughness: 0.6 }));
   // One shared joint marker: the retarget maps source joints onto OUR pivots,
   // so the pivots themselves are drawn. Twelve beads keep the chain readable
   // at the host's fit distance; without them it is a thin stick that the
   // framing gate cannot see.
-  const jointGeometry = registry.track(new THREE.SphereGeometry(0.095, 10, 8));
+  const jointGeometry = registry.track(new THREE.SphereGeometry(0.15, 10, 8));
   const chain: THREE_NS.Object3D[] = [];
   let parent: THREE_NS.Object3D = group;
   // One visible chain of 12 links driven by the first 12 source joints; the
@@ -177,8 +180,24 @@ export function createDemo(context: DemoContext): Demo {
   left.group.name = 'before:hard-cut-concatenation';
   right.group.name = 'after:sequence-transition-stitch';
 
-  const root = sideBySide(THREE, registry, left.group, right.group, 1.6);
+  // Halves closer: at 1.6 the fitted frame carried an empty gulf between two
+  // thin chains. 1.3 keeps both readable with less dead middle.
+  const root = sideBySide(THREE, registry, left.group, right.group, 1.3);
   root.name = 'source-16:text-to-motion-import-and-stitch';
+  // One light stage disc per half: tall narrow chains leave the fitted frame
+  // nearly all backdrop without grounding. Identical staging for both halves;
+  // the hard-cut versus blend comparison is untouched.
+  for (const half of [left.group, right.group]) {
+    const discGeometry = registry.track(new THREE.CircleGeometry(0.8, 28));
+    const discMaterial = registry.track(
+      new THREE.MeshStandardMaterial({ color: 0x59626c, roughness: 0.95, side: THREE.DoubleSide }),
+    );
+    const disc = new THREE.Mesh(discGeometry, discMaterial);
+    disc.rotation.x = -Math.PI / 2;
+    disc.position.y = 0.005;
+    disc.name = 'stage-disc';
+    half.add(disc);
+  }
   root.userData.motion = {
     layout,
     jointCount,

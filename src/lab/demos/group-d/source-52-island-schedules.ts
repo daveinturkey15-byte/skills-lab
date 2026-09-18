@@ -69,7 +69,9 @@ function makeNameTag(
   if (ctx) {
     const rng = createRng(seed);
     void rng;
-    ctx.fillStyle = 'rgba(10, 14, 18, 0.82)';
+    // Lightened slate: near-black pills sat in the backdrop's coarse tone
+    // bucket. White text keeps strong contrast on the lighter ground.
+    ctx.fillStyle = 'rgba(38, 46, 54, 0.92)';
     ctx.beginPath();
     ctx.roundRect(28, 8, 200, 48, 10);
     ctx.fill();
@@ -162,9 +164,12 @@ export function createDemo(context: DemoContext): DemoInstance {
       const shelf = Math.max(0, Math.min(1, (4.1 - r) / 1.2));
       const chop = fbm2(x * 0.8, z * 0.8, 3, seed) * 0.1;
       position.setY(i, chop);
-      colours[i * 3] = 0.08 + shelf * 0.22 + chop * 0.4;
-      colours[i * 3 + 1] = 0.3 + shelf * 0.3 + chop * 0.4;
-      colours[i * 3 + 2] = 0.48 + shelf * 0.24 + chop * 0.35;
+      // Capture-measured: the deep-water base sat in the backdrop's coarse
+      // tone bucket, so a sea that fills the bounds read as empty stage
+      // (modal 87%). Lifted base and shelf; geometry and timetable untouched.
+      colours[i * 3] = 0.13 + shelf * 0.24 + chop * 0.4;
+      colours[i * 3 + 1] = 0.42 + shelf * 0.3 + chop * 0.4;
+      colours[i * 3 + 2] = 0.6 + shelf * 0.24 + chop * 0.35;
     }
     seaGeometry.setAttribute('color', new THREE.BufferAttribute(colours, 3));
   }
@@ -179,7 +184,7 @@ export function createDemo(context: DemoContext): DemoInstance {
 
   const foam = new THREE.Mesh(
     new THREE.RingGeometry(3.42, 3.78, 64),
-    new THREE.MeshBasicMaterial({ color: 0xdff2f4, transparent: true, opacity: 0.5, side: THREE.DoubleSide }),
+    new THREE.MeshBasicMaterial({ color: 0xdff2f4, transparent: true, opacity: 0.8, side: THREE.DoubleSide }),
   );
   foam.rotation.x = -Math.PI / 2;
   foam.position.y = SEA_Y + 0.06;
@@ -194,7 +199,7 @@ export function createDemo(context: DemoContext): DemoInstance {
   sand.name = 'sand';
   const grass = new THREE.Mesh(
     new THREE.CylinderGeometry(2.75, 2.95, 0.24, 48),
-    new THREE.MeshStandardMaterial({ color: 0x5d8a48, roughness: 1 }),
+    new THREE.MeshStandardMaterial({ color: 0x679a52, roughness: 1 }),
   );
   grass.position.y = -0.01;
   grass.name = 'grass';

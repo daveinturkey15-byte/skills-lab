@@ -217,6 +217,21 @@ export function createDemo(context: DemoContext): Demo {
   }
   const root = sideBySide(THREE, registry, left, right, 1.0);
   root.name = 'source-12:closed-loop-asset-acceptance';
+  // The host camera sits on the +x+z diagonal, which hid the small rejected
+  // candidate behind the accepted one (capture: modal 88%, edges 1.3%). Turn
+  // the comparison axis across the view so both halves read at once.
+  root.rotation.y = Math.PI / 4;
+  // Shared stage strip both candidates stand on: identical staging, so only
+  // the verdict marks carry the difference. Light slate against the dark
+  // backdrop, tracked for disposal with everything else.
+  const stageGeometry = registry.track(new THREE.BoxGeometry(3.2, 0.1, 2.2));
+  const stageMaterial = registry.track(
+    new THREE.MeshStandardMaterial({ color: 0x59626c, roughness: 0.95 }),
+  );
+  const stage = new THREE.Mesh(stageGeometry, stageMaterial);
+  stage.position.y = -0.15;
+  stage.name = 'stage-strip';
+  root.add(stage);
   root.userData.candidateReports = reports;
 
   const metadata = {

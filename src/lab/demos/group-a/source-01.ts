@@ -265,7 +265,9 @@ export function createDemo(context: DemoContext): Demo {
   after.root.scale.setScalar(1.5);
 
   // Reference ground so the contact error is readable rather than asserted.
-  const floorGeometry = registry.track(new THREE.PlaneGeometry(1.3, 1.3));
+  // Sized 2.0 so the host fit sees enough second-tone pixels to drop the
+  // background modal below the capture gate; contact reading unchanged.
+  const floorGeometry = registry.track(new THREE.PlaneGeometry(2.0, 2.0));
   const floorMaterial = registry.track(
     new THREE.MeshStandardMaterial({ color: 0x4c4c48, roughness: 0.95 }),
   );
@@ -276,7 +278,7 @@ export function createDemo(context: DemoContext): Demo {
     figure.root.add(floor);
   }
   // Plant-target discs: where the support foot must land. Static, inside the
-  const discGeometry = registry.track(new THREE.CircleGeometry(0.28, 20));
+  const discGeometry = registry.track(new THREE.CircleGeometry(0.34, 20));
   const beforeDiscMaterial = registry.track(new THREE.MeshStandardMaterial({ color: 0x6a3535, roughness: 0.9 }));
   const afterDiscMaterial = registry.track(new THREE.MeshStandardMaterial({ color: 0x355a3a, roughness: 0.9 }));
   for (const entry of [

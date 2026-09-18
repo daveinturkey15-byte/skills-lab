@@ -27,12 +27,27 @@ async function mountAtlasView(container: HTMLElement): Promise<void> {
   mountAtlas(container, { baseUrl: import.meta.env.BASE_URL });
 }
 
+async function mountWorldView(container: HTMLElement): Promise<void> {
+  document.title = 'Skills Lab — Map 3';
+  // The world owns the whole viewport: you are walking, not scrolling.
+  document.documentElement.style.height = '100%';
+  document.body.style.height = '100%';
+  document.body.style.overflow = 'hidden';
+  container.style.height = '100%';
+  const { collectRooms } = await import('./world/rooms');
+  const { mountWorld } = await import('./world/world');
+  const rooms = await collectRooms(import.meta.env.BASE_URL);
+  const handle = await mountWorld(container, rooms);
+  window.addEventListener('pagehide', () => handle.dispose(), { once: true });
+}
+
 async function main(): Promise<void> {
   const container = document.getElementById('app');
   if (!container) throw new Error('#app is missing from index.html');
   const view = new URLSearchParams(location.search).get('view');
   try {
-    if (view === 'lab') await mountLab(container);
+    if (view === 'world') await mountWorldView(container);
+    else if (view === 'lab') await mountLab(container);
     else await mountAtlasView(container);
   } catch (error) {
     container.textContent = '';

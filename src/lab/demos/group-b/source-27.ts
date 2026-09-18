@@ -161,7 +161,11 @@ export function createDemo(context: DemoContext): Demo {
   };
 
   root.userData.stats = stats;
-
+  // The host camera sits on the +x+z diagonal, down the striker's travel
+  // axis: mid-lunge frames hid the striker inside the dummy (capture: modal
+  // 84%, edges 2.0%). Turn the travel axis across the view so striker, dummy,
+  // flash and scorch read in every phase. Timing and update order untouched.
+  root.rotation.y = Math.PI / 4;
   return {
     root,
     update,

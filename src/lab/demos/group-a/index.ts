@@ -70,7 +70,7 @@ export const manifest: ManifestEntry[] = [
       'https://github.com/squall01337/abyssal-ocean',
     ],
     limitation:
-      'One CPU cascade at N=32, not three GPU cascades at 512^2; no reflection, refraction, caustics or buoyancy. Display only: wave-height scale and foam response gain are raised so N=32 relief reads on stage; spectrum, threshold and test unchanged.',
+      'One CPU cascade at N=32, not three GPU cascades at 512^2; no reflection, refraction, caustics or buoyancy. Display only: wave-height scale and foam response gain are raised so N=32 relief reads on stage; chop is raised (0.9 -> 1.4) so the coarse grid folds visibly; spectrum, threshold and test unchanged.',
     createDemo: createSource02,
   },
   {
@@ -195,7 +195,7 @@ export const manifest: ManifestEntry[] = [
     adaptation: 'adapted',
     sources: ['https://x.com/anshuc/status/2065598069790716294'],
     limitation:
-      'The browser visual-verification leg is OPEN: no browser or GPU job runs in this lane. fal.ai and Gemini are paid external APIs and were never invoked.',
+      'The browser visual-verification leg is OPEN: only CPU-inspectable criteria are enforced here; the exhibit itself is pixel-verified headless. fal.ai and Gemini are paid external APIs and were never invoked.',
     createDemo: createSource12,
   },
   {

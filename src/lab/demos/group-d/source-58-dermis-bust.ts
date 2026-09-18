@@ -283,16 +283,19 @@ export function createDemo(context: DemoContext): DemoInstance {
 
   // Mottled studio halo: a second tone behind the bust so the head reads
   // against structure rather than void. Fbm-broken, never one flat tone.
-  const haloGeometry = new THREE.PlaneGeometry(2.2, 1.8, 18, 14);
+  // Sized 3.2x2.6 and faced to the host camera (azimuth 45 deg) so it owns
+  // pixels instead of foreshortening; brightened clear of the background
+  // bucket so the gate counts it as subject, not void. Presentation only.
+  const haloGeometry = new THREE.PlaneGeometry(3.2, 2.6, 18, 14);
   {
     const positions = haloGeometry.getAttribute('position');
     const colours = new Float32Array(positions.count * 3);
     for (let i = 0; i < positions.count; i += 1) {
       const x = positions.getX(i);
       const y = positions.getY(i);
-      const r = Math.min(1, Math.hypot(x / 1.1, y / 0.9));
+      const r = Math.min(1, Math.hypot(x / 1.6, y / 1.3));
       const mottle = fbm2(x * 2.1, y * 2.1 + 5, 3, seed);
-      const v = (0.08 + mottle * 0.12) * (1 - r * 0.55);
+      const v = (0.16 + mottle * 0.18) * (1 - r * 0.45);
       colours[i * 3] = v * 0.9;
       colours[i * 3 + 1] = v;
       colours[i * 3 + 2] = v * 1.25;
@@ -304,6 +307,7 @@ export function createDemo(context: DemoContext): DemoInstance {
     new THREE.MeshBasicMaterial({ vertexColors: true }),
   );
   halo.position.set(0, 1.45, -0.55);
+  halo.rotation.y = Math.PI / 4;
   halo.name = 'studio-halo';
   root.add(halo);
 

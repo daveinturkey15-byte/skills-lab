@@ -152,7 +152,8 @@ export function createDemo(context: DemoContext): Demo {
 
   // The "walker" whose passage is recorded. Two markers, one over each plate, so the
   // before/after is the same path driven into two fields with different retention.
-  const markerGeometry = new THREE.SphereGeometry(0.36, 16, 12);
+  // Radius 0.5 so the walkers survive the host fit as subjects, not specks.
+  const markerGeometry = new THREE.SphereGeometry(0.5, 16, 12);
   const markerMaterial = new THREE.MeshStandardMaterial({ color: 0x2f6fd0, roughness: 0.4 });
   const markerA = new THREE.Mesh(markerGeometry, markerMaterial);
   const markerB = new THREE.Mesh(markerGeometry, markerMaterial);
@@ -196,17 +197,18 @@ export function createDemo(context: DemoContext): Demo {
     const x = Math.sin(time * 0.7) * COVERAGE * 0.42;
     const z = Math.sin(time * 0.47 + 1.1) * COVERAGE * 0.42;
     const step = Math.max(0, Math.min(dt, 0.1));
-
     for (const { plate, field } of plates) {
       field.recentre(x, z);
-      field.brush(x, z, 0.62, 6.5 * step);
+      // Radius and depth raised for stage legibility; the shared brush path,
+      // toroidal addressing and banked recovery are unchanged.
+      field.brush(x, z, 0.85, 9.0 * step);
       applyField(plate, field);
     }
 
     const depthA = fieldWithoutMemory.sample(x, z);
     const depthB = fieldWithMemory.sample(x, z);
-    markerA.position.set(-halfGap + x, 0.36 - depthA, z);
-    markerB.position.set(halfGap + x, 0.36 - depthB, z);
+    markerA.position.set(-halfGap + x, 0.5 - depthA, z);
+    markerB.position.set(halfGap + x, 0.5 - depthB, z);
   }
 
   return {
