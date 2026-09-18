@@ -124,8 +124,9 @@ export const room: RoomDefinition = {
     'Headline features NOT shown: no dual contouring, live CSG, '
     + 'tunnels, worker pool, IndexedDB or frame-budget scheduler — '
     + 'main-thread swaps, not off-thread. The 6 px error tolerance is re-scaled '
-    + 'to 80 px for a 16 m room (algorithms unchanged); without that every '
-    + 'section would sit at L0. Sections are unlit so the level '
+    + 'to 80 px for a 16 m room (algorithms unchanged). Sections start coarse and '
+    + 'refine as you approach; the restated 1.16x gate never re-coarsens, so walking '
+    + 'away leaves refined levels in place. Sections are unlit so the level '
     + 'map reads as data, not lighting. Relief capped so the camera stays '
     + 'above it; you walk through the hills, not over them.',
   create: (ctx: RoomContext) => {
@@ -175,11 +176,14 @@ export const room: RoomDefinition = {
       mesh.position.set(cx, 0.12, cz);
       return mesh;
     };
-
     for (let row = 0; row < ROWS; row += 1) {
       const line: Section[] = [];
       for (let col = 0; col < COLS; col += 1) {
-        const mesh = buildSection(col, row, 0);
+        // Start coarse: the restated selector refines on approach but its
+        // 1.16x coarsen gate never opens (a coarser level always projects a
+        // larger error), so L0-initialised sections would sit at L0 forever.
+        // Walking in refines the near sections live; the limitation owns this.
+        const mesh = buildSection(col, row, 3);
         root.add(mesh);
         line.push({
           mesh,
@@ -187,7 +191,7 @@ export const room: RoomDefinition = {
             x: (col - (COLS - 1) / 2) * SECTION_W,
             z: (row - (ROWS - 1) / 2) * SECTION_D + 0.5,
           },
-          level: 0,
+          level: 3,
         });
       }
       sections.push(line);

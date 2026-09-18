@@ -78,9 +78,28 @@ export interface RoomLauncher {
   note: string;
 }
 
+/**
+ * Where a technique is most fully itself.
+ *
+ * Not everything is a spatial thing. Water, clouds, foliage, a street cell and a
+ * lighting look all want a room you can stand in. But a catalogue format, a
+ * licence comparison, a QA harness or a set of measured findings is a
+ * *document*, and building a token 3D prop for it makes the world worse and the
+ * technique less legible, not more.
+ *
+ * `world`   — belongs in Map 3. Walk in and it is running.
+ * `browser` — belongs in the Atlas, where it can be read, searched and clicked.
+ *             Its Map 3 door still exists and still opens: the room presents the
+ *             artifact at wall scale and points at the interactive version.
+ *             Present in both, but authoritative in the one that suits it.
+ */
+export type RoomVenue = 'world' | 'browser';
+
 export interface RoomDefinition {
   /** Catalogue source this room demonstrates; links the world to the evidence. */
   sourceId: number;
+  /** Defaults to 'world'. Set 'browser' only for genuinely document-shaped techniques. */
+  venue?: RoomVenue;
   /** The skill on the door. This is the whole point of the room. */
   skill: string;
   /** Door plate text. Short — it is read at walking pace. */
