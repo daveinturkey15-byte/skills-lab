@@ -128,7 +128,47 @@ export const room: RoomDefinition = {
       ring.position.set(entry.at[0], 0.045, entry.at[1]);
       root.add(ring);
     }
-    // Verdict board on the back wall: what the brief admitted and refused.
+    // Lectern just inside the door: the same before/after at eye height. The
+    // floor comparison aliases to flat grey from the doorway at a grazing
+    // angle, so the capture showed an empty room; this board carries the
+    // identical surfaces (flat grey left, sampled asphalt right) where the
+    // entry sightline lands. One post, one board: two draw calls.
+    const postGeo = new THREE.CylinderGeometry(0.09, 0.12, 1.5, 10);
+    disposables.push(postGeo);
+    const postMat = new THREE.MeshStandardMaterial({ color: 0x3a4046, roughness: 0.8 });
+    disposables.push(postMat);
+    const post = new THREE.Mesh(postGeo, postMat);
+    // Stands 1.7 m inside the door and right of the entry path: the first
+    // staging put it 0.2 m in front of the doorway camera and blinded it.
+    post.position.set(1.3, 0.75, -4.8);
+    root.add(post);
+    const lectGeo = new THREE.PlaneGeometry(2.2, 0.8, 40, 14);
+    disposables.push(lectGeo);
+    const lectPos = lectGeo.getAttribute('position');
+    const lectCol = new Float32Array(lectPos.count * 3);
+    for (let i = 0; i < lectPos.count; i += 1) {
+      const u = lectPos.getX(i) / 2.2;
+      if (u < 0) {
+        lectCol[i * 3] = 0.29;
+        lectCol[i * 3 + 1] = 0.29;
+        lectCol[i * 3 + 2] = 0.31;
+      } else {
+        const c = asphalt(2.0 + u * 4.0, 2.5 + (lectPos.getY(i) / 0.8 + 0.5) * 1.3);
+        lectCol[i * 3] = c[0];
+        lectCol[i * 3 + 1] = c[1];
+        lectCol[i * 3 + 2] = c[2];
+      }
+    }
+    lectGeo.setAttribute('color', new THREE.BufferAttribute(lectCol, 3));
+    const lectMat = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
+    disposables.push(lectMat);
+    const lectern = new THREE.Mesh(lectGeo, lectMat);
+    // Broad board right of the entry path: the doorway read lives or dies
+    // on this panel, so it takes the larger share of the wall the visitor
+    // faces. Same two surfaces, no new claim.
+    lectern.position.set(1.45, 1.5, -4.8);
+    lectern.rotation.y = Math.PI;
+    root.add(lectern);
     const canvas = document.createElement('canvas');
     canvas.width = 1024;
     canvas.height = 96;

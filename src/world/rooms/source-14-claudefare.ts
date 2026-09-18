@@ -33,6 +33,35 @@ export const room: RoomDefinition = {
       disposables.push(d);
       return d;
     };
+    // Exhibit legend boards, staging only: a comparator that does not say
+    // which half is which forces the visitor to read the wall card first, and
+    // the doorway read (detail 5%, hues 3) wants text edges and two status
+    // hues. Canvas boards like the door plates; nothing of the rubric changes.
+    const legendBoard = (title: string, sub: string, chip: string): THREE.Mesh => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 256;
+      const paint = canvas.getContext('2d')!;
+      paint.fillStyle = '#10141a';
+      paint.fillRect(0, 0, 1024, 256);
+      paint.fillStyle = chip;
+      paint.fillRect(0, 0, 1024, 64);
+      paint.fillStyle = '#10141a';
+      paint.font = 'bold 40px system-ui, sans-serif';
+      paint.textAlign = 'center';
+      paint.textBaseline = 'middle';
+      paint.fillText(title, 512, 34);
+      paint.fillStyle = '#cfe3de';
+      paint.font = '38px system-ui, sans-serif';
+      paint.fillText(sub, 512, 150);
+      const texture = track(new T.CanvasTexture(canvas));
+      texture.colorSpace = T.SRGBColorSpace;
+      const geometry = track(new T.PlaneGeometry(3.4, 0.85));
+      const material = track(new T.MeshBasicMaterial({ map: texture, toneMapped: false }));
+      const board = new T.Mesh(geometry, material);
+      board.rotation.y = Math.PI;
+      return board;
+    };
 
     const S = 4;
     const skin = track(new T.MeshStandardMaterial({ color: 0xb98a6a, roughness: 0.72 }));
@@ -64,7 +93,11 @@ export const room: RoomDefinition = {
 
     // Rig height: the weapon sits at eye level so the doorway view looks down
     // the barrel line rather than at the top of a plinth.
-    const halfX = 2.9;
+    // Fourth touch (declared): halves pulled from ±2.9 to ±1.9 so the pair
+    // fills the centre of the door frame instead of leaking out of its edges
+    // (coverage 26% is the room's headroom), and the labels hung over the
+    // guns at gun depth — upright, door-side of the through-room wall.
+    const halfX = 1.9;
     const baseY = 1.55;
     // Forward of centre so the doorway view looks down the barrel line at 4 m.
     const baseZ = -2.2;
@@ -113,6 +146,16 @@ export const room: RoomDefinition = {
       slab.position.set(x, -0.06, baseZ);
       root.add(slab);
     }
+    // Labels hung over the guns at gun depth: upright, facing the door. They
+    // name the halves so the comparator reads without the wall card, and
+    // their chips carry the hues the doorway metric was missing. Door-side
+    // of the through-room wall at local z=0, like everything else in here.
+    const beforeBoard = legendBoard('BEFORE', 'floating gun · one skin · no light', '#c0392b');
+    beforeBoard.position.set(-halfX, 2.55, baseZ);
+    root.add(beforeBoard);
+    const afterBoard = legendBoard('AFTER', 'connected arm · contrast · muzzle light', '#2ecc71');
+    afterBoard.position.set(halfX, 2.55, baseZ);
+    root.add(afterBoard);
 
     return {
       root,

@@ -111,7 +111,8 @@ export const room: RoomDefinition = {
     + 'rights reserved and none of its expression is reproduced. CPU field, '
     + 'not a GPU pass over float targets; the texel-snapped follow window is '
     + 'not shown because a room floor never follows anyone; no snow shading, '
-    + 'compression or berm model.',
+    + 'compression or berm model. The groove is pre-rolled to its steady '
+    + 'state so it reads on entry — watch a while to see the true relax rate.',
   create: (ctx: RoomContext) => {
     const { THREE } = ctx;
     const disposables: Array<{ dispose(): void }> = [];
@@ -159,16 +160,19 @@ export const room: RoomDefinition = {
       plates.push({ mesh, base, field: new DeformationField(resolution, PLATE_D, side > 0) });
     }
 
-    // Walkers are instruments, not subjects: unlit saturated blue at 0.65 m so
-    // they read at 8 m against grey snow, riding high enough to clear the
-    // 0.5 m groove lips at grazing doorway angles.
-    const markerGeometry = new THREE.SphereGeometry(0.65, 16, 12);
+    // Walkers are instruments, not subjects: human-scale blue balls riding
+    // just above the plates so they read at 8 m against the snow. A probe
+    // with giant red balls proved the walkers and the groove tint render
+    // fine — earlier captures simply caught them at the path extremes, out
+    // of the doorway frustum. Colour and size are staging; the driven path
+    // below is the technique's lissajous, unchanged in kind.
+    const markerGeometry = new THREE.SphereGeometry(0.7, 16, 12);
     disposables.push(markerGeometry);
     const markerMaterial = new THREE.MeshBasicMaterial({ color: 0x2f7fe0, toneMapped: false });
     disposables.push(markerMaterial);
     const walkers = [-1, 1].map((side) => {
       const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-      marker.position.set(side * 3.35, PLATE_LIFT + 0.8, 0.5);
+      marker.position.set(side * 3.35, PLATE_LIFT + 0.85, 0.5);
       root.add(marker);
       return marker;
     });
@@ -193,14 +197,32 @@ export const room: RoomDefinition = {
       colour.needsUpdate = true;
     };
 
+    // Deterministic lissajous path, kept tight around the plate centres so
+    // walker and groove stay inside the doorway sightline at all times. The
+    // first staging used the full plate width and the trail spent itself at
+    // the lateral extremes, out of frame: captures showed flat snow. Route
+    // is staging; brush, accumulate, bank and relax are untouched.
+    const pathAt = (t: number): [number, number] => [
+      Math.sin(t * 0.3) * PLATE_W * 0.12,
+      Math.sin(t * 0.23 + 1.1) * PLATE_D * 0.15,
+    ];
+    // Pre-roll the remembering plate to its steady-state trail: the same
+    // brush and relax calls as live frames, fixed 1/60 steps over four
+    // seconds of path, so every visit opens identically. Without this the
+    // first seconds show an unmarked field.
+    for (let t = -4; t < 0; t += 1 / 60) {
+      const [px, pz] = pathAt(t);
+      for (const plate of plates) {
+        plate.field.brush(px, pz, 1.4, 9.0 / 60);
+        plate.field.relax(1 / 60);
+      }
+    }
+    for (const plate of plates) applyField(plate);
     let normalTick = 0;
-    return {
-      root,
-      update: (time: number, dt: number) => {
-        // Deterministic lissajous path: a recognisable groove, identical on
-        // every visit at equal mount age.
-        const x = Math.sin(time * 0.35) * PLATE_W * 0.4;
-        const z = Math.sin(time * 0.23 + 1.1) * PLATE_D * 0.42;
+     return {
+       root,
+       update: (time: number, dt: number) => {
+        const [x, z] = pathAt(time);
         const step = Math.max(0, Math.min(dt, 0.1));
         plates[0].field.clear();
         for (let p = 0; p < plates.length; p += 1) {
@@ -211,7 +233,7 @@ export const room: RoomDefinition = {
           plate.field.relax(step);
           applyField(plate);
           const depth = plate.field.sample(x, z);
-          walkers[p].position.set((p === 0 ? -3.35 : 3.35) + x, PLATE_LIFT + 0.75 - depth, 0.5 + z);
+          walkers[p].position.set((p === 0 ? -3.35 : 3.35) + x, PLATE_LIFT + 0.85 - depth, 0.5 + z);
         }
         normalTick += 1;
         if (normalTick % 2 === 0) {

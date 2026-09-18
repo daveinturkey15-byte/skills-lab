@@ -63,11 +63,12 @@ export const room: RoomDefinition = {
       return d;
     };
 
-    // Forward of centre: from the doorway the props read at 3–7 m, which is
-    // what the first capture lacked at 6.4%.
-    const bayX = 3.1;
-    const bayZ = -0.8;
-    const boardGeo = track(new T.BoxGeometry(5.6, 0.12, 6.4));
+    // Door-side of centre, clear of the through-room world wall at local z=0
+    // (this wing carries it: the back half of both bays never reached the
+    // door). Boards smaller and closer, so the props read at 2–5 m.
+    const bayX = 2.8;
+    const bayZ = -3.6;
+    const boardGeo = track(new T.BoxGeometry(5.2, 0.12, 4.6));
     const boardMat = track(new T.MeshStandardMaterial({ color: 0x3d454f, roughness: 0.95 }));
     for (const side of [-1, 1]) {
       const board = new T.Mesh(boardGeo, boardMat);
@@ -159,6 +160,17 @@ export const room: RoomDefinition = {
     light.name = 'reconstructed-key-light';
     light.position.set(bayX + BAKE[0], BAKE[1], bayZ + BAKE[2]);
     root.add(light);
+    // The parameter made visible: a small bright orb riding the light, so a
+    // visitor sees WHY the right bay relights instead of only that it does.
+    // Staging only — Lumera estimates lighting; nothing here estimates
+    // anything. One mesh, driven by the same orbit below.
+    const orb = new T.Mesh(
+      track(new T.SphereGeometry(0.22, 16, 12)),
+      track(new T.MeshBasicMaterial({ color: 0xffe6b8, toneMapped: false })),
+    );
+    orb.name = 'light-parameter-orb';
+    orb.position.copy(light.position);
+    root.add(orb);
 
     let elapsed = 0;
     return {
@@ -168,10 +180,11 @@ export const room: RoomDefinition = {
         elapsed += dt;
         const angle = elapsed * 0.7;
         light.position.set(
-          bayX + Math.cos(angle) * 3.7,
+          bayX + Math.cos(angle) * 2.6,
           4.1,
-          bayZ + Math.sin(angle) * 3.4,
+          bayZ + Math.sin(angle) * 2.2,
         );
+        orb.position.copy(light.position);
       },
       dispose: () => {
         for (const d of disposables) d.dispose();

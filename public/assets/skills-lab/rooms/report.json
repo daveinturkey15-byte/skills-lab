@@ -1,11 +1,11 @@
 {
- "capturedAt": "2026-09-18T14:47:22.064Z",
+ "capturedAt": "2026-09-18T15:20:00.247Z",
  "adapter": {
   "adapter": true,
   "vendor": "nvidia"
  },
  "base": "http://localhost:5199/skills-lab/",
- "target": 0.35,
+ "target": 0.38,
  "results": [
   {
    "sourceId": 1,
@@ -22,12 +22,12 @@
    },
    "facing": 1.5707963267948966,
    "doorway": 0.547,
-   "inside": 0.381,
+   "inside": 0.382,
    "detail": 0.055,
    "hues": 7,
-   "motion": 0.011,
-   "quality": 0.675,
-   "target": 0.35,
+   "motion": 0.01,
+   "quality": 0.673,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -44,13 +44,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.261,
+   "doorway": 0.262,
    "inside": 0.268,
-   "detail": 0.045,
+   "detail": 0.046,
    "hues": 4,
-   "motion": 0.09,
-   "quality": 0.497,
-   "target": 0.35,
+   "motion": 0.088,
+   "quality": 0.496,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -68,12 +68,12 @@
    },
    "facing": -1.5707963267948966,
    "doorway": 0.455,
-   "inside": 0.471,
+   "inside": 0.472,
    "detail": 0.023,
    "hues": 7,
    "motion": 0.032,
    "quality": 0.58,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -90,13 +90,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.397,
-   "inside": 0.412,
+   "doorway": 0.399,
+   "inside": 0.413,
    "detail": 0.057,
-   "hues": 10,
+   "hues": 9,
    "motion": 0.03,
-   "quality": 0.595,
-   "target": 0.35,
+   "quality": 0.596,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -113,13 +113,13 @@
     "z": -9
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.412,
+   "doorway": 0.411,
    "inside": 0.203,
-   "detail": 0.055,
+   "detail": 0.052,
    "hues": 4,
-   "motion": 0.039,
-   "quality": 0.551,
-   "target": 0.35,
+   "motion": 0.037,
+   "quality": 0.542,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -137,13 +137,13 @@
    },
    "facing": 3.141592653589793,
    "doorway": 0.343,
-   "inside": 0.328,
+   "inside": 0.314,
    "detail": 0.014,
    "hues": 2,
    "motion": 0,
    "quality": 0.325,
-   "target": 0.35,
-   "verdict": "BELOW BAR — quality 0.33 under the 0.35 target"
+   "target": 0.38,
+   "verdict": "BELOW BAR — quality 0.33 under the 0.38 target"
   },
   {
    "sourceId": 7,
@@ -159,13 +159,13 @@
     "z": 9
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.268,
+   "doorway": 0.27,
    "inside": 0.189,
-   "detail": 0.055,
+   "detail": 0.056,
    "hues": 7,
-   "motion": 0.006,
-   "quality": 0.458,
-   "target": 0.35,
+   "motion": 0.008,
+   "quality": 0.465,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -182,13 +182,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.706,
-   "inside": 0.507,
-   "detail": 0.096,
+   "doorway": 0.707,
+   "inside": 0.506,
+   "detail": 0.095,
    "hues": 7,
-   "motion": 0.013,
-   "quality": 0.791,
-   "target": 0.35,
+   "motion": 0.03,
+   "quality": 0.815,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -205,13 +205,13 @@
     "z": -26
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.384,
+   "doorway": 0.385,
    "inside": 0.335,
-   "detail": 0.038,
+   "detail": 0.036,
    "hues": 5,
-   "motion": 0.022,
-   "quality": 0.496,
-   "target": 0.35,
+   "motion": 0.029,
+   "quality": 0.504,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -234,7 +234,7 @@
    "hues": 8,
    "motion": 0.001,
    "quality": 0.552,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -253,11 +253,11 @@
    "facing": -1.5707963267948966,
    "doorway": 0.406,
    "inside": 0.331,
-   "detail": 0.132,
+   "detail": 0.131,
    "hues": 5,
-   "motion": 0.013,
+   "motion": 0.014,
    "quality": 0.667,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -274,13 +274,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.322,
-   "inside": 0.317,
-   "detail": 0.019,
-   "hues": 4,
-   "motion": 0.072,
-   "quality": 0.469,
-   "target": 0.35,
+   "doorway": 0.368,
+   "inside": 0.347,
+   "detail": 0.02,
+   "hues": 6,
+   "motion": 0.073,
+   "quality": 0.55,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -298,12 +298,12 @@
    },
    "facing": -1.5707963267948966,
    "doorway": 0.273,
-   "inside": 0.211,
+   "inside": 0.213,
    "detail": 0.032,
    "hues": 4,
-   "motion": 0.013,
-   "quality": 0.367,
-   "target": 0.35,
+   "motion": 0.061,
+   "quality": 0.439,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -320,14 +320,14 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.261,
+   "doorway": 0.33,
    "inside": 0.179,
-   "detail": 0.045,
-   "hues": 3,
+   "detail": 0.062,
+   "hues": 8,
    "motion": 0,
-   "quality": 0.34,
-   "target": 0.35,
-   "verdict": "BELOW BAR — quality 0.34 under the 0.35 target"
+   "quality": 0.508,
+   "target": 0.38,
+   "verdict": "PRESENT"
   },
   {
    "sourceId": 15,
@@ -349,7 +349,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.063,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "THIN — subject is there but too small to read"
   },
   {
@@ -366,13 +366,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.161,
+   "doorway": 0.185,
    "inside": 0.329,
    "detail": 0.038,
-   "hues": 3,
-   "motion": 0.087,
-   "quality": 0.383,
-   "target": 0.35,
+   "hues": 4,
+   "motion": 0.072,
+   "quality": 0.4,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -390,12 +390,12 @@
    },
    "facing": 1.5707963267948966,
    "doorway": 0.345,
-   "inside": 0.611,
+   "inside": 0.61,
    "detail": 0.101,
    "hues": 8,
-   "motion": 0.014,
-   "quality": 0.61,
-   "target": 0.35,
+   "motion": 0.019,
+   "quality": 0.618,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -412,13 +412,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.202,
-   "inside": 0.452,
-   "detail": 0.151,
+   "doorway": 0.201,
+   "inside": 0.453,
+   "detail": 0.149,
    "hues": 4,
-   "motion": 0.153,
-   "quality": 0.637,
-   "target": 0.35,
+   "motion": 0.151,
+   "quality": 0.636,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -441,7 +441,7 @@
    "hues": 8,
    "motion": 0.003,
    "quality": 0.51,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -464,8 +464,8 @@
    "hues": 6,
    "motion": 0.004,
    "quality": 0.355,
-   "target": 0.35,
-   "verdict": "PRESENT"
+   "target": 0.38,
+   "verdict": "BELOW BAR — quality 0.35 under the 0.38 target"
   },
   {
    "sourceId": 21,
@@ -487,7 +487,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.038,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -510,7 +510,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.046,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -527,14 +527,14 @@
     "z": 43
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.104,
-   "inside": 0.254,
-   "detail": 0.023,
-   "hues": 2,
-   "motion": 0.168,
-   "quality": 0.312,
-   "target": 0.35,
-   "verdict": "THIN — subject is there but too small to read"
+   "doorway": 0.044,
+   "inside": 0.391,
+   "detail": 0.019,
+   "hues": 0,
+   "motion": 0,
+   "quality": 0.067,
+   "target": 0.38,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
    "sourceId": 24,
@@ -556,7 +556,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.044,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -579,7 +579,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.026,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -602,7 +602,7 @@
    "hues": 10,
    "motion": 0.029,
    "quality": 0.418,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -619,14 +619,14 @@
     "z": 60
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.212,
+   "doorway": 0.213,
    "inside": 0.262,
-   "detail": 0.048,
+   "detail": 0.049,
    "hues": 4,
-   "motion": 0.007,
-   "quality": 0.341,
-   "target": 0.35,
-   "verdict": "BELOW BAR — quality 0.34 under the 0.35 target"
+   "motion": 0.008,
+   "quality": 0.345,
+   "target": 0.38,
+   "verdict": "BELOW BAR — quality 0.34 under the 0.38 target"
   },
   {
    "sourceId": 28,
@@ -644,11 +644,11 @@
    "facing": -3.141592653589793,
    "doorway": 0.344,
    "inside": 0.177,
-   "detail": 0.172,
+   "detail": 0.158,
    "hues": 5,
-   "motion": 0.117,
-   "quality": 0.765,
-   "target": 0.35,
+   "motion": 0.09,
+   "quality": 0.75,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -665,13 +665,13 @@
     "z": -60
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.472,
+   "doorway": 0.466,
    "inside": 0.148,
-   "detail": 0.132,
-   "hues": 19,
-   "motion": 0.124,
-   "quality": 0.89,
-   "target": 0.35,
+   "detail": 0.15,
+   "hues": 18,
+   "motion": 0.109,
+   "quality": 0.9,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -694,7 +694,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.046,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -711,14 +711,14 @@
     "z": 60
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.128,
+   "doorway": 0.198,
    "inside": 0.146,
-   "detail": 0.043,
+   "detail": 0.059,
    "hues": 4,
-   "motion": 0.031,
-   "quality": 0.305,
-   "target": 0.35,
-   "verdict": "BELOW BAR — quality 0.30 under the 0.35 target"
+   "motion": 0.08,
+   "quality": 0.46,
+   "target": 0.38,
+   "verdict": "PRESENT"
   },
   {
    "sourceId": 32,
@@ -740,7 +740,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.044,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -763,7 +763,7 @@
    "hues": 7,
    "motion": 0,
    "quality": 0.392,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -782,11 +782,11 @@
    "facing": 0,
    "doorway": 0.492,
    "inside": 0.373,
-   "detail": 0.058,
-   "hues": 13,
-   "motion": 0.001,
-   "quality": 0.624,
-   "target": 0.35,
+   "detail": 0.059,
+   "hues": 14,
+   "motion": 0.003,
+   "quality": 0.629,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -803,14 +803,14 @@
     "z": 77
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.127,
-   "inside": 0.119,
-   "detail": 0.084,
-   "hues": 2,
-   "motion": 0.024,
-   "quality": 0.324,
-   "target": 0.35,
-   "verdict": "BELOW BAR — quality 0.32 under the 0.35 target"
+   "doorway": 0.35,
+   "inside": 0.111,
+   "detail": 0.082,
+   "hues": 3,
+   "motion": 0.088,
+   "quality": 0.605,
+   "target": 0.38,
+   "verdict": "PRESENT"
   },
   {
    "sourceId": 36,
@@ -829,10 +829,10 @@
    "doorway": 0.326,
    "inside": 0.174,
    "detail": 0.059,
-   "hues": 4,
-   "motion": 0.122,
-   "quality": 0.586,
-   "target": 0.35,
+   "hues": 3,
+   "motion": 0.107,
+   "quality": 0.564,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -855,7 +855,7 @@
    "hues": 6,
    "motion": 0.062,
    "quality": 0.402,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -872,13 +872,13 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.242,
+   "doorway": 0.248,
    "inside": 0.224,
-   "detail": 0.16,
+   "detail": 0.166,
    "hues": 6,
-   "motion": 0,
-   "quality": 0.56,
-   "target": 0.35,
+   "motion": 0.048,
+   "quality": 0.637,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -901,8 +901,8 @@
    "hues": 8,
    "motion": 0,
    "quality": 0.354,
-   "target": 0.35,
-   "verdict": "PRESENT"
+   "target": 0.38,
+   "verdict": "BELOW BAR — quality 0.35 under the 0.38 target"
   },
   {
    "sourceId": 40,
@@ -924,7 +924,7 @@
    "hues": 5,
    "motion": 0.047,
    "quality": 0.553,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -941,13 +941,13 @@
     "z": -94
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.305,
+   "doorway": 0.306,
    "inside": 0.14,
    "detail": 0.062,
    "hues": 10,
-   "motion": 0.062,
+   "motion": 0.061,
    "quality": 0.582,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -964,13 +964,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.134,
-   "inside": 0.536,
-   "detail": 0.048,
+   "doorway": 0.163,
+   "inside": 0.535,
+   "detail": 0.047,
    "hues": 7,
    "motion": 0.039,
-   "quality": 0.395,
-   "target": 0.35,
+   "quality": 0.415,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -987,13 +987,13 @@
     "z": 94
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.139,
-   "inside": 0.284,
-   "detail": 0.027,
-   "hues": 3,
-   "motion": 0.721,
-   "quality": 0.367,
-   "target": 0.35,
+   "doorway": 0.544,
+   "inside": 0.189,
+   "detail": 0.035,
+   "hues": 5,
+   "motion": 0.563,
+   "quality": 0.728,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1016,7 +1016,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.046,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1033,14 +1033,14 @@
     "z": -94
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.115,
-   "inside": 0.42,
-   "detail": 0.047,
+   "doorway": 0.131,
+   "inside": 0.362,
+   "detail": 0.04,
    "hues": 5,
-   "motion": 0.069,
-   "quality": 0.381,
-   "target": 0.35,
-   "verdict": "THIN — subject is there but too small to read"
+   "motion": 0.077,
+   "quality": 0.392,
+   "target": 0.38,
+   "verdict": "PRESENT"
   },
   {
    "sourceId": 46,
@@ -1056,13 +1056,13 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.237,
+   "doorway": 0.242,
    "inside": 0.334,
-   "detail": 0.033,
+   "detail": 0.037,
    "hues": 3,
-   "motion": 0.307,
-   "quality": 0.451,
-   "target": 0.35,
+   "motion": 0.311,
+   "quality": 0.462,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1085,7 +1085,7 @@
    "hues": 3,
    "motion": 0,
    "quality": 0.623,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1108,7 +1108,7 @@
    "hues": 3,
    "motion": 0,
    "quality": 0.764,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1129,9 +1129,9 @@
    "inside": 0.351,
    "detail": 0.033,
    "hues": 6,
-   "motion": 0.037,
-   "quality": 0.387,
-   "target": 0.35,
+   "motion": 0.05,
+   "quality": 0.407,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1154,8 +1154,8 @@
    "hues": 6,
    "motion": 0.003,
    "quality": 0.361,
-   "target": 0.35,
-   "verdict": "PRESENT"
+   "target": 0.38,
+   "verdict": "BELOW BAR — quality 0.36 under the 0.38 target"
   },
   {
    "sourceId": 51,
@@ -1171,13 +1171,13 @@
     "z": 111
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.269,
-   "inside": 0.644,
-   "detail": 0.05,
+   "doorway": 0.266,
+   "inside": 0.637,
+   "detail": 0.051,
    "hues": 3,
-   "motion": 0.292,
+   "motion": 0.29,
    "quality": 0.505,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1196,11 +1196,11 @@
    "facing": -3.141592653589793,
    "doorway": 0.209,
    "inside": 0.299,
-   "detail": 0.055,
-   "hues": 14,
-   "motion": 0.031,
-   "quality": 0.451,
-   "target": 0.35,
+   "detail": 0.053,
+   "hues": 10,
+   "motion": 0.021,
+   "quality": 0.433,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1217,13 +1217,13 @@
     "z": -111
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.392,
-   "inside": 0.562,
-   "detail": 0.132,
+   "doorway": 0.39,
+   "inside": 0.555,
+   "detail": 0.131,
    "hues": 7,
-   "motion": 0.016,
-   "quality": 0.704,
-   "target": 0.35,
+   "motion": 0.03,
+   "quality": 0.721,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1240,13 +1240,13 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.154,
+   "doorway": 0.165,
    "inside": 0.2,
-   "detail": 0.036,
+   "detail": 0.038,
    "hues": 3,
-   "motion": 0.122,
-   "quality": 0.394,
-   "target": 0.35,
+   "motion": 0.114,
+   "quality": 0.406,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1264,12 +1264,12 @@
    },
    "facing": 1.5707963267948966,
    "doorway": 0.015,
-   "inside": 0.057,
+   "inside": 0.056,
    "detail": 0.007,
    "hues": 0,
    "motion": 0,
    "quality": 0.024,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1286,13 +1286,13 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.295,
+   "doorway": 0.3,
    "inside": 0.155,
    "detail": 0.079,
-   "hues": 11,
-   "motion": 0.121,
-   "quality": 0.662,
-   "target": 0.35,
+   "hues": 12,
+   "motion": 0.107,
+   "quality": 0.666,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1309,13 +1309,13 @@
     "z": -128
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.193,
-   "inside": 0.202,
-   "detail": 0.045,
-   "hues": 3,
+   "doorway": 0.253,
+   "inside": 0.204,
+   "detail": 0.047,
+   "hues": 2,
    "motion": 0.277,
-   "quality": 0.439,
-   "target": 0.35,
+   "quality": 0.467,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1334,11 +1334,11 @@
    "facing": 0,
    "doorway": 0.273,
    "inside": 0.118,
-   "detail": 0.055,
+   "detail": 0.056,
    "hues": 5,
    "motion": 0.006,
-   "quality": 0.419,
-   "target": 0.35,
+   "quality": 0.421,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1361,7 +1361,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.038,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1378,13 +1378,13 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.297,
+   "doorway": 0.292,
    "inside": 0.603,
-   "detail": 0.051,
+   "detail": 0.05,
    "hues": 4,
-   "motion": 0.015,
-   "quality": 0.422,
-   "target": 0.35,
+   "motion": 0.014,
+   "quality": 0.415,
+   "target": 0.38,
    "verdict": "PRESENT"
   },
   {
@@ -1407,7 +1407,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.054,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1430,7 +1430,7 @@
    "hues": 0,
    "motion": 0,
    "quality": 0.047,
-   "target": 0.35,
+   "target": 0.38,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   }
  ],
