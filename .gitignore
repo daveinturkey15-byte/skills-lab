@@ -39,3 +39,7 @@ qa/dbg*.mjs
 qa/probe-*.mjs
 s4u-probe.cmd
 launch-lanes.cmd
+
+# Any Chrome profile any harness makes, whatever it is called.
+qa/world/
+**/.profile/
