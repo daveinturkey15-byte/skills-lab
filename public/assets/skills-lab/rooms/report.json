@@ -1,5 +1,5 @@
 {
- "capturedAt": "2026-09-18T13:58:47.582Z",
+ "capturedAt": "2026-09-18T14:02:00.916Z",
  "adapter": {
   "adapter": true,
   "vendor": "nvidia"
@@ -21,7 +21,7 @@
    },
    "facing": 1.5707963267948966,
    "doorway": 0.41,
-   "inside": 0.313,
+   "inside": 0.312,
    "verdict": "PRESENT"
   },
   {
@@ -57,7 +57,7 @@
    },
    "facing": -1.5707963267948966,
    "doorway": 0.456,
-   "inside": 0.472,
+   "inside": 0.471,
    "verdict": "PRESENT"
   },
   {
@@ -74,8 +74,8 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.394,
-   "inside": 0.417,
+   "doorway": 0.399,
+   "inside": 0.421,
    "verdict": "PRESENT"
   },
   {
@@ -92,7 +92,7 @@
     "z": -9
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.407,
+   "doorway": 0.414,
    "inside": 0.161,
    "verdict": "PRESENT"
   },
@@ -111,7 +111,7 @@
    },
    "facing": 3.141592653589793,
    "doorway": 0.345,
-   "inside": 0.457,
+   "inside": 0.472,
    "verdict": "PRESENT"
   },
   {
@@ -128,7 +128,7 @@
     "z": 9
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.271,
+   "doorway": 0.27,
    "inside": 0.19,
    "verdict": "PRESENT"
   },
@@ -146,8 +146,8 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.249,
-   "inside": 0.452,
+   "doorway": 0.27,
+   "inside": 0.459,
    "verdict": "PRESENT"
   },
   {
@@ -218,8 +218,8 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.327,
-   "inside": 0.35,
+   "doorway": 0.388,
+   "inside": 0.328,
    "verdict": "PRESENT"
   },
   {
@@ -237,7 +237,7 @@
    },
    "facing": -1.5707963267948966,
    "doorway": 0.126,
-   "inside": 0.266,
+   "inside": 0.263,
    "verdict": "PRESENT"
   },
   {
@@ -290,7 +290,7 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.151,
+   "doorway": 0.189,
    "inside": 0.327,
    "verdict": "PRESENT"
   },
@@ -308,8 +308,8 @@
     "z": -43
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.349,
-   "inside": 0.608,
+   "doorway": 0.348,
+   "inside": 0.609,
    "verdict": "PRESENT"
   },
   {
@@ -327,7 +327,7 @@
    },
    "facing": 0,
    "doorway": 0.203,
-   "inside": 0.448,
+   "inside": 0.45,
    "verdict": "PRESENT"
   },
   {
@@ -344,7 +344,7 @@
     "z": 43
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.339,
+   "doorway": 0.338,
    "inside": 0.376,
    "verdict": "PRESENT"
   },
@@ -416,8 +416,8 @@
     "z": 43
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.123,
-   "inside": 0.299,
+   "doorway": 0.122,
+   "inside": 0.303,
    "verdict": "PRESENT"
   },
   {
@@ -471,7 +471,7 @@
    },
    "facing": 0,
    "doorway": 0.148,
-   "inside": 0.435,
+   "inside": 0.429,
    "verdict": "PRESENT"
   },
   {
@@ -524,7 +524,7 @@
     "z": -60
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.47,
+   "doorway": 0.454,
    "inside": 0.147,
    "verdict": "PRESENT"
   },
@@ -632,7 +632,7 @@
     "z": 77
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.13,
+   "doorway": 0.131,
    "inside": 0.134,
    "verdict": "PRESENT"
   },
@@ -686,7 +686,7 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.251,
+   "doorway": 0.244,
    "inside": 0.227,
    "verdict": "PRESENT"
   },
@@ -758,8 +758,8 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.162,
-   "inside": 0.535,
+   "doorway": 0.154,
+   "inside": 0.536,
    "verdict": "PRESENT"
   },
   {
@@ -776,8 +776,8 @@
     "z": 94
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.121,
-   "inside": 0.481,
+   "doorway": 0.128,
+   "inside": 0.371,
    "verdict": "PRESENT"
   },
   {
@@ -812,8 +812,8 @@
     "z": -94
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.122,
-   "inside": 0.395,
+   "doorway": 0.124,
+   "inside": 0.412,
    "verdict": "PRESENT"
   },
   {
@@ -830,8 +830,8 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.246,
-   "inside": 0.374,
+   "doorway": 0.247,
+   "inside": 0.387,
    "verdict": "PRESENT"
   },
   {
@@ -920,7 +920,7 @@
     "z": 111
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.262,
+   "doorway": 0.264,
    "inside": 0.66,
    "verdict": "PRESENT"
   },
@@ -939,7 +939,7 @@
    },
    "facing": -3.141592653589793,
    "doorway": 0.215,
-   "inside": 0.303,
+   "inside": 0.308,
    "verdict": "PRESENT"
   },
   {
@@ -957,7 +957,7 @@
    },
    "facing": -1.5707963267948966,
    "doorway": 0.395,
-   "inside": 0.565,
+   "inside": 0.564,
    "verdict": "PRESENT"
   },
   {
@@ -974,7 +974,7 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.172,
+   "doorway": 0.171,
    "inside": 0.198,
    "verdict": "PRESENT"
   },
@@ -1010,7 +1010,7 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.302,
+   "doorway": 0.306,
    "inside": 0.154,
    "verdict": "PRESENT"
   },
@@ -1028,7 +1028,7 @@
     "z": -128
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.181,
+   "doorway": 0.257,
    "inside": 0.201,
    "verdict": "PRESENT"
   },
