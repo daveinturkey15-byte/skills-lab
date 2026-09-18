@@ -36,12 +36,15 @@ export const room: RoomDefinition = {
     const demo = createDemo({ THREE, seed: ctx.seed });
 
     // Presentation only: widen the street pair toward the walls. The measured
-    // budget and every procedural byte are the demo’s own.
+    // budget and every procedural byte are the demo's own. Cycle 1 shifted the
+    // pair sideways and hid the budgeted glow behind its own facade (0.38 to
+    // 0.32), so this reverts the shift and instead brings the pair toward the
+    // door: larger roads, pillar still central but the comparison reads bigger.
     const stage = new THREE.Group();
     stage.name = 'source-7-room-stage';
     stage.add(demo.root);
     demo.root.scale.setScalar(1.5);
-    stage.position.set(0, 0.1, -1.0);
+    stage.position.set(0, 0.1, -2.2);
 
     const root = new THREE.Group();
     root.name = 'source-7-night-street-room';

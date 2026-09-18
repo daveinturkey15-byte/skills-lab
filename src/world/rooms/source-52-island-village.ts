@@ -35,13 +35,18 @@ export const room: RoomDefinition = {
     const { THREE } = ctx;
     const demo = createDemo({ THREE, seed: ctx.seed });
 
-    // Presentation only: grow the isle to fill the room floor. Schedules,
-    // counters and the roster behind them are untouched.
+    // Presentation only: grow the isle, sit it closer to the door, and turn
+    // the working dock side toward the entry. Schedules, counters and the
+    // roster behind them are untouched. Doorway read q=0.36 against the 0.38
+    // target with a hut back filling the frame; the dock, boat and walking
+    // villagers are the moving half and belong in the doorway, rotated +90°
+    // about Y so demo-east faces the door. Extent is unchanged, so walls hold.
     const stage = new THREE.Group();
     stage.name = 'source-52-room-stage';
     stage.add(demo.root);
-    demo.root.scale.setScalar(1.35);
-    stage.position.set(0, 0.02, -1.5);
+    demo.root.scale.setScalar(1.42);
+    stage.rotation.y = Math.PI / 2;
+    stage.position.set(0, 0.02, -0.6);
 
     const root = new THREE.Group();
     root.name = 'source-52-island-village-room';

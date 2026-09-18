@@ -44,7 +44,9 @@ export const room: RoomDefinition = {
     const disposables: { dispose(): void }[] = [];
     const track = <T extends { dispose(): void }>(v: T): T => (disposables.push(v), v);
 
-    // Backdrop fills the doorway frame behind the action.
+    // Backdrop fills the doorway frame behind the action. Its upper half is
+    // otherwise empty dark pixels from the door, so the pen curve lives on it
+    // as bright bars (staging only: the interpolation itself is penAtDistanceMm).
     const backdrop = new THREE.Mesh(
       track(new THREE.BoxGeometry(13, 5.4, 0.3)),
       track(new THREE.MeshStandardMaterial({
@@ -53,15 +55,30 @@ export const room: RoomDefinition = {
     );
     backdrop.position.set(0, 2.7, 6.9);
     root.add(backdrop);
+    const chartMat = track(new THREE.MeshStandardMaterial({
+      color: 0xc7a23a, emissive: 0xc7a23a, emissiveIntensity: 0.85, roughness: 0.6,
+    }));
+    for (let i = 0; i < 9; i += 1) {
+      const pen = penAtDistanceMm(100 + (i * 900) / 8);
+      const barHeight = 1.0 + ((pen - 140) / 40) * 1.6;
+      const bar = new THREE.Mesh(track(new THREE.BoxGeometry(0.7, barHeight, 0.1)), chartMat);
+      bar.position.set(-4.2 + i * 1.05, 2.7 + barHeight / 2, 6.68);
+      root.add(bar);
+    }
+    const baseline = new THREE.Mesh(track(new THREE.BoxGeometry(9.6, 0.08, 0.08)), chartMat);
+    baseline.position.set(0, 2.66, 6.68);
+    root.add(baseline);
 
-    // Firing lane strip on the floor between the vehicles.
+    // Firing lane strip on the floor between the vehicles. Tanks sit closer to
+    // the door than before (z -3.5, ~4.5 m read) so their silhouette fills the
+    // doorway instead of the backdrop swallowing it.
     const lane = new THREE.Mesh(
       track(new THREE.BoxGeometry(7.5, 0.04, 0.6)),
       track(new THREE.MeshStandardMaterial({
         color: 0xc7a23a, emissive: 0x6b5312, emissiveIntensity: 0.7, roughness: 0.6,
       })),
     );
-    lane.position.set(0, 0.03, -2);
+    lane.position.set(0, 0.03, -3.5);
     root.add(lane);
 
     interface Tank { turret: THREE.Group }
@@ -72,7 +89,7 @@ export const room: RoomDefinition = {
     const plateGeo = track(new THREE.BoxGeometry(0.1, 0.7, 1.5));
     for (const [side, colour] of [[-1, 0x6b8038], [1, 0x9e5636]] as const) {
       const group = new THREE.Group();
-      group.position.set(side * 2.5, 0, -2);
+      group.position.set(side * 2.5, 0, -3.5);
       group.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
       const hullMat = track(new THREE.MeshStandardMaterial({
         color: colour, roughness: 0.65, metalness: 0.25,
@@ -107,11 +124,13 @@ export const room: RoomDefinition = {
     }
 
     // Cutaway plate rack on the back wall: ordered hits land left to right.
+    // Pale alloy at low metalness so the plates read from the door; hit flashes
+    // still pop to 2.2 and decay back to the 0.4 floor, never to black.
     const rackPlates: THREE.MeshStandardMaterial[] = [];
     for (let i = 0; i < 4; i += 1) {
       const mat = track(new THREE.MeshStandardMaterial({
-        color: 0x9fb4bd, roughness: 0.35, metalness: 0.7,
-        emissive: 0xff7a2a, emissiveIntensity: 0,
+        color: 0x9fb4bd, roughness: 0.5, metalness: 0.25,
+        emissive: 0xff7a2a, emissiveIntensity: 0.4,
       }));
       const plate = new THREE.Mesh(track(new THREE.BoxGeometry(1.7, 2.1, 0.12)), mat);
       plate.position.set(-4.5 + i * 3, 2.2, 6.6);
@@ -152,10 +171,10 @@ export const room: RoomDefinition = {
       const shell = shells.find((s) => !s.live);
       if (!shell) return;
       const dir = fromTank === 0 ? 1 : -1;
-      shell.from.set(dir * -2.5, 1.55, -2);
+      shell.from.set(dir * -2.5, 1.55, -3.5);
       // 2-sigma-clamped dispersion, restated: small deterministic offsets.
       const miss = (rng() + rng() - 1) * 0.35;
-      shell.to.set(dir * 2.5, 1.1 + miss * 0.4, -2 + miss);
+      shell.to.set(dir * 2.5, 1.1 + miss * 0.4, -3.5 + miss);
       shell.t = 0;
       shell.live = true;
       shell.mesh.visible = true;
@@ -196,7 +215,7 @@ export const room: RoomDefinition = {
         flashAge += dt;
         flashMat.emissiveIntensity = Math.max(0, 3 - flashAge * 6);
         if (flashAge > 0.6) flash.visible = false;
-        for (const plate of rackPlates) plate.emissiveIntensity = Math.max(0, plate.emissiveIntensity - dt * 3);
+        for (const plate of rackPlates) plate.emissiveIntensity = Math.max(0.4, plate.emissiveIntensity - dt * 3);
       },
       dispose: () => { for (const d of disposables) d.dispose(); },
     };

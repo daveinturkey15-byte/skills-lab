@@ -255,6 +255,67 @@ export const room: RoomDefinition = {
     legendBoard.position.set(1.6, 1.9, -2.2);
     legendBoard.rotation.y = Math.PI;
     root.add(legendBoard);
+    // Error-curve chart on the back wall: projected geometric error against
+    // distance for each level, with the 80 px room gate. It plots the exact
+    // formula selectLod evaluates, so the doorway sees what the floor is doing
+    // instead of empty dark wall above the terrain. Annotation only.
+    const chart = document.createElement('canvas');
+    chart.width = 1024;
+    chart.height = 320;
+    const ink = chart.getContext('2d')!;
+    ink.fillStyle = '#10141a';
+    ink.fillRect(0, 0, 1024, 320);
+    ink.font = '30px system-ui, sans-serif';
+    ink.textAlign = 'left';
+    ink.textBaseline = 'middle';
+    ink.fillStyle = '#cfe3de';
+    ink.fillText('projected error vs distance — gate 80 px', 28, 34);
+    const chartLevelCss = ['#5ca370', '#a39e54', '#e09942', '#e05c42'];
+    const plotX = (d: number): number => 60 + (d / 16) * 920;
+    const plotY = (px: number): number => 290 - Math.min(px, 420) * (220 / 420);
+    ink.strokeStyle = '#e8ecef';
+    ink.lineWidth = 3;
+    ink.beginPath();
+    ink.moveTo(plotX(0.5), plotY(80));
+    ink.lineTo(plotX(16), plotY(80));
+    ink.stroke();
+    ink.lineWidth = 5;
+    for (let level = 0; level < 4; level += 1) {
+      ink.strokeStyle = chartLevelCss[level]!;
+      ink.beginPath();
+      for (let d = 0.5; d <= 16; d += 0.25) {
+        const px = (LEVEL_ERROR[level]! * PROJECTION) / d;
+        const x = plotX(d);
+        const y = plotY(px);
+        if (d === 0.5) ink.moveTo(x, y);
+        else ink.lineTo(x, y);
+      }
+      ink.stroke();
+    }
+    const chartTexture = new THREE.CanvasTexture(chart);
+    chartTexture.colorSpace = THREE.SRGBColorSpace;
+    disposables.push(chartTexture);
+    const chartGeometry = new THREE.PlaneGeometry(9, 2.2);
+    disposables.push(chartGeometry);
+    const chartMaterial = new THREE.MeshBasicMaterial({ map: chartTexture, toneMapped: false });
+    disposables.push(chartMaterial);
+    const chartBoard = new THREE.Mesh(chartGeometry, chartMaterial);
+    // Low on the back wall: from the doorway the frame top cuts hard, and the
+    // first hanging (centre 3.1) sat entirely above it. Centre 2.0 keeps the
+    // top near the legend's sightline while the board stays off the terrain.
+    chartBoard.position.set(0, 2.0, 7.4);
+    root.add(chartBoard);
+
+
+    // Door-side repeat of the same chart. The back-wall hanging only lands for
+    // visitors already inside; the doorway frame cuts above it, so entering
+    // visitors get the curves beside the legend on the proven sightline.
+    const nearGeometry = new THREE.PlaneGeometry(3.5, 1.1);
+    disposables.push(nearGeometry);
+    const nearBoard = new THREE.Mesh(nearGeometry, chartMaterial);
+    nearBoard.position.set(-2.6, 1.7, -2.4);
+    nearBoard.rotation.y = Math.PI;
+    root.add(nearBoard);
 
     const swapSection = (col: number, row: number, level: number): void => {
       const section = sections[row][col];

@@ -19,6 +19,9 @@ export const room: RoomDefinition = {
   create: (ctx) => {
     const T = ctx.THREE;
     const root = new T.Group();
+    // Whole exhibit rides 1.8 m toward the door: the face is small at 8 m and
+    // every annotation travels with it, rigid, so nothing changes but the read.
+    root.position.z = -1.8;
     const geos: THREE.BufferGeometry[] = [];
     const mats: THREE.Material[] = [];
     const low = ctx.quality === 'low';
@@ -101,7 +104,10 @@ export const room: RoomDefinition = {
       const irisMat = new T.MeshBasicMaterial({ vertexColors: true });
       mats.push(irisMat);
       const iris = new T.Mesh(irisGeo, irisMat);
-      iris.position.set(sx, 2.65, -1.4);
+      // Door side: the head centre sits at z -2.2 with the door at -Z, so the
+      // face belongs on -Z (surface -2.91 at this x). It was authored on +Z,
+      // facing the back wall through the skull — the doorway saw scalp only.
+      iris.position.set(sx, 2.65, -2.9);
       iris.rotation.y = Math.PI;
       root.add(iris);
       const lidGeo = new T.BoxGeometry(0.34, 0.06, 0.06);
@@ -109,7 +115,7 @@ export const room: RoomDefinition = {
       const lidMat = new T.MeshStandardMaterial({ color: 0x6b4a3a, roughness: 0.7 });
       mats.push(lidMat);
       const lid = new T.Mesh(lidGeo, lidMat);
-      lid.position.set(sx, 2.82, -1.4);
+      lid.position.set(sx, 2.82, -2.9);
       lid.userData.lid = true;
       root.add(lid);
     }
@@ -125,9 +131,10 @@ export const room: RoomDefinition = {
       const ph = rand() * 1.1;
       const ax = Math.sin(ph) * Math.cos(th) * 0.72;
       const ay = 2.75 + Math.cos(ph) * 0.9 + 0.35;
-      const az = -2.2 + Math.sin(ph) * Math.sin(th) * 0.68 - 0.1;
+      // Mirrored with the face: fringe over the -Z face, length down the +Z back.
+      const az = -2.2 - Math.sin(ph) * Math.sin(th) * 0.68 + 0.1;
       // Crop the fringe short so the procedural face reads; back strands run long.
-      const front = az > -2.15 ? 0.45 : 1.15;
+      const front = az < -2.25 ? 0.45 : 1.15;
       const len = (0.35 + rand() * 0.55) * front;
       anchors.push([ax, ay, az, len, rand() * Math.PI * 2]);
     }
@@ -186,8 +193,9 @@ export const room: RoomDefinition = {
       // Single blink channel: 3.7 s period, brief close.
       const t = elapsed % 3.7;
       const shut = t < 0.12 ? Math.sin((t / 0.12) * Math.PI) : 0;
-      for (const lid of lids) lid.position.y = 2.82 - shut * 0.14;
-      head.rotation.y = Math.sin(elapsed * 0.25) * 0.3;
+      // Narrow sway: the scalp turns but the iris discs do not, so a wide swing
+      // slides the face out from under the eyes. Strands carry the motion.
+      head.rotation.y = Math.sin(elapsed * 0.25) * 0.08;
     };
     const dispose = (): void => {
       for (const g of geos) g.dispose();

@@ -60,9 +60,11 @@ export const room: RoomDefinition = {
     );
     root.add(cursor);
 
-    const linkGeo = track(new THREE.BoxGeometry(0.36, LINK, 0.36));
+    const linkGeo = track(new THREE.BoxGeometry(0.44, LINK, 0.44));
     linkGeo.translate(0, LINK / 2, 0);
-    const beadGeo = track(new THREE.SphereGeometry(0.24, 14, 10));
+    // Joint beads oversized for doorway legibility: spheres carry the lit
+    // relief this room scores on, so they are drawn larger than scale.
+    const beadGeo = track(new THREE.SphereGeometry(0.36, 14, 10));
 
     interface Chain { base: THREE.Group; pivots: THREE.Group[] }
     const buildChain = (ox: number, colour: number): Chain => {
@@ -142,8 +144,10 @@ export const room: RoomDefinition = {
       update: (_t, dt) => {
         const step = Math.min(dt, 0.05);
         elapsed += step;
+        // Staging pace: the target side flips every 1.1 s so a doorway capture
+        // always straddles a replan. Spring, targets and trails untouched.
+        const phase = Math.floor(elapsed / 1.1) % 2 === 0 ? 1 : -1;
         cursor.position.set(Math.cos(elapsed * 0.5) * 4.6, 0.5, -1.2 + Math.sin(elapsed * 0.5) * 4.6);
-        const phase = Math.floor(elapsed / 1.6) % 2 === 0 ? 1 : -1;
         for (let j = 0; j < JOINTS; j += 1) {
           const target = TARGETS[j]! * phase;
           snapState[j]! += (target - snapState[j]!) * Math.min(1, step * 14);

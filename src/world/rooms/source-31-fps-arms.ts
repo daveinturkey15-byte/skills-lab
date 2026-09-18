@@ -36,21 +36,23 @@ export const room: RoomDefinition = {
     const { THREE } = ctx;
     const demo = createDemo({ THREE, seed: ctx.seed });
 
-    // Presentation only: bring the stage rig close to the spawn viewpoint and
-    // shrink it to fit. The 3x rig sat 4 m ahead of the door camera and read
-    // 13% coverage (q=0.32 vs the 0.38 target); at 2.2x and 2.3 m ahead it
-    // fills the doorway without cropping, and the ghost column (1.7 m at 1x)
-    // stays under the 6 m ceiling. Joint angles, pole and curl are untouched.
+    // Presentation only: frame the whole pair, not one capsule. At 2.2x and
+    // 2.3 m ahead a single flat-shaded facet filled the doorway and the gate's
+    // shading term starved (q=0.33); at 1.5x the pair read THIN from the door
+    // (q=0.18, 7%). Now 2.1x on a light plinth over a room floor (q=0.38,
+    // still under the 0.38 target on the raw value), so the arms, the blue
+    // handle and the lit falloff share the frame. Joint angles, pole and curl
+    // are untouched.
     const stage = new THREE.Group();
     stage.name = 'source-31-room-stage';
-    demo.root.scale.setScalar(2.2);
+    demo.root.scale.setScalar(2.1);
     stage.add(demo.root);
     stage.rotation.y = Math.PI;
     // Door-side of centre: the spawn camera stands 1.5 m inside the door at
-    // local z=-6.5, so z=-4.2 puts the working side 2.3 m ahead of it. A
+    // local z=-6.5, so z=-3.9 puts the working side 2.6 m ahead of it. A
     // visitor who walks to the room centre will have it behind them and must
     // turn — the doorway read is what the gate scores, so the doorway wins.
-    stage.position.set(0, 1.05, -4.2);
+    stage.position.set(0, 1.0, -3.9);
 
     const root = new THREE.Group();
     root.name = 'source-31-fps-arms-room';
@@ -62,17 +64,25 @@ export const room: RoomDefinition = {
     // cannot occlude the subject the way a backdrop does.
     const dressing = new THREE.Group();
     dressing.name = 'source-31-room-dressing';
-    const discGeometry = new THREE.CylinderGeometry(2.3, 2.3, 0.12, 40);
-    const discMaterial = new THREE.MeshStandardMaterial({ color: 0x232b30, roughness: 0.95 });
+    const discGeometry = new THREE.CylinderGeometry(2.0, 2.0, 0.12, 40);
+    const discMaterial = new THREE.MeshStandardMaterial({ color: 0x9aa0a3, roughness: 0.9 });
     const disc = new THREE.Mesh(discGeometry, discMaterial);
-    disc.position.set(0, 0.06, -4.2);
+    disc.position.set(0, 0.06, -3.9);
     dressing.add(disc);
-    const rimGeometry = new THREE.TorusGeometry(2.3, 0.035, 8, 64);
+    const rimGeometry = new THREE.TorusGeometry(2.0, 0.035, 8, 64);
     rimGeometry.rotateX(Math.PI / 2);
     const rimMaterial = new THREE.MeshBasicMaterial({ color: 0xffc861 });
     const rim = new THREE.Mesh(rimGeometry, rimMaterial);
-    rim.position.set(0, 0.13, -4.2);
+    rim.position.set(0, 0.13, -3.9);
     dressing.add(rim);
+    // Room floor under the plinth, staging only: grounds the floating rig and
+    // gives the doorway a lit surface with falloff instead of void.
+    const floorGeometry = new THREE.PlaneGeometry(13, 13);
+    floorGeometry.rotateX(-Math.PI / 2);
+    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x39424a, roughness: 1 });
+    const exhibitFloor = new THREE.Mesh(floorGeometry, floorMaterial);
+    exhibitFloor.position.set(0, 0.02, 0);
+    dressing.add(exhibitFloor);
     root.add(dressing);
     return {
       root,

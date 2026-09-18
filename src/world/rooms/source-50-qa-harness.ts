@@ -1,3 +1,4 @@
+import type * as THREE from 'three';
 import type { RoomContext, RoomDefinition, RoomInstance } from '../contract';
 
 /**
@@ -11,7 +12,8 @@ import type { RoomContext, RoomDefinition, RoomInstance } from '../contract';
  *
  * BEFORE (left): the corridor with the crate-pair defect left in — two
  * stations blocked. AFTER (right): the cleared corridor, all stations green.
- * A travelling sweep bar shows the audit walking the corridor.
+ * A bright audit cursor rides each corridor centreline on the same 6 s phase
+ * as the disc pulse, so the audit walking the corridor is visible motion.
  */
 
 type Obstacle = { x: number; z: number; radius: number };
@@ -83,11 +85,17 @@ export const room: RoomDefinition = {
     discGeo.rotateX(-Math.PI / 2);
     // Per-disc materials: the audit wave lights stations up as it passes, so
     // each disc needs its own emissive to pulse. Same base verdict colours.
+    // Floor verdict washes, registered with their unlit base colours so the
+    // sweep band can brighten them in place each frame. Same phase as discs.
+    const floors: Array<{ geo: THREE.BufferGeometry; base: Float32Array }> = [];
     interface PulseDisc { mat: InstanceType<typeof T.MeshStandardMaterial>; base: number; z: number }
     const pulseDiscs: PulseDisc[] = [];
     // Verdict beacons at the corridor entrances, computed from the stations,
     // not painted on: a corridor with any blocked station gets red, an
     // all-pass corridor green. Tall so the verdict reads from the doorway.
+    // Registered so the audit heartbeat can breathe their brightness. Hue
+    // never changes: red stays red, green stays green.
+    const beacons: Array<{ mat: InstanceType<typeof T.MeshBasicMaterial>; base: InstanceType<typeof T.Color> }> = [];
     const beaconGeo = track(new T.CylinderGeometry(0.22, 0.28, 2.5, 12));
 
     function build(
@@ -122,6 +130,7 @@ export const room: RoomDefinition = {
         wash[v * 3 + 2] = mixed.b;
       }
       floorGeo.setAttribute('color', new T.BufferAttribute(wash, 3));
+      floors.push({ geo: floorGeo, base: wash.slice() });
       const floor = new T.Mesh(
         floorGeo,
         track(new T.MeshStandardMaterial({ vertexColors: true, roughness: 0.96 })),
@@ -158,26 +167,54 @@ export const room: RoomDefinition = {
       const beaconMat = track(
         new T.MeshBasicMaterial({ color: blocked ? 0xe05c42 : 0x46c08a, toneMapped: false }),
       );
+      beacons.push({ mat: beaconMat, base: beaconMat.color.clone() });
       const beacon = new T.Mesh(beaconGeo, beaconMat);
       beacon.position.set(centreX, 1.25, corridorZ - LENGTH / 2 + 0.4);
       root.add(beacon);
     }
-
     build(-corridorX, DEFECTIVE_OBSTACLES, sweepCorridor(LENGTH, WIDTH, DEFECTIVE_OBSTACLES), 0x3a3d40);
     build(corridorX, CLEARED_OBSTACLES, sweepCorridor(LENGTH, WIDTH, CLEARED_OBSTACLES), 0x3a3d40);
+
+    // Audit cursors: one bright ball per corridor riding the centreline on the
+    // same 6 s sweep phase as the disc pulse. Same position the pulse wave
+    // marks, drawn as an opaque marker so the walk reads from the doorway.
+    const cursorGeo = track(new T.SphereGeometry(0.22, 14, 10));
+    const cursorMat = track(new T.MeshBasicMaterial({ color: 0xffc46b, toneMapped: false }));
+    const cursors = [-corridorX, corridorX].map((centreX) => {
+      const cursor = new T.Mesh(cursorGeo, cursorMat);
+      cursor.position.set(centreX, 1.5, corridorZ - LENGTH / 2);
+      root.add(cursor);
+      return cursor;
+    });
 
     let elapsed = 0;
     return {
       root,
       update: (_t: number, dt: number) => {
-        // The audit walking the corridor: a brightness wave over the station
-        // discs, both halves together, same 6 s sweep phase as before.
+        // The audit walking the corridor: a brightness band over the floor
+        // wash plus the disc pulse, both halves together on one 6 s phase.
+        // The verdict beacons breathe on a 3 s heartbeat so the live audit
+        // reads from the doorway; hue is untouched, only brightness moves.
         elapsed = (elapsed + dt) % 6;
         const z = corridorZ - LENGTH / 2 + (elapsed / 6) * LENGTH;
+        const heartbeat = 0.8 + 0.2 * (0.5 + 0.5 * Math.sin((elapsed / 3) * Math.PI * 2));
+        for (const beacon of beacons) beacon.mat.color.copy(beacon.base).multiplyScalar(heartbeat);
         for (const disc of pulseDiscs) {
           const d = disc.z - z;
           disc.mat.emissiveIntensity = disc.base * (1 + 1.8 * Math.exp(-(d * d) / 1.5));
         }
+        for (const floor of floors) {
+          const positions = floor.geo.getAttribute('position');
+          const colours = floor.geo.getAttribute('color');
+          for (let v = 0; v < positions.count; v += 1) {
+            const vz = positions.getZ(v) + corridorZ;
+            const dz = vz - z;
+            const band = 1 + 1.1 * Math.exp(-(dz * dz) / 1.2);
+            colours.setXYZ(v, floor.base[v * 3]! * band, floor.base[v * 3 + 1]! * band, floor.base[v * 3 + 2]! * band);
+          }
+          colours.needsUpdate = true;
+        }
+        for (const cursor of cursors) cursor.position.z = z;
       },
       dispose: () => {
         for (const d of disposables) d.dispose();

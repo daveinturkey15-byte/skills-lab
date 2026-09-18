@@ -37,13 +37,14 @@ export const room: RoomDefinition = {
     const demo = createDemo({ THREE, seed: ctx.seed });
 
     // Presentation only: lay the pair down as the floor, widened to the walls
-    // with height gained for legibility. Trains, dispersion and foam rule stay
-    // exactly as the demo computes them.
+    // with height gained for legibility. Staged fully door-side so the near
+    // water fills the doorway frame instead of foreshortening to a strip.
+    // Trains, dispersion and foam rule stay exactly as the demo computes them.
     const stage = new THREE.Group();
     stage.name = 'source-57-room-stage';
     stage.add(demo.root);
     demo.root.scale.set(1.7, 2.5, 1.7);
-    stage.position.set(0, 0.15, -1.5);
+    stage.position.set(0, 0.15, -3.0);
 
     const root = new THREE.Group();
     root.name = 'source-57-two-scale-ocean-room';
