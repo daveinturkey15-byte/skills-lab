@@ -235,6 +235,18 @@ export async function mountWorld(
   (window as unknown as Record<string, unknown>).__worldTeleport =
     (x: number, z: number, yaw = 0) => player.teleport(x, z, yaw);
 
+  // The room index, so a capture tool can stand in the right doorway without
+  // reimplementing the layout maths and drifting from it.
+  (window as unknown as Record<string, unknown>).__worldRooms = slots.map((s) => ({
+    sourceId: definitions[s.index]!.sourceId,
+    skill: definitions[s.index]!.skill,
+    title: definitions[s.index]!.title,
+    kind: definitions[s.index]!.kind,
+    spawn: s.spawn,
+    room: s.room,
+    facing: s.facing,
+  }));
+
   /* --------------------------------------------------------- streaming */
 
   const quality: 'low' | 'medium' | 'high' = backend === 'WebGPU' ? 'high' : 'low';

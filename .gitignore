@@ -43,3 +43,5 @@ launch-lanes.cmd
 # Any Chrome profile any harness makes, whatever it is called.
 qa/world/
 **/.profile/
+
+plan-rooms.mjs
