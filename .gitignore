@@ -47,6 +47,7 @@ plan-rooms.mjs
 qa/*
 !qa/capture.mjs
 !qa/room-shot.mjs
+!qa/chrome-lifecycle.mjs
 !qa/package.json
 !qa/package-lock.json
 
