@@ -1,0 +1,1129 @@
+{
+ "capturedAt": "2026-09-18T13:58:47.582Z",
+ "adapter": {
+  "adapter": true,
+  "vendor": "nvidia"
+ },
+ "base": "http://localhost:5199/skills-lab/",
+ "results": [
+  {
+   "sourceId": 1,
+   "skill": "game-animation-asset-pipeline",
+   "title": "Mocap to in-game animation",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": -9
+   },
+   "room": {
+    "x": -15,
+    "z": -9
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.41,
+   "inside": 0.313,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 2,
+   "skill": "threejs-webgpu-water",
+   "title": "Spectral FFT ocean",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 9,
+    "z": -8.5
+   },
+   "room": {
+    "x": 9,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.266,
+   "inside": 0.265,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 3,
+   "skill": "threejs-webgpu-water",
+   "title": "Stylised water composition",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": 9
+   },
+   "room": {
+    "x": 15,
+    "z": 9
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.456,
+   "inside": 0.472,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 4,
+   "skill": "threejs-webgpu-water",
+   "title": "Underwater hull, unsolved cut",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -9,
+    "z": 8.5
+   },
+   "room": {
+    "x": -9,
+    "z": 15
+   },
+   "facing": -3.141592653589793,
+   "doorway": 0.394,
+   "inside": 0.417,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 5,
+   "skill": "game-animation-asset-pipeline",
+   "title": "Local H3 video to sprite animation",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": -9
+   },
+   "room": {
+    "x": 15,
+    "z": -9
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.407,
+   "inside": 0.161,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 6,
+   "skill": "img2threejs",
+   "title": "Image to procedural model contract",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 9,
+    "z": 8.5
+   },
+   "room": {
+    "x": 9,
+    "z": 15
+   },
+   "facing": 3.141592653589793,
+   "doorway": 0.345,
+   "inside": 0.457,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 7,
+   "skill": "photoreal-procedural-scene-forge",
+   "title": "Code-only night street",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": 9
+   },
+   "room": {
+    "x": -15,
+    "z": 9
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.271,
+   "inside": 0.19,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 8,
+   "skill": "threejs-procedural-vegetation",
+   "title": "Fully procedural jungle",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -9,
+    "z": -8.5
+   },
+   "room": {
+    "x": -9,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.249,
+   "inside": 0.452,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 9,
+   "skill": "threejs-frame-loop-audit",
+   "title": "Frame-loop audit, live",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": -26
+   },
+   "room": {
+    "x": -15,
+    "z": -26
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.385,
+   "inside": 0.335,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 10,
+   "skill": "threejs-source-prop-ingestion",
+   "title": "Vibe3D asset registry",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 26,
+    "z": -8.5
+   },
+   "room": {
+    "x": 26,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.166,
+   "inside": 0.634,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 11,
+   "skill": "ai-3d-asset-generation-loop",
+   "title": "Scaffold first, generate the hero",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": 26
+   },
+   "room": {
+    "x": 15,
+    "z": 26
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.205,
+   "inside": 0.319,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 12,
+   "skill": "ai-3d-asset-generation-loop",
+   "title": "Asset acceptance loop",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -26,
+    "z": 8.5
+   },
+   "room": {
+    "x": -26,
+    "z": 15
+   },
+   "facing": -3.141592653589793,
+   "doorway": 0.327,
+   "inside": 0.35,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 13,
+   "skill": "visual-gauntlet-loop",
+   "title": "Gauntlet loop",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": -26
+   },
+   "room": {
+    "x": 15,
+    "z": -26
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.126,
+   "inside": 0.266,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 14,
+   "skill": "unmapped",
+   "title": "Modern Claudefare viewmodel rubric",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 26,
+    "z": 8.5
+   },
+   "room": {
+    "x": 26,
+    "z": 15
+   },
+   "facing": 3.141592653589793,
+   "doorway": 0.143,
+   "inside": 0.188,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 15,
+   "skill": "threejs-rtx-runtime-route",
+   "title": "Native RTX runtime (blocked)",
+   "kind": "stub",
+   "spawn": {
+    "x": -8.5,
+    "z": 26
+   },
+   "room": {
+    "x": -15,
+    "z": 26
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.069,
+   "inside": 0.191,
+   "verdict": "THIN — subject is there but too small to read"
+  },
+  {
+   "sourceId": 16,
+   "skill": "game-animation-asset-pipeline",
+   "title": "Text to character animation locally",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -26,
+    "z": -8.5
+   },
+   "room": {
+    "x": -26,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.151,
+   "inside": 0.327,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 17,
+   "skill": "unmapped",
+   "title": "Environment-art quality bar",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": -43
+   },
+   "room": {
+    "x": -15,
+    "z": -43
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.349,
+   "inside": 0.608,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 18,
+   "skill": "threejs-procedural-vegetation",
+   "title": "Procedural grass meadow",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 43,
+    "z": -8.5
+   },
+   "room": {
+    "x": 43,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.203,
+   "inside": 0.448,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 19,
+   "skill": "unmapped",
+   "title": "Classic ray tracing in the browser",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": 43
+   },
+   "room": {
+    "x": 15,
+    "z": 43
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.339,
+   "inside": 0.376,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 20,
+   "skill": "unmapped",
+   "title": "Engine-free armour and ballistics",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -43,
+    "z": 8.5
+   },
+   "room": {
+    "x": -43,
+    "z": 15
+   },
+   "facing": -3.141592653589793,
+   "doorway": 0.174,
+   "inside": 0.221,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 21,
+   "skill": "unmapped",
+   "title": "Classic ray tracing as a shipped option - see row 19",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": -43
+   },
+   "room": {
+    "x": 15,
+    "z": -43
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.019,
+   "inside": 0.152,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 22,
+   "skill": "unmapped",
+   "title": "Environment-art comparators, 2026-08-24 batch",
+   "kind": "stub",
+   "spawn": {
+    "x": 43,
+    "z": 8.5
+   },
+   "room": {
+    "x": 43,
+    "z": 15
+   },
+   "facing": 3.141592653589793,
+   "doorway": 0.025,
+   "inside": 0.186,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 23,
+   "skill": "unmapped",
+   "title": "Deforming-terrain combat sim",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": 43
+   },
+   "room": {
+    "x": -15,
+    "z": 43
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.123,
+   "inside": 0.299,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 24,
+   "skill": "unmapped",
+   "title": "TAKEN — dense cover and night sky",
+   "kind": "stub",
+   "spawn": {
+    "x": -43,
+    "z": -8.5
+   },
+   "room": {
+    "x": -43,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.029,
+   "inside": 0.188,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 25,
+   "skill": "threejs-webgpu-water",
+   "title": "Shoreline water (unreleased)",
+   "kind": "stub",
+   "spawn": {
+    "x": -8.5,
+    "z": -60
+   },
+   "room": {
+    "x": -15,
+    "z": -60
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.021,
+   "inside": 0.155,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 26,
+   "skill": "game-hud-menu-overhaul",
+   "title": "Arcade game-select ring",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 60,
+    "z": -8.5
+   },
+   "room": {
+    "x": 60,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.148,
+   "inside": 0.435,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 27,
+   "skill": "majidmanzarpour/threejs-game-skills",
+   "title": "Three.js game skill pack: feel loop",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": 60
+   },
+   "room": {
+    "x": 15,
+    "z": 60
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.164,
+   "inside": 0.313,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 28,
+   "skill": "dgreenheck/webgpu-claude-skill",
+   "title": "Threshold dissolve over noise",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -60,
+    "z": 8.5
+   },
+   "room": {
+    "x": -60,
+    "z": 15
+   },
+   "facing": -3.141592653589793,
+   "doorway": 0.345,
+   "inside": 0.176,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 29,
+   "skill": "CloudAI-X/threejs-skills",
+   "title": "Three.js skills collection (CloudAI-X)",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": -60
+   },
+   "room": {
+    "x": 15,
+    "z": -60
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.47,
+   "inside": 0.147,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 30,
+   "skill": "game-animation-asset-pipeline",
+   "title": "Video as motion reference, not asset",
+   "kind": "stub",
+   "spawn": {
+    "x": 60,
+    "z": 8.5
+   },
+   "room": {
+    "x": 60,
+    "z": 15
+   },
+   "facing": 3.141592653589793,
+   "doorway": 0.025,
+   "inside": 0.179,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 31,
+   "skill": "game-animation-asset-pipeline",
+   "title": "Rigged first-person arms",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": 60
+   },
+   "room": {
+    "x": -15,
+    "z": 60
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.021,
+   "inside": 0.145,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 32,
+   "skill": "local-video-generation",
+   "title": "WAN 2.2 local video generation",
+   "kind": "stub",
+   "spawn": {
+    "x": -60,
+    "z": -8.5
+   },
+   "room": {
+    "x": -60,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.029,
+   "inside": 0.179,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 33,
+   "skill": "unmapped",
+   "title": "Partitioned terrain with worker LOD",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": -77
+   },
+   "room": {
+    "x": -15,
+    "z": -77
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.17,
+   "inside": 0.28,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 34,
+   "skill": "unmapped",
+   "title": "Subsystem contracts, not broadcasts",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 77,
+    "z": -8.5
+   },
+   "room": {
+    "x": 77,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.491,
+   "inside": 0.373,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 35,
+   "skill": "brief-driven-scene-production",
+   "title": "One-page scene brief, all-procedural",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": 77
+   },
+   "room": {
+    "x": 15,
+    "z": 77
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.13,
+   "inside": 0.134,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 36,
+   "skill": "atomic-acres-production-asset-governance",
+   "title": "Remesh and bake turntables",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -77,
+    "z": 8.5
+   },
+   "room": {
+    "x": -77,
+    "z": 15
+   },
+   "facing": -3.141592653589793,
+   "doorway": 0.327,
+   "inside": 0.172,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 37,
+   "skill": "unmapped",
+   "title": "Z-up centimetres to Y-up metres",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": -77
+   },
+   "room": {
+    "x": 15,
+    "z": -77
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.17,
+   "inside": 0.207,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 38,
+   "skill": "threejs-procedural-vegetation",
+   "title": "Spline-field forest",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 77,
+    "z": 8.5
+   },
+   "room": {
+    "x": 77,
+    "z": 15
+   },
+   "facing": 3.141592653589793,
+   "doorway": 0.251,
+   "inside": 0.227,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 39,
+   "skill": "unmapped",
+   "title": "Procedural levels via editor ops",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": 77
+   },
+   "room": {
+    "x": -15,
+    "z": 77
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.19,
+   "inside": 0.426,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 40,
+   "skill": "atomic-acres-destructible-world",
+   "title": "Windows computed from voxels",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -77,
+    "z": -8.5
+   },
+   "room": {
+    "x": -77,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.307,
+   "inside": 0.637,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 41,
+   "skill": "unmapped",
+   "title": "Technique-demo hub",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": -94
+   },
+   "room": {
+    "x": -15,
+    "z": -94
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.31,
+   "inside": 0.139,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 42,
+   "skill": "threejs-source-prop-ingestion",
+   "title": "Vibe-stack shelf: six MIT tools",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 94,
+    "z": -8.5
+   },
+   "room": {
+    "x": 94,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.162,
+   "inside": 0.535,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 43,
+   "skill": "img2threejs",
+   "title": "Lighting as a parameter, not paint",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": 94
+   },
+   "room": {
+    "x": 15,
+    "z": 94
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.121,
+   "inside": 0.481,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 44,
+   "skill": "unmapped",
+   "title": "Sweep comparators (no method)",
+   "kind": "stub",
+   "spawn": {
+    "x": -94,
+    "z": 8.5
+   },
+   "room": {
+    "x": -94,
+    "z": 15
+   },
+   "facing": -3.141592653589793,
+   "doorway": 0.025,
+   "inside": 0.172,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 45,
+   "skill": "ai-3d-asset-generation-loop",
+   "title": "Cleaning a generated shell",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": -94
+   },
+   "room": {
+    "x": 15,
+    "z": -94
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.122,
+   "inside": 0.395,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 46,
+   "skill": "threejs-webgpu-water",
+   "title": "FFT ocean and bubble backscatter",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 94,
+    "z": 8.5
+   },
+   "room": {
+    "x": 94,
+    "z": 15
+   },
+   "facing": 3.141592653589793,
+   "doorway": 0.246,
+   "inside": 0.374,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 47,
+   "skill": "visual-gauntlet-loop",
+   "title": "Street cell: a bar, not a pipeline",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": 94
+   },
+   "room": {
+    "x": -15,
+    "z": 94
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.466,
+   "inside": 0.389,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 48,
+   "skill": "threejs-webgpu-interior-lighting-look",
+   "title": "Dark interior without lighting tech",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -94,
+    "z": -8.5
+   },
+   "room": {
+    "x": -94,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.668,
+   "inside": 0.156,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 49,
+   "skill": "game-animation-asset-pipeline",
+   "title": "Motion planner scaffold, no network",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": -111
+   },
+   "room": {
+    "x": -15,
+    "z": -111
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.196,
+   "inside": 0.352,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 50,
+   "skill": "realtime-browser-qa",
+   "title": "Mechanical passability sweep",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 111,
+    "z": -8.5
+   },
+   "room": {
+    "x": 111,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.201,
+   "inside": 0.393,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 51,
+   "skill": "threejs-webgpu-water",
+   "title": "Weather state machine over open water",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": 111
+   },
+   "room": {
+    "x": 15,
+    "z": 111
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.262,
+   "inside": 0.66,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 52,
+   "skill": "game-animation-asset-pipeline",
+   "title": "Island village schedules",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -111,
+    "z": 8.5
+   },
+   "room": {
+    "x": -111,
+    "z": 15
+   },
+   "facing": -3.141592653589793,
+   "doorway": 0.215,
+   "inside": 0.303,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 53,
+   "skill": "threejs-procedural-vegetation",
+   "title": "Verdant woodland",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 8.5,
+    "z": -111
+   },
+   "room": {
+    "x": 15,
+    "z": -111
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.395,
+   "inside": 0.565,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 54,
+   "skill": "blender-gauntlet-loop",
+   "title": "Pickup truck authored in Blender",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 111,
+    "z": 8.5
+   },
+   "room": {
+    "x": 111,
+    "z": 15
+   },
+   "facing": 3.141592653589793,
+   "doorway": 0.172,
+   "inside": 0.198,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 55,
+   "skill": "unmapped",
+   "title": "Project Aether — release unverified",
+   "kind": "stub",
+   "spawn": {
+    "x": -8.5,
+    "z": 111
+   },
+   "room": {
+    "x": -15,
+    "z": 111
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.015,
+   "inside": 0.055,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 56,
+   "skill": "ai-3d-asset-generation-loop",
+   "title": "Smart-mesh game-ready assets",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -111,
+    "z": -8.5
+   },
+   "room": {
+    "x": -111,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.302,
+   "inside": 0.154,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 57,
+   "skill": "threejs-webgpu-water",
+   "title": "Two-scale ocean stitch",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -8.5,
+    "z": -128
+   },
+   "room": {
+    "x": -15,
+    "z": -128
+   },
+   "facing": 1.5707963267948966,
+   "doorway": 0.181,
+   "inside": 0.201,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 58,
+   "skill": "game-animation-asset-pipeline",
+   "title": "DERMIS procedural bust, not a likeness",
+   "kind": "webgpu",
+   "spawn": {
+    "x": 128,
+    "z": -8.5
+   },
+   "room": {
+    "x": 128,
+    "z": -15
+   },
+   "facing": 0,
+   "doorway": 0.275,
+   "inside": 0.117,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 59,
+   "skill": "unmapped",
+   "title": "Graalitoo X article — not retrieved",
+   "kind": "stub",
+   "spawn": {
+    "x": 8.5,
+    "z": 128
+   },
+   "room": {
+    "x": 15,
+    "z": 128
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.019,
+   "inside": 0.238,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 60,
+   "skill": "img2threejs",
+   "title": "Image-to-game: panel and diorama",
+   "kind": "webgpu",
+   "spawn": {
+    "x": -128,
+    "z": 8.5
+   },
+   "room": {
+    "x": -128,
+    "z": 15
+   },
+   "facing": -3.141592653589793,
+   "doorway": 0.291,
+   "inside": 0.606,
+   "verdict": "PRESENT"
+  },
+  {
+   "sourceId": 61,
+   "skill": "unreal-content-pipeline",
+   "title": "COD4 LiveLink in UE5, multiplayer",
+   "kind": "external",
+   "spawn": {
+    "x": 8.5,
+    "z": -128
+   },
+   "room": {
+    "x": 15,
+    "z": -128
+   },
+   "facing": -1.5707963267948966,
+   "doorway": 0.04,
+   "inside": 0.18,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  },
+  {
+   "sourceId": 62,
+   "skill": "unreal-content-pipeline",
+   "title": "AGRPLUGIN: AGR-based UE importer",
+   "kind": "external",
+   "spawn": {
+    "x": 128,
+    "z": 8.5
+   },
+   "room": {
+    "x": 128,
+    "z": 15
+   },
+   "facing": 3.141592653589793,
+   "doorway": 0.022,
+   "inside": 0.195,
+   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+  }
+ ],
+ "errors": [
+  "Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ]
+}
