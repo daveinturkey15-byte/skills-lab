@@ -108,9 +108,13 @@ export const room: RoomDefinition = {
       if ((o as THREE.Mesh).userData.bob !== undefined) bobs.push(o);
     });
     const update = (elapsed: number): void => {
-      for (const b of bobs) b.position.y = 1.6 + Math.sin(elapsed * 2 + (b as THREE.Mesh).userData.bob as number) * 0.12;
+      // Staging pace only: the figures bob wider and the critic's screen turns
+      // over every 1.2 s instead of 2 s, so a visitor standing in the doorway
+      // sees the loop working rather than a still. Rounds, budgets and the
+      // builder/critic split are untouched.
+      for (const b of bobs) b.position.y = 1.6 + Math.sin(elapsed * 2 + (b as THREE.Mesh).userData.bob as number) * 0.2;
       pen.rotation.z = 0.5 + Math.sin(elapsed * 3.2) * 0.25;
-      const round = Math.floor(elapsed / 2) % 7;
+      const round = Math.floor(elapsed / 1.2) % 7;
       for (let i = 0; i < bars.length; i += 1) {
         bars[i].scale.x = i <= round ? 1 : 0.25;
       }

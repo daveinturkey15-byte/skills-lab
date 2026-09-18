@@ -1,11 +1,11 @@
 {
- "capturedAt": "2026-09-18T15:20:00.247Z",
+ "capturedAt": "2026-09-18T15:48:28.865Z",
  "adapter": {
   "adapter": true,
   "vendor": "nvidia"
  },
  "base": "http://localhost:5199/skills-lab/",
- "target": 0.38,
+ "target": 0.35,
  "results": [
   {
    "sourceId": 1,
@@ -22,12 +22,13 @@
    },
    "facing": 1.5707963267948966,
    "doorway": 0.547,
-   "inside": 0.382,
-   "detail": 0.055,
+   "inside": 0.38,
+   "detail": 0.056,
    "hues": 7,
-   "motion": 0.01,
-   "quality": 0.673,
-   "target": 0.38,
+   "shading": 0.038,
+   "motion": 0.012,
+   "quality": 0.549,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -44,13 +45,14 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.262,
+   "doorway": 0.261,
    "inside": 0.268,
-   "detail": 0.046,
+   "detail": 0.047,
    "hues": 4,
-   "motion": 0.088,
-   "quality": 0.496,
-   "target": 0.38,
+   "shading": 0.064,
+   "motion": 0.055,
+   "quality": 0.39,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -67,13 +69,14 @@
     "z": 9
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.455,
+   "doorway": 0.493,
    "inside": 0.472,
-   "detail": 0.023,
-   "hues": 7,
-   "motion": 0.032,
-   "quality": 0.58,
-   "target": 0.38,
+   "detail": 0.042,
+   "hues": 10,
+   "shading": 0.102,
+   "motion": 0.079,
+   "quality": 0.627,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -90,13 +93,14 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.399,
-   "inside": 0.413,
+   "doorway": 0.4,
+   "inside": 0.419,
    "detail": 0.057,
    "hues": 9,
-   "motion": 0.03,
-   "quality": 0.596,
-   "target": 0.38,
+   "shading": 0.1,
+   "motion": 0.032,
+   "quality": 0.515,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -113,13 +117,14 @@
     "z": -9
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.411,
+   "doorway": 0.412,
    "inside": 0.203,
-   "detail": 0.052,
+   "detail": 0.054,
    "hues": 4,
-   "motion": 0.037,
-   "quality": 0.542,
-   "target": 0.38,
+   "shading": 0.028,
+   "motion": 0.018,
+   "quality": 0.423,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -136,14 +141,15 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.343,
-   "inside": 0.314,
-   "detail": 0.014,
-   "hues": 2,
-   "motion": 0,
-   "quality": 0.325,
-   "target": 0.38,
-   "verdict": "BELOW BAR — quality 0.33 under the 0.38 target"
+   "doorway": 0.402,
+   "inside": 0.214,
+   "detail": 0.042,
+   "hues": 9,
+   "shading": 0.021,
+   "motion": 0.038,
+   "quality": 0.472,
+   "target": 0.35,
+   "verdict": "PRESENT"
   },
   {
    "sourceId": 7,
@@ -159,13 +165,14 @@
     "z": 9
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.27,
+   "doorway": 0.269,
    "inside": 0.189,
-   "detail": 0.056,
-   "hues": 7,
+   "detail": 0.055,
+   "hues": 8,
+   "shading": 0.062,
    "motion": 0.008,
-   "quality": 0.465,
-   "target": 0.38,
+   "quality": 0.377,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -182,13 +189,14 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.707,
-   "inside": 0.506,
-   "detail": 0.095,
+   "doorway": 0.704,
+   "inside": 0.504,
+   "detail": 0.093,
    "hues": 7,
-   "motion": 0.03,
-   "quality": 0.815,
-   "target": 0.38,
+   "shading": 0.052,
+   "motion": 0.033,
+   "quality": 0.666,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -205,13 +213,14 @@
     "z": -26
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.385,
+   "doorway": 0.393,
    "inside": 0.335,
-   "detail": 0.036,
+   "detail": 0.042,
    "hues": 5,
-   "motion": 0.029,
-   "quality": 0.504,
-   "target": 0.38,
+   "shading": 0.032,
+   "motion": 0.028,
+   "quality": 0.428,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -232,9 +241,10 @@
    "inside": 0.216,
    "detail": 0.071,
    "hues": 8,
+   "shading": 0.047,
    "motion": 0.001,
-   "quality": 0.552,
-   "target": 0.38,
+   "quality": 0.44,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -253,11 +263,12 @@
    "facing": -1.5707963267948966,
    "doorway": 0.406,
    "inside": 0.331,
-   "detail": 0.131,
+   "detail": 0.134,
    "hues": 5,
-   "motion": 0.014,
-   "quality": 0.667,
-   "target": 0.38,
+   "shading": 0.015,
+   "motion": 0.015,
+   "quality": 0.52,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -275,12 +286,13 @@
    },
    "facing": -3.141592653589793,
    "doorway": 0.368,
-   "inside": 0.347,
+   "inside": 0.313,
    "detail": 0.02,
-   "hues": 6,
-   "motion": 0.073,
-   "quality": 0.55,
-   "target": 0.38,
+   "hues": 5,
+   "shading": 0.016,
+   "motion": 0.075,
+   "quality": 0.448,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -297,14 +309,15 @@
     "z": -26
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.273,
+   "doorway": 0.272,
    "inside": 0.213,
    "detail": 0.032,
    "hues": 4,
-   "motion": 0.061,
-   "quality": 0.439,
-   "target": 0.38,
-   "verdict": "PRESENT"
+   "shading": 0.038,
+   "motion": 0.042,
+   "quality": 0.348,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.35 under the 0.35 target"
   },
   {
    "sourceId": 14,
@@ -321,12 +334,13 @@
    },
    "facing": 3.141592653589793,
    "doorway": 0.33,
-   "inside": 0.179,
+   "inside": 0.181,
    "detail": 0.062,
    "hues": 8,
-   "motion": 0,
-   "quality": 0.508,
-   "target": 0.38,
+   "shading": 0.014,
+   "motion": 0.363,
+   "quality": 0.541,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -347,9 +361,10 @@
    "inside": 0.193,
    "detail": 0.007,
    "hues": 0,
+   "shading": 0.016,
    "motion": 0,
-   "quality": 0.063,
-   "target": 0.38,
+   "quality": 0.058,
+   "target": 0.35,
    "verdict": "THIN — subject is there but too small to read"
   },
   {
@@ -366,13 +381,14 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.185,
-   "inside": 0.329,
-   "detail": 0.038,
-   "hues": 4,
-   "motion": 0.072,
-   "quality": 0.4,
-   "target": 0.38,
+   "doorway": 0.319,
+   "inside": 0.331,
+   "detail": 0.039,
+   "hues": 3,
+   "shading": 0.058,
+   "motion": 0.094,
+   "quality": 0.459,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -389,13 +405,14 @@
     "z": -43
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.345,
-   "inside": 0.61,
+   "doorway": 0.344,
+   "inside": 0.612,
    "detail": 0.101,
    "hues": 8,
-   "motion": 0.019,
-   "quality": 0.618,
-   "target": 0.38,
+   "shading": 0.093,
+   "motion": 0.017,
+   "quality": 0.507,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -412,13 +429,14 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.201,
-   "inside": 0.453,
-   "detail": 0.149,
+   "doorway": 0.202,
+   "inside": 0.45,
+   "detail": 0.151,
    "hues": 4,
-   "motion": 0.151,
-   "quality": 0.636,
-   "target": 0.38,
+   "shading": 0.013,
+   "motion": 0.146,
+   "quality": 0.511,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -439,9 +457,10 @@
    "inside": 0.378,
    "detail": 0.057,
    "hues": 8,
+   "shading": 0.07,
    "motion": 0.003,
-   "quality": 0.51,
-   "target": 0.38,
+   "quality": 0.419,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -462,10 +481,11 @@
    "inside": 0.221,
    "detail": 0.051,
    "hues": 6,
+   "shading": 0.013,
    "motion": 0.004,
-   "quality": 0.355,
-   "target": 0.38,
-   "verdict": "BELOW BAR — quality 0.35 under the 0.38 target"
+   "quality": 0.268,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.27 under the 0.35 target"
   },
   {
    "sourceId": 21,
@@ -482,12 +502,13 @@
    },
    "facing": -1.5707963267948966,
    "doorway": 0.015,
-   "inside": 0.153,
+   "inside": 0.155,
    "detail": 0.015,
    "hues": 0,
+   "shading": 0,
    "motion": 0,
-   "quality": 0.038,
-   "target": 0.38,
+   "quality": 0.028,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -505,12 +526,13 @@
    },
    "facing": 3.141592653589793,
    "doorway": 0.021,
-   "inside": 0.187,
+   "inside": 0.191,
    "detail": 0.017,
    "hues": 0,
+   "shading": 0.001,
    "motion": 0,
-   "quality": 0.046,
-   "target": 0.38,
+   "quality": 0.034,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -527,14 +549,15 @@
     "z": 43
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.044,
-   "inside": 0.391,
-   "detail": 0.019,
-   "hues": 0,
-   "motion": 0,
-   "quality": 0.067,
-   "target": 0.38,
-   "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
+   "doorway": 0.121,
+   "inside": 0.155,
+   "detail": 0.015,
+   "hues": 1,
+   "shading": 0.005,
+   "motion": 0.055,
+   "quality": 0.194,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.19 under the 0.35 target"
   },
   {
    "sourceId": 24,
@@ -554,9 +577,10 @@
    "inside": 0.19,
    "detail": 0.014,
    "hues": 0,
+   "shading": 0.004,
    "motion": 0,
-   "quality": 0.044,
-   "target": 0.38,
+   "quality": 0.035,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -577,9 +601,10 @@
    "inside": 0.156,
    "detail": 0.007,
    "hues": 0,
+   "shading": 0.008,
    "motion": 0,
-   "quality": 0.026,
-   "target": 0.38,
+   "quality": 0.023,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -600,10 +625,11 @@
    "inside": 0.408,
    "detail": 0.048,
    "hues": 10,
-   "motion": 0.029,
-   "quality": 0.418,
-   "target": 0.38,
-   "verdict": "PRESENT"
+   "shading": 0.045,
+   "motion": 0.032,
+   "quality": 0.343,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.34 under the 0.35 target"
   },
   {
    "sourceId": 27,
@@ -619,14 +645,15 @@
     "z": 60
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.213,
+   "doorway": 0.212,
    "inside": 0.262,
-   "detail": 0.049,
+   "detail": 0.048,
    "hues": 4,
-   "motion": 0.008,
-   "quality": 0.345,
-   "target": 0.38,
-   "verdict": "BELOW BAR — quality 0.34 under the 0.38 target"
+   "shading": 0.03,
+   "motion": 0.011,
+   "quality": 0.28,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.28 under the 0.35 target"
   },
   {
    "sourceId": 28,
@@ -644,11 +671,12 @@
    "facing": -3.141592653589793,
    "doorway": 0.344,
    "inside": 0.177,
-   "detail": 0.158,
+   "detail": 0.169,
    "hues": 5,
-   "motion": 0.09,
-   "quality": 0.75,
-   "target": 0.38,
+   "shading": 0.054,
+   "motion": 0.126,
+   "quality": 0.633,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -665,13 +693,14 @@
     "z": -60
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.466,
+   "doorway": 0.472,
    "inside": 0.148,
-   "detail": 0.15,
-   "hues": 18,
-   "motion": 0.109,
-   "quality": 0.9,
-   "target": 0.38,
+   "detail": 0.151,
+   "hues": 19,
+   "shading": 0.012,
+   "motion": 0.101,
+   "quality": 0.724,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -692,9 +721,10 @@
    "inside": 0.18,
    "detail": 0.017,
    "hues": 0,
+   "shading": 0.001,
    "motion": 0,
-   "quality": 0.046,
-   "target": 0.38,
+   "quality": 0.034,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -711,14 +741,15 @@
     "z": 60
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.198,
+   "doorway": 0.207,
    "inside": 0.146,
-   "detail": 0.059,
+   "detail": 0.062,
    "hues": 4,
-   "motion": 0.08,
-   "quality": 0.46,
-   "target": 0.38,
-   "verdict": "PRESENT"
+   "shading": 0.015,
+   "motion": 0.039,
+   "quality": 0.329,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.33 under the 0.35 target"
   },
   {
    "sourceId": 32,
@@ -738,9 +769,10 @@
    "inside": 0.181,
    "detail": 0.014,
    "hues": 0,
+   "shading": 0.004,
    "motion": 0,
-   "quality": 0.044,
-   "target": 0.38,
+   "quality": 0.035,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -757,14 +789,15 @@
     "z": -77
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.263,
-   "inside": 0.408,
-   "detail": 0.025,
-   "hues": 7,
+   "doorway": 0.27,
+   "inside": 0.41,
+   "detail": 0.037,
+   "hues": 9,
+   "shading": 0.064,
    "motion": 0,
-   "quality": 0.392,
-   "target": 0.38,
-   "verdict": "PRESENT"
+   "quality": 0.344,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.34 under the 0.35 target"
   },
   {
    "sourceId": 34,
@@ -784,9 +817,10 @@
    "inside": 0.373,
    "detail": 0.059,
    "hues": 14,
+   "shading": 0.011,
    "motion": 0.003,
-   "quality": 0.629,
-   "target": 0.38,
+   "quality": 0.493,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -804,12 +838,13 @@
    },
    "facing": -1.5707963267948966,
    "doorway": 0.35,
-   "inside": 0.111,
+   "inside": 0.113,
    "detail": 0.082,
    "hues": 3,
-   "motion": 0.088,
-   "quality": 0.605,
-   "target": 0.38,
+   "shading": 0.225,
+   "motion": 0.089,
+   "quality": 0.598,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -830,9 +865,10 @@
    "inside": 0.174,
    "detail": 0.059,
    "hues": 3,
+   "shading": 0.132,
    "motion": 0.107,
-   "quality": 0.564,
-   "target": 0.38,
+   "quality": 0.53,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -853,10 +889,11 @@
    "inside": 0.205,
    "detail": 0.032,
    "hues": 6,
+   "shading": 0.027,
    "motion": 0.062,
-   "quality": 0.402,
-   "target": 0.38,
-   "verdict": "PRESENT"
+   "quality": 0.333,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.33 under the 0.35 target"
   },
   {
    "sourceId": 38,
@@ -872,13 +909,14 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.248,
+   "doorway": 0.242,
    "inside": 0.224,
-   "detail": 0.166,
+   "detail": 0.16,
    "hues": 6,
-   "motion": 0.048,
-   "quality": 0.637,
-   "target": 0.38,
+   "shading": 0.145,
+   "motion": 0,
+   "quality": 0.473,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -899,10 +937,11 @@
    "inside": 0.427,
    "detail": 0.036,
    "hues": 8,
+   "shading": 0.022,
    "motion": 0,
-   "quality": 0.354,
-   "target": 0.38,
-   "verdict": "BELOW BAR — quality 0.35 under the 0.38 target"
+   "quality": 0.271,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.27 under the 0.35 target"
   },
   {
    "sourceId": 40,
@@ -922,9 +961,10 @@
    "inside": 0.635,
    "detail": 0.082,
    "hues": 5,
+   "shading": 0.024,
    "motion": 0.047,
-   "quality": 0.553,
-   "target": 0.38,
+   "quality": 0.445,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -942,12 +982,13 @@
    },
    "facing": 1.5707963267948966,
    "doorway": 0.306,
-   "inside": 0.14,
+   "inside": 0.151,
    "detail": 0.062,
    "hues": 10,
+   "shading": 0.051,
    "motion": 0.061,
-   "quality": 0.582,
-   "target": 0.38,
+   "quality": 0.483,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -965,13 +1006,14 @@
    },
    "facing": 0,
    "doorway": 0.163,
-   "inside": 0.535,
+   "inside": 0.537,
    "detail": 0.047,
    "hues": 7,
-   "motion": 0.039,
-   "quality": 0.415,
-   "target": 0.38,
-   "verdict": "PRESENT"
+   "shading": 0.022,
+   "motion": 0.037,
+   "quality": 0.326,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.33 under the 0.35 target"
   },
   {
    "sourceId": 43,
@@ -987,13 +1029,14 @@
     "z": 94
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.544,
-   "inside": 0.189,
+   "doorway": 0.521,
+   "inside": 0.177,
    "detail": 0.035,
    "hues": 5,
-   "motion": 0.563,
-   "quality": 0.728,
-   "target": 0.38,
+   "shading": 0.181,
+   "motion": 0.54,
+   "quality": 0.674,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1011,12 +1054,13 @@
    },
    "facing": -3.141592653589793,
    "doorway": 0.021,
-   "inside": 0.173,
+   "inside": 0.176,
    "detail": 0.017,
    "hues": 0,
+   "shading": 0.001,
    "motion": 0,
-   "quality": 0.046,
-   "target": 0.38,
+   "quality": 0.034,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1033,13 +1077,14 @@
     "z": -94
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.131,
-   "inside": 0.362,
-   "detail": 0.04,
+   "doorway": 0.14,
+   "inside": 0.359,
+   "detail": 0.049,
    "hues": 5,
-   "motion": 0.077,
-   "quality": 0.392,
-   "target": 0.38,
+   "shading": 0.041,
+   "motion": 0.075,
+   "quality": 0.35,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1057,12 +1102,13 @@
    },
    "facing": 3.141592653589793,
    "doorway": 0.242,
-   "inside": 0.334,
+   "inside": 0.336,
    "detail": 0.037,
    "hues": 3,
+   "shading": 0.035,
    "motion": 0.311,
-   "quality": 0.462,
-   "target": 0.38,
+   "quality": 0.407,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1080,12 +1126,13 @@
    },
    "facing": 1.5707963267948966,
    "doorway": 0.462,
-   "inside": 0.391,
+   "inside": 0.393,
    "detail": 0.119,
    "hues": 3,
+   "shading": 0.174,
    "motion": 0,
-   "quality": 0.623,
-   "target": 0.38,
+   "quality": 0.557,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1106,9 +1153,10 @@
    "inside": 0.156,
    "detail": 0.153,
    "hues": 3,
+   "shading": 0.291,
    "motion": 0,
-   "quality": 0.764,
-   "target": 0.38,
+   "quality": 0.722,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1125,13 +1173,14 @@
     "z": -111
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.192,
+   "doorway": 0.211,
    "inside": 0.351,
-   "detail": 0.033,
+   "detail": 0.055,
    "hues": 6,
+   "shading": 0.008,
    "motion": 0.05,
-   "quality": 0.407,
-   "target": 0.38,
+   "quality": 0.365,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1148,14 +1197,15 @@
     "z": -15
    },
    "facing": 0,
-   "doorway": 0.199,
-   "inside": 0.393,
-   "detail": 0.044,
-   "hues": 6,
-   "motion": 0.003,
-   "quality": 0.361,
-   "target": 0.38,
-   "verdict": "BELOW BAR — quality 0.36 under the 0.38 target"
+   "doorway": 0.255,
+   "inside": 0.399,
+   "detail": 0.05,
+   "hues": 9,
+   "shading": 0.011,
+   "motion": 0.004,
+   "quality": 0.333,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.33 under the 0.35 target"
   },
   {
    "sourceId": 51,
@@ -1171,13 +1221,14 @@
     "z": 111
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.266,
+   "doorway": 0.268,
    "inside": 0.637,
    "detail": 0.051,
    "hues": 3,
+   "shading": 0.129,
    "motion": 0.29,
-   "quality": 0.505,
-   "target": 0.38,
+   "quality": 0.482,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1194,14 +1245,15 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.209,
+   "doorway": 0.21,
    "inside": 0.299,
-   "detail": 0.053,
+   "detail": 0.054,
    "hues": 10,
-   "motion": 0.021,
-   "quality": 0.433,
-   "target": 0.38,
-   "verdict": "PRESENT"
+   "shading": 0.042,
+   "motion": 0.001,
+   "quality": 0.319,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.32 under the 0.35 target"
   },
   {
    "sourceId": 53,
@@ -1217,13 +1269,14 @@
     "z": -111
    },
    "facing": -1.5707963267948966,
-   "doorway": 0.39,
-   "inside": 0.555,
-   "detail": 0.131,
+   "doorway": 0.392,
+   "inside": 0.563,
+   "detail": 0.132,
    "hues": 7,
-   "motion": 0.03,
-   "quality": 0.721,
-   "target": 0.38,
+   "shading": 0.13,
+   "motion": 0.013,
+   "quality": 0.586,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1240,13 +1293,14 @@
     "z": 15
    },
    "facing": 3.141592653589793,
-   "doorway": 0.165,
-   "inside": 0.2,
-   "detail": 0.038,
+   "doorway": 0.297,
+   "inside": 0.204,
+   "detail": 0.063,
    "hues": 3,
-   "motion": 0.114,
-   "quality": 0.406,
-   "target": 0.38,
+   "shading": 0.022,
+   "motion": 0.087,
+   "quality": 0.448,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1264,12 +1318,13 @@
    },
    "facing": 1.5707963267948966,
    "doorway": 0.015,
-   "inside": 0.056,
+   "inside": 0.06,
    "detail": 0.007,
    "hues": 0,
+   "shading": 0.007,
    "motion": 0,
-   "quality": 0.024,
-   "target": 0.38,
+   "quality": 0.021,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1288,11 +1343,12 @@
    "facing": 0,
    "doorway": 0.3,
    "inside": 0.155,
-   "detail": 0.079,
-   "hues": 12,
-   "motion": 0.107,
-   "quality": 0.666,
-   "target": 0.38,
+   "detail": 0.076,
+   "hues": 10,
+   "shading": 0.041,
+   "motion": 0.103,
+   "quality": 0.551,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1309,13 +1365,14 @@
     "z": -128
    },
    "facing": 1.5707963267948966,
-   "doorway": 0.253,
-   "inside": 0.204,
-   "detail": 0.047,
+   "doorway": 0.207,
+   "inside": 0.202,
+   "detail": 0.051,
    "hues": 2,
-   "motion": 0.277,
-   "quality": 0.467,
-   "target": 0.38,
+   "shading": 0.086,
+   "motion": 0.22,
+   "quality": 0.41,
+   "target": 0.35,
    "verdict": "PRESENT"
   },
   {
@@ -1334,12 +1391,13 @@
    "facing": 0,
    "doorway": 0.273,
    "inside": 0.118,
-   "detail": 0.056,
+   "detail": 0.057,
    "hues": 5,
+   "shading": 0.054,
    "motion": 0.006,
-   "quality": 0.421,
-   "target": 0.38,
-   "verdict": "PRESENT"
+   "quality": 0.347,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.35 under the 0.35 target"
   },
   {
    "sourceId": 59,
@@ -1356,12 +1414,13 @@
    },
    "facing": -1.5707963267948966,
    "doorway": 0.015,
-   "inside": 0.238,
+   "inside": 0.242,
    "detail": 0.015,
    "hues": 0,
+   "shading": 0,
    "motion": 0,
-   "quality": 0.038,
-   "target": 0.38,
+   "quality": 0.028,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1378,14 +1437,15 @@
     "z": 15
    },
    "facing": -3.141592653589793,
-   "doorway": 0.292,
+   "doorway": 0.297,
    "inside": 0.603,
-   "detail": 0.05,
+   "detail": 0.051,
    "hues": 4,
-   "motion": 0.014,
-   "quality": 0.415,
-   "target": 0.38,
-   "verdict": "PRESENT"
+   "shading": 0.017,
+   "motion": 0.005,
+   "quality": 0.322,
+   "target": 0.35,
+   "verdict": "BELOW BAR — quality 0.32 under the 0.35 target"
   },
   {
    "sourceId": 61,
@@ -1405,9 +1465,10 @@
    "inside": 0.182,
    "detail": 0.015,
    "hues": 0,
+   "shading": 0,
    "motion": 0,
-   "quality": 0.054,
-   "target": 0.38,
+   "quality": 0.041,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   },
   {
@@ -1428,9 +1489,10 @@
    "inside": 0.197,
    "detail": 0.017,
    "hues": 0,
+   "shading": 0.001,
    "motion": 0,
-   "quality": 0.047,
-   "target": 0.38,
+   "quality": 0.035,
+   "target": 0.35,
    "verdict": "EMPTY FROM THE DOOR — subject is not readable on entry"
   }
  ],

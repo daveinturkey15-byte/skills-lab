@@ -202,9 +202,11 @@ export const room: RoomDefinition = {
     // (seams constrained) versus right (raw), and from the doorway at grazing
     // angle the colour change alone reads weakly. Tall gold markers make the
     // boundary itself walk-in legible; the sections and levels are untouched.
+    // Lit furniture, not data: the cylinders shade under the room rig while
+    // the level map stays unlit beside them.
     const postGeometry = new THREE.CylinderGeometry(0.07, 0.08, 1.1, 8);
     disposables.push(postGeometry);
-    const postMaterial = new THREE.MeshBasicMaterial({ color: 0xd8c27a, toneMapped: false });
+    const postMaterial = new THREE.MeshStandardMaterial({ color: 0xd8c27a, roughness: 0.5 });
     disposables.push(postMaterial);
     for (let row = 0; row < ROWS; row += 1) {
       const post = new THREE.Mesh(postGeometry, postMaterial);
