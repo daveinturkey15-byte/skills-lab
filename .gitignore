@@ -15,8 +15,6 @@ spark.py
 .claude/
 
 # QA harness output and its throwaway Chrome profile.
-qa/captures/
-qa/node_modules/
 
 # Agent-fleet orchestration. Kept local: these reference absolute paths into the
 # operational vault and the AKP passport, and they drive a private model fleet.
@@ -29,19 +27,25 @@ logs/
 # Capture output from ANY lane, not just the default directory. A lane wrote to
 # qa/captures-N1/ with its own Chrome profile inside, and the narrower
 # `qa/captures/` rule let thousands of profile files into `git add -A`.
-qa/captures*/
-**/.chrome-profile-*
 
 # Lane scratch. Lanes spawn their own Chrome profiles and debug scripts; without
 # these, `git add -A` stages tens of thousands of profile files.
-qa/tmp-*/
-qa/dbg*.mjs
-qa/probe-*.mjs
 s4u-probe.cmd
 launch-lanes.cmd
 
 # Any Chrome profile any harness makes, whatever it is called.
-qa/world/
-**/.profile/
 
 plan-rooms.mjs
+
+# qa/ is a WHITELIST, not a pattern list.
+#
+# Four separate Chrome profile directories reached the index under four names a
+# pattern rule did not anticipate: .chrome-profile-*, captures-N1/, tmp-deep/,
+# and .profile-<pid>-<rand>/. Each time the fix was a narrower pattern and each
+# time the next tool invented a new name. Ignore everything under qa/ and name
+# the handful of files that belong in the repository.
+qa/*
+!qa/capture.mjs
+!qa/room-shot.mjs
+!qa/package.json
+!qa/package-lock.json
