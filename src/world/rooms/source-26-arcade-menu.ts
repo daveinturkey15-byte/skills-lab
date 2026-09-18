@@ -108,9 +108,10 @@ export const room: RoomDefinition = {
       return d;
     };
 
-    // Back of the door-side half: the whole ring reads at 5–8 m, and the
-    // middle-of-room camera stands outside it instead of inside the cards.
-    const centreZ = -1.8;
+    // Centred on the door half with the near edge ~2.7 m past the spawn, so
+    // the doorway camera meets the whole ring instead of standing on its
+    // circle seeing every card edge-on (probed: 18% doorway from on the ring).
+    const centreZ = 0.5;
     const ringY = 1.9;
 
     // Floor pad so the ring reads as one installation from the door.
@@ -118,7 +119,8 @@ export const room: RoomDefinition = {
       track(new T.BoxGeometry(9.5, 0.12, 10)),
       track(new T.MeshStandardMaterial({ color: 0x3a4247, roughness: 0.95, emissive: 0x3a4247, emissiveIntensity: 0.35 })),
     );
-
+    pad.position.set(0, 0, centreZ);
+    root.add(pad);
     // Deterministic stand-in cover art: banded hues, every third card washed
     // out so the clamp has something real to correct.
     const rng = makeRng(ctx.seed * 13 + 26);
@@ -175,13 +177,12 @@ export const room: RoomDefinition = {
       track(new T.CylinderGeometry(0.8, 0.9, 1.9, 6)),
       track(new T.MeshStandardMaterial({ roughness: 0.6, flatShading: true })),
     );
-    totem.position.set(0, 1.05, centreZ);
-    root.add(totem);
     const hero = new T.Mesh(
       track(new T.PlaneGeometry(1.6, 1.0)),
       track(new T.MeshBasicMaterial({ toneMapped: false, side: T.DoubleSide })),
     );
     hero.position.set(0, 2.55, centreZ);
+    root.add(hero);
 
     // The two swatches, wall-sized, flanking the totem where the doorway sees
     // them: the shell crosses local z = 0 on this slot, so anything past the
