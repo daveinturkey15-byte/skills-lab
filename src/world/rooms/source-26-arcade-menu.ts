@@ -5,17 +5,16 @@ import type { RoomContext, RoomDefinition, RoomInstance } from '../contract';
  * `src/lab/demos/group-b/source-26.ts`: the ring arithmetic is kept verbatim
  * (R = N(W+GAP)/TAU, STEP = TAU/N, short-way delta modulo N, two-stage commit,
  * accent scored by saturation against distance from mid-lightness then clamped
- * with a fixed fallback). What changed is scale and address: card width grows
- * to 1.7 m so the ring stands ~2.5 m in radius at the back of the room, the
- * focus totem becomes a walk-around pillar, and the unclamped/clamped swatches
- * become wall-sized comparisons — because from the doorway the old stage read
- * as a thin sliver at 6.2%.
+ * with a fixed fallback). What changed is scale and address: card width is
+ * 1.15 m so the ~1.8 m-radius ring reads whole from the doorway instead of
+ * surrounding the middle-of-room camera, the focus totem becomes a walk-around
+ * pillar, and the unclamped/clamped swatches become wall-sized comparisons —
+ * because from the doorway the old stage read as a thin sliver at 6.2%.
  */
-
 const ITEM_COUNT = 8;
-const CARD_WIDTH = 1.7;
-const CARD_HEIGHT = 1.5;
-const CARD_GAP = 0.3;
+const CARD_WIDTH = 1.15;
+const CARD_HEIGHT = 1.05;
+const CARD_GAP = 0.25;
 const TAU = Math.PI * 2;
 
 /** Ring radius derived from item count, not hand-tuned. */
@@ -109,17 +108,16 @@ export const room: RoomDefinition = {
       return d;
     };
 
-    // Forward of centre: from the doorway the ring reads at 4–7 m, not 8–12 m.
-    const centreZ = -0.6;
-    const ringY = 2.5;
+    // Back of the door-side half: the whole ring reads at 5–8 m, and the
+    // middle-of-room camera stands outside it instead of inside the cards.
+    const centreZ = -1.8;
+    const ringY = 1.9;
 
     // Floor pad so the ring reads as one installation from the door.
     const pad = new T.Mesh(
       track(new T.BoxGeometry(9.5, 0.12, 10)),
-      track(new T.MeshStandardMaterial({ color: 0x2e3438, roughness: 0.95 })),
+      track(new T.MeshStandardMaterial({ color: 0x3a4247, roughness: 0.95, emissive: 0x3a4247, emissiveIntensity: 0.35 })),
     );
-    pad.position.set(0, -0.06, centreZ);
-    root.add(pad);
 
     // Deterministic stand-in cover art: banded hues, every third card washed
     // out so the clamp has something real to correct.
@@ -174,18 +172,16 @@ export const room: RoomDefinition = {
     // the focus slot is physical — a pillar in the live accent carrying the
     // focused cover as a hero plate, the focused-item detail panel.
     const totem = new T.Mesh(
-      track(new T.CylinderGeometry(1.15, 1.3, 2.4, 6)),
+      track(new T.CylinderGeometry(0.8, 0.9, 1.9, 6)),
       track(new T.MeshStandardMaterial({ roughness: 0.6, flatShading: true })),
     );
-    totem.position.set(0, 1.3, centreZ);
+    totem.position.set(0, 1.05, centreZ);
     root.add(totem);
     const hero = new T.Mesh(
-      track(new T.PlaneGeometry(2.3, 1.4)),
+      track(new T.PlaneGeometry(1.6, 1.0)),
       track(new T.MeshBasicMaterial({ toneMapped: false, side: T.DoubleSide })),
     );
-    hero.position.set(0, 3.3, centreZ);
-    hero.rotation.y = Math.PI / 5;
-    root.add(hero);
+    hero.position.set(0, 2.55, centreZ);
 
     // The two swatches, wall-sized, flanking the totem where the doorway sees
     // them: the shell crosses local z = 0 on this slot, so anything past the
@@ -195,16 +191,16 @@ export const room: RoomDefinition = {
     const rawSwatchMat = track(new T.MeshBasicMaterial({ toneMapped: false, side: T.DoubleSide }));
     const clampedSwatchMat = track(new T.MeshBasicMaterial({ toneMapped: false, side: T.DoubleSide }));
     const rawSwatch = new T.Mesh(swatchGeo, rawSwatchMat);
-    rawSwatch.position.set(-3.1, 1.3, centreZ - 1.2);
+    rawSwatch.position.set(-2.6, 1.2, centreZ - 1.2);
     const clampedSwatch = new T.Mesh(swatchGeo, clampedSwatchMat);
-    clampedSwatch.position.set(3.1, 1.3, centreZ - 1.2);
+    clampedSwatch.position.set(2.6, 1.2, centreZ - 1.2);
     root.add(rawSwatch, clampedSwatch);
 
     // Focus rail: the live accent as a physical element, carried in front of
     // the totem for the same reason.
     const railMat = track(new T.MeshBasicMaterial({ toneMapped: false, side: T.DoubleSide }));
     const rail = new T.Mesh(track(new T.PlaneGeometry(CARD_WIDTH * 1.2, 0.09)), railMat);
-    rail.position.set(0, 1.0, centreZ - 1.5);
+    rail.position.set(0, 0.9, centreZ - 1.5);
     root.add(rail);
 
     const totemMat = totem.material as InstanceType<typeof T.MeshStandardMaterial>;
@@ -236,7 +232,7 @@ export const room: RoomDefinition = {
         // two-frame motion probe — so the totem turns and the hero plate sways
         // continuously, and the ring still steps the short way round on events.
         totem.rotation.y = time * 0.25;
-        hero.position.y = 3.3 + Math.sin(time * 1.3) * 0.08;
+        hero.position.y = 2.55 + Math.sin(time * 1.3) * 0.08;
         if (time >= nextEventAt) {
           nextEventAt = time + 1.8;
           if (pendingActivation === null) {

@@ -17,6 +17,9 @@ const JOINTS = 5;
 const TARGETS = [-0.55, 0.5, -0.3, 0.62, 0.0];
 const TRAIL_MAX = 150;
 const LINK = 0.56;
+// Staging depth: the far half of this slot is shell wall, so the stage,
+// chains, rings and cursor all live door-side of it.
+const SZ = -2.2;
 
 export const room: RoomDefinition = {
   sourceId: 49,
@@ -36,10 +39,10 @@ export const room: RoomDefinition = {
     const stage = new THREE.Mesh(
       track(new THREE.CylinderGeometry(5.4, 5.4, 0.18, 40)),
       track(new THREE.MeshStandardMaterial({
-        color: 0x4a5a64, roughness: 0.9, emissive: 0x4a5a64, emissiveIntensity: 0.25,
+        color: 0x4a5a64, roughness: 0.9, emissive: 0x4a5a64, emissiveIntensity: 0.45,
       })),
     );
-    stage.position.set(0, 0.09, -1.2);
+    stage.position.set(0, 0.09, SZ);
     root.add(stage);
     // Range rings on the measurement stage: staging only, they give the flat
     // disc the edge detail a doorway read needs.
@@ -49,7 +52,7 @@ export const room: RoomDefinition = {
     for (const radius of [1.8, 3.2, 4.6]) {
       const ring = new THREE.Mesh(ringGeo, ringMat);
       ring.scale.setScalar(radius);
-      ring.position.set(0, 0.19, -1.2);
+      ring.position.set(0, 0.19, SZ);
       root.add(ring);
     }
     // Rolling-window cursor: the window the next plan step would take. It laps
@@ -69,7 +72,7 @@ export const room: RoomDefinition = {
     interface Chain { base: THREE.Group; pivots: THREE.Group[] }
     const buildChain = (ox: number, colour: number): Chain => {
       const base = new THREE.Group();
-      base.position.set(ox, 0.18, -1.2);
+      base.position.set(ox, 0.18, SZ);
       const light = new THREE.Color(colour).offsetHSL(0, 0.02, 0.14);
       const dark = new THREE.Color(colour).offsetHSL(0, 0.02, -0.1);
       const mats = [
@@ -100,6 +103,18 @@ export const room: RoomDefinition = {
 
     const before = buildChain(-2.9, 0xa8766a);
     const after = buildChain(2.9, 0x6fb894);
+    // Label banners flanking the stage: from the doorway nothing says which
+    // chain is which, and the trails are 1 px lines at 7 m. The banners carry
+    // the snap-vs-spring read as colour fields at the frame edges.
+    const bannerGeo = track(new THREE.PlaneGeometry(2.0, 3.4));
+    for (const [bx, colour] of [[-4.6, 0xd86450], [4.6, 0x59d68c]] as const) {
+      const banner = new THREE.Mesh(
+        bannerGeo,
+        track(new THREE.MeshBasicMaterial({ color: colour, toneMapped: false, side: THREE.DoubleSide })),
+      );
+      banner.position.set(bx, 2.0, SZ);
+      root.add(banner);
+    }
 
     interface Trail { history: Float32Array; attr: THREE.BufferAttribute; geometry: THREE.BufferGeometry; count: number }
     const makeTrail = (colour: number): Trail => {

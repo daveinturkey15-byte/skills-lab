@@ -69,27 +69,40 @@ export const room: RoomDefinition = {
     baseline.position.set(0, 2.66, 6.68);
     root.add(baseline);
 
-    // Firing lane strip on the floor between the vehicles. Tanks sit closer to
-    // the door than before (z -3.5, ~4.5 m read) so their silhouette fills the
-    // doorway instead of the backdrop swallowing it.
+    // Firing lane strip on the floor between the vehicles. Tanks sit forward
+    // of centre (z -0.5, ~6 m from the doorway camera) so the pair reads whole
+    // in the frame with the rack behind them, instead of the camera standing
+    // between the hulls seeing only flanks and void.
     const lane = new THREE.Mesh(
       track(new THREE.BoxGeometry(7.5, 0.04, 0.6)),
       track(new THREE.MeshStandardMaterial({
         color: 0xc7a23a, emissive: 0x6b5312, emissiveIntensity: 0.7, roughness: 0.6,
       })),
     );
-    lane.position.set(0, 0.03, -3.5);
+    lane.position.set(0, 0.03, -0.5);
     root.add(lane);
+    // One warm exhibit spot above the gap, staging only: the world key leaves
+    // the door-facing flanks one flat tone, which starves the shading term.
+    // Removed with the room; the armour maths never know about it.
+    const exhibit = track(new THREE.PointLight(0xffd9a0, 50, 18, 2));
+    exhibit.position.set(0, 4.2, -2.8);
+    root.add(exhibit);
 
     interface Tank { turret: THREE.Group }
     const tanks: Tank[] = [];
     const hullGeo = track(new THREE.BoxGeometry(3.1, 0.95, 1.9));
     const turretGeo = track(new THREE.BoxGeometry(1.7, 0.62, 1.45));
     const barrelGeo = track(new THREE.CylinderGeometry(0.09, 0.12, 2.6, 12));
+    // Dark gunmetal barrels, staging only: the demo paints all parts one colour,
+    // which hides the turret sweep against the turret behind it. Same geometry.
+    const barrelMat = track(new THREE.MeshStandardMaterial({
+      color: 0x23272b, roughness: 0.45, metalness: 0.7,
+      emissive: 0x23272b, emissiveIntensity: 0.25,
+    }));
     const plateGeo = track(new THREE.BoxGeometry(0.1, 0.7, 1.5));
     for (const [side, colour] of [[-1, 0x6b8038], [1, 0x9e5636]] as const) {
       const group = new THREE.Group();
-      group.position.set(side * 2.5, 0, -3.5);
+      group.position.set(side * 2.5, 0, -0.5);
       group.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
       const hullMat = track(new THREE.MeshStandardMaterial({
         color: colour, roughness: 0.65, metalness: 0.25,
@@ -101,7 +114,7 @@ export const room: RoomDefinition = {
       const turret = new THREE.Group();
       turret.position.y = 1.45;
       turret.add(new THREE.Mesh(turretGeo, hullMat));
-      const barrel = new THREE.Mesh(barrelGeo, hullMat);
+      const barrel = new THREE.Mesh(barrelGeo, barrelMat);
       barrel.rotation.x = Math.PI / 2;
       barrel.position.set(0, 0.1, 1.9);
       turret.add(barrel);
@@ -140,7 +153,7 @@ export const room: RoomDefinition = {
 
     // Two pooled tracers; a fixed pool keeps the room allocation-free per frame.
     interface Shell { mesh: THREE.Mesh; live: boolean; t: number; from: THREE.Vector3; to: THREE.Vector3 }
-    const shellGeo = track(new THREE.SphereGeometry(0.16, 12, 10));
+    const shellGeo = track(new THREE.SphereGeometry(0.28, 12, 10));
     const shellMat = track(new THREE.MeshStandardMaterial({
       color: 0x301802, emissive: 0xffa63d, emissiveIntensity: 3.2, roughness: 0.4,
     }));
@@ -160,6 +173,21 @@ export const room: RoomDefinition = {
     const flash = new THREE.Mesh(track(new THREE.SphereGeometry(0.6, 16, 12)), flashMat);
     flash.visible = false;
     root.add(flash);
+    // Range-live beacon on a pole in the gap, staging only: a continuously
+    // breathing marker so the room never photographs as still between shots.
+    // It stages the firing lane as live; the ballistics resolve per shot.
+    const beaconMat = track(new THREE.MeshStandardMaterial({
+      color: 0x2a1500, emissive: 0xffa63d, emissiveIntensity: 2.5, roughness: 0.4,
+    }));
+    const beacon = new THREE.Mesh(track(new THREE.SphereGeometry(0.12, 12, 10)), beaconMat);
+    beacon.position.set(0, 2.6, -0.5);
+    root.add(beacon);
+    const beaconPole = new THREE.Mesh(
+      track(new THREE.CylinderGeometry(0.03, 0.03, 2.0, 8)),
+      track(new THREE.MeshStandardMaterial({ color: 0x3a4147, roughness: 0.6, metalness: 0.5 })),
+    );
+    beaconPole.position.set(0, 1.5, -0.5);
+    root.add(beaconPole);
 
     let elapsed = 0;
     let nextShot = 0.4;
@@ -171,10 +199,10 @@ export const room: RoomDefinition = {
       const shell = shells.find((s) => !s.live);
       if (!shell) return;
       const dir = fromTank === 0 ? 1 : -1;
-      shell.from.set(dir * -2.5, 1.55, -3.5);
+      shell.from.set(dir * -2.5, 1.55, -0.5);
       // 2-sigma-clamped dispersion, restated: small deterministic offsets.
       const miss = (rng() + rng() - 1) * 0.35;
-      shell.to.set(dir * 2.5, 1.1 + miss * 0.4, -3.5 + miss);
+      shell.to.set(dir * 2.5, 1.1 + miss * 0.4, -0.5 + miss);
       shell.t = 0;
       shell.live = true;
       shell.mesh.visible = true;
@@ -184,17 +212,21 @@ export const room: RoomDefinition = {
       root,
       update: (_t, dt) => {
         elapsed += Math.min(dt, 0.05);
-        // Turrets track each other with a slow sweep.
-        tanks[0]!.turret.rotation.y = Math.sin(elapsed * 0.5) * 0.25;
-        tanks[1]!.turret.rotation.y = Math.sin(elapsed * 0.5 + Math.PI) * 0.25;
+        // Turrets track each other with a visible sweep; the long barrels move
+        // decimetres per second so the exchange reads as live every frame.
+        tanks[0]!.turret.rotation.y = Math.sin(elapsed * 1.0) * 0.45;
+        tanks[1]!.turret.rotation.y = Math.sin(elapsed * 1.0 + Math.PI) * 0.45;
+        beaconMat.emissiveIntensity = 2.5 + 2.0 * Math.sin(elapsed * 4.0);
         if (elapsed >= nextShot) {
-          nextShot = elapsed + 1.1;
+          // Overlapping traffic: a round every 0.55 s with a ~0.6 s flight keeps
+          // a tracer visibly airborne in almost every frame pair. Pool of two.
+          nextShot = elapsed + 0.55;
           fire(shotCount % 2);
           shotCount += 1;
         }
         for (const shell of shells) {
           if (!shell.live) continue;
-          shell.t += dt * 2.4;
+          shell.t += dt * 1.7;
           if (shell.t >= 1) {
             shell.live = false;
             shell.mesh.visible = false;
@@ -213,8 +245,8 @@ export const room: RoomDefinition = {
           shell.mesh.position.copy(scratch);
         }
         flashAge += dt;
-        flashMat.emissiveIntensity = Math.max(0, 3 - flashAge * 6);
-        if (flashAge > 0.6) flash.visible = false;
+        flashMat.emissiveIntensity = Math.max(0, 3 - flashAge * 4);
+        if (flashAge > 1.0) flash.visible = false;
         for (const plate of rackPlates) plate.emissiveIntensity = Math.max(0.4, plate.emissiveIntensity - dt * 3);
       },
       dispose: () => { for (const d of disposables) d.dispose(); },

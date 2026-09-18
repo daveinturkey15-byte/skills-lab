@@ -1,31 +1,31 @@
 /**
  * Source 23 — hand-written GLSL combat sim with deforming terrain.
  *
- * Restages the lab demo's comparison at room scale: two snow plates face the
- * door as tilted drafting tables, and a walker drives the same lissajous path
- * into both. The left plate clears its field every frame; the right plate
- * remembers, so the path accumulates into a tinted groove. The tilt is pure
- * staging for the doorway sightline — a flat floor foreshortens to a sliver
- * from a 1.6 m eye — while field, brush, banked recovery and path run in the
- * plate's own frame, untouched. The source's texel-snapped toroidal follow
- * window is not shown because a room floor never follows anyone — stated,
- * not smuggled.
+ * Restages the lab demo's comparison at room scale: two snow panels face the
+ * door as steep drafting tables (66°), and a walker drives the same lissajous
+ * path into both. The left panel clears its field every frame; the right
+ * remembers, so the path accumulates into a tinted groove. The steep tilt is
+ * pure staging for the doorway sightline — a 1.62 m horizontal eye sees a
+ * shallow plate edge-on, while a steep face fills the frame — and field,
+ * brush, banked recovery and path run in the panel's own frame, untouched.
+ * The source's texel-snapped toroidal follow window is not shown because a
+ * room floor never follows anyone — stated, not smuggled.
  *
- * Staging geometry: the doorway camera stands at local z = -4 (layout spawn
- * is 4 m inside the door wall) at 1.6 m eye height looking +Z, and the inside
+ * Staging geometry: the doorway camera stands ~5.7 m outside the door wall at
+ * 1.62 m eye height looking straight in with zero pitch, and the inside
  * camera stands at the room centre looking the same way — so the exhibit
- * lives in the back half (centre z = +2), tilted 34° toward the door with
- * its bottom edge anchored in a dark base box. An earlier staging at z = -3.5
- * put the plates at the camera plane, half behind it and half under the
- * floor, and the doorway read as two floating balls.
+ * lives in the back half (centre z = +3.4, faces spanning y 0.2–5.0), split
+ * into two panels with a 1.5 m walkable gap on the room axis. A shallow 34°
+ * staging put the action above the doorway sightline and the groove outside
+ * the door frustum, and the doorway read as two blank slivers.
  */
 import type * as THREE from 'three';
 import type { RoomContext, RoomDefinition } from '../contract';
-const PLATE_W = 6.2;
-const PLATE_D = 8;
-const EXHIBIT_Z = 2.0;
-const TILT = 0.6;
-const PIVOT_Y = 2.55;
+const PLATE_W = 5.2;
+const PLATE_D = 5.2;
+const EXHIBIT_Z = 3.4;
+const TILT = 1.15;
+const PIVOT_Y = 2.6;
 const MAX_DEPTH = 0.5;
 const RELAX_STEP = 0.4;
 const RELAX_RATE = 0.05;
@@ -203,7 +203,7 @@ export const room: RoomDefinition = {
     disposables.push(baseMaterial);
     for (const side of [-1, 1]) {
       const base = new THREE.Mesh(baseGeometry, baseMaterial);
-      base.position.set(side * 3.35, 0.35, EXHIBIT_Z - 3.0);
+      base.position.set(side * 3.35, 0.35, EXHIBIT_Z - 1.4);
       root.add(base);
     }
 
