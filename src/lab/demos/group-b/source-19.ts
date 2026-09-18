@@ -320,12 +320,26 @@ export function createDemo(context: DemoContext): Demo {
     texture.flipY = true;
     texture.needsUpdate = true;
     textures.push(texture);
+    // Mount board: the prints read as exhibits and the board gives the pair
+    // area from the host's oblique fit direction instead of empty stage.
+    const board = new THREE.Mesh(
+      new THREE.PlaneGeometry(3.5, 3.5 * (HEIGHT / WIDTH) + 0.3),
+      new THREE.MeshStandardMaterial({ color: 0x11151b, roughness: 0.9 }),
+    );
+    board.name = `${label}-mount`;
+    board.position.set(x, 1.4, 0);
+    board.rotation.y = Math.PI / 4;
+    board.translateZ(-0.04);
+    root.add(board);
     const mesh = new THREE.Mesh(
       new THREE.PlaneGeometry(3.2, 3.2 * (HEIGHT / WIDTH)),
       new THREE.MeshBasicMaterial({ map: texture, toneMapped: false }),
     );
     mesh.name = label;
     mesh.position.set(x, 1.4, 0);
+    // The host fits from azimuth 45°; a +Z-facing print seen from there loses
+    // a third of its width to foreshortening, so face the prints at it.
+    mesh.rotation.y = Math.PI / 4;
     root.add(mesh);
   }
 

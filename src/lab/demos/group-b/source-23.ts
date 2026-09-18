@@ -38,7 +38,7 @@ import { disposeGroup, type Demo, type DemoContext } from './types';
 const COVERAGE = 8;
 const RESOLUTION = 96;
 const TEXEL = COVERAGE / RESOLUTION;
-const MAX_DEPTH = 0.34;
+const MAX_DEPTH = 0.5;
 /** Seconds of recovery banked before it is worth spending. The source banks for a precision
  *  reason; we bank for the same reason and because a tiny per-frame decay is untestable. */
 const RELAX_STEP = 0.4;
@@ -114,16 +114,23 @@ function buildPlate(
   geometry.rotateX(-Math.PI / 2);
   const position = geometry.getAttribute('position');
   const base = new Float32Array(position.count);
+  // Per-vertex colour so the groove reads as MORE than shading: undisturbed
+  // snow through to packed blue-grey at full depth. Same state, second channel.
+  const colours = new Float32Array(position.count * 3);
+  geometry.setAttribute('color', new THREE.BufferAttribute(colours, 3));
   for (let i = 0; i < position.count; i += 1) {
     // A little undulation so a groove reads against something rather than against a flat void.
-    base[i] = fbm2(position.getX(i) * 0.5 + 3, position.getZ(i) * 0.5 + 9, seed, 3) * 0.12;
+    base[i] = fbm2(position.getX(i) * 0.5 + 3, position.getZ(i) * 0.5 + 9, seed, 3) * 0.22;
     position.setY(i, base[i]);
+    colours[i * 3] = 0.87;
+    colours[i * 3 + 1] = 0.9;
+    colours[i * 3 + 2] = 0.94;
   }
   position.needsUpdate = true;
   geometry.computeVertexNormals();
   const mesh = new THREE.Mesh(
     geometry,
-    new THREE.MeshStandardMaterial({ color: 0xdfe6ef, roughness: 0.86, metalness: 0 }),
+    new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.86, metalness: 0 }),
   );
   return { mesh, base };
 }
@@ -131,9 +138,7 @@ function buildPlate(
 export function createDemo(context: DemoContext): Demo {
   const { THREE, seed } = context;
   const root = new THREE.Group();
-  root.name = 'source-23-deforming-terrain-that-remembers';
-
-  const halfGap = COVERAGE * 0.56;
+  const halfGap = COVERAGE * 0.51;
   const forgetting = buildPlate(THREE, seed);
   const remembering = buildPlate(THREE, seed);
   forgetting.mesh.position.x = -halfGap;
@@ -147,7 +152,7 @@ export function createDemo(context: DemoContext): Demo {
 
   // The "walker" whose passage is recorded. Two markers, one over each plate, so the
   // before/after is the same path driven into two fields with different retention.
-  const markerGeometry = new THREE.SphereGeometry(0.22, 16, 12);
+  const markerGeometry = new THREE.SphereGeometry(0.36, 16, 12);
   const markerMaterial = new THREE.MeshStandardMaterial({ color: 0x2f6fd0, roughness: 0.4 });
   const markerA = new THREE.Mesh(markerGeometry, markerMaterial);
   const markerB = new THREE.Mesh(markerGeometry, markerMaterial);
@@ -160,37 +165,48 @@ export function createDemo(context: DemoContext): Demo {
     { plate: remembering, field: fieldWithMemory },
   ];
 
+  // Snow white undisturbed, packed slate-blue at full depth. The tint is a pure
+  // function of the field value, so both plates agree everywhere except where
+  // memory differs — which is exactly the comparison being made.
+  const SNOW: readonly [number, number, number] = [0.93, 0.95, 0.98];
+  const PACKED: readonly [number, number, number] = [0.16, 0.26, 0.4];
   function applyField(
     plate: { mesh: import('three').Mesh; base: Float32Array },
     field: DeformationField,
   ): void {
     const position = plate.mesh.geometry.getAttribute('position');
+    const colour = plate.mesh.geometry.getAttribute('color');
     for (let i = 0; i < position.count; i += 1) {
       const depth = field.sample(position.getX(i), position.getZ(i));
       position.setY(i, plate.base[i] - depth);
+      // Legibility scale only: field values are small most of the time, so a linear
+      // map of depth to colour leaves real grooves as faint smears. The square root
+      // compresses the state range into visible tint; the stored field is untouched.
+      const t = Math.sqrt(Math.max(0, Math.min(1, depth / MAX_DEPTH)));
+      colour.setXYZ(i, SNOW[0] + (PACKED[0] - SNOW[0]) * t, SNOW[1] + (PACKED[1] - SNOW[1]) * t, SNOW[2] + (PACKED[2] - SNOW[2]) * t);
     }
     position.needsUpdate = true;
+    colour.needsUpdate = true;
     plate.mesh.geometry.computeVertexNormals();
   }
 
   function update(time: number, dt: number): void {
     // A deterministic lissajous path so the accumulated groove is a recognisable shape and
     // the same at any two inspections of the same time value.
-    const x = Math.sin(time * 0.7) * COVERAGE * 0.32;
-    const z = Math.sin(time * 0.47 + 1.1) * COVERAGE * 0.32;
+    const x = Math.sin(time * 0.7) * COVERAGE * 0.42;
+    const z = Math.sin(time * 0.47 + 1.1) * COVERAGE * 0.42;
     const step = Math.max(0, Math.min(dt, 0.1));
 
     for (const { plate, field } of plates) {
       field.recentre(x, z);
-      field.relax(step);
-      field.brush(x, z, 0.34, 1.9 * step);
+      field.brush(x, z, 0.62, 6.5 * step);
       applyField(plate, field);
     }
 
     const depthA = fieldWithoutMemory.sample(x, z);
     const depthB = fieldWithMemory.sample(x, z);
-    markerA.position.set(-halfGap + x, 0.22 - depthA, z);
-    markerB.position.set(halfGap + x, 0.22 - depthB, z);
+    markerA.position.set(-halfGap + x, 0.36 - depthA, z);
+    markerB.position.set(halfGap + x, 0.36 - depthB, z);
   }
 
   return {

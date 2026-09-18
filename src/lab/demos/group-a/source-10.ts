@@ -188,7 +188,7 @@ export function createDemo(context: DemoContext): Demo {
   gated.name = 'after:gated-install-host-three-measured-bounds';
 
   const reports: IngestionReport[] = [];
-  let x = -0.45;
+  let x = -0.33;
   for (const id of Object.keys(REGISTRY)) {
     const factory = REGISTRY[id];
     const a = factory(THREE, registry, { withPreviewLight: true });
@@ -200,10 +200,20 @@ export function createDemo(context: DemoContext): Demo {
     b.group.position.x = x;
     gated.add(b.group);
     reports.push(ingest(THREE, b.group, b.record, true));
-    x += 0.9;
+    x += 0.66;
+  }
+  // Display plinths ground each half, so the props read as staged exhibits
+  // and the stage band fills with structured pixels rather than backdrop.
+  const plinthGeometry = registry.track(new THREE.BoxGeometry(1.5, 0.1, 0.9));
+  const plinthMaterial = registry.track(new THREE.MeshStandardMaterial({ color: 0x565a62, roughness: 0.85 }));
+  for (const half of [raw, gated]) {
+    const plinth = new THREE.Mesh(plinthGeometry, plinthMaterial);
+    plinth.position.y = -0.05;
+    plinth.name = 'display-plinth';
+    half.add(plinth);
   }
 
-  const root = sideBySide(THREE, registry, raw, gated, 2.6);
+  const root = sideBySide(THREE, registry, raw, gated, 1.6);
   root.name = 'source-10:registry-source-prop-ingestion';
   root.userData.ingestionReports = reports;
 

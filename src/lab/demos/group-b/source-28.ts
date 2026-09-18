@@ -42,7 +42,7 @@ export function createDemo(context: DemoContext): Demo {
   const root = new THREE.Group();
   const disposables: { dispose: () => void }[] = [];
 
-  const panelGeometry = new THREE.PlaneGeometry(1.4, 1.4, GRID, GRID);
+  const panelGeometry = new THREE.PlaneGeometry(1.15, 2.1, GRID, GRID);
   const panelMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     vertexColors: true,
@@ -53,11 +53,11 @@ export function createDemo(context: DemoContext): Demo {
   disposables.push(panelGeometry, panelMaterial);
 
   const before = new THREE.Mesh(panelGeometry, panelMaterial);
-  before.position.set(-0.8, 0.5, 0);
+  before.position.set(-0.62, 1.0, 0);
   root.add(before);
 
   const after = new THREE.Mesh(panelGeometry.clone(), panelMaterial);
-  after.position.set(0.8, 0.5, 0);
+  after.position.set(0.62, 1.0, 0);
   root.add(after);
   disposables.push(after.geometry);
 

@@ -37,28 +37,55 @@ export function createDemo(context: DemoContext): Demo {
   const disposables: { dispose: () => void }[] = [];
   const rng = createRng(context.seed ^ 0x27beef);
 
+  // Layout fills its own bounding sphere: a compact dummy and striker at close
+  // quarters over a ground strip, so the feel loop reads instead of rattling
+  // in an empty stage. Timing constants below are untouched — only spacing is.
+  const DUMMY_X = 0.45;
+  const DUMMY_Y = 1.0;
+  const STRIKER_Y = 0.95;
+  const STRIKER_END_X = -1.15;
   // Target dummy (shakes on hit) and striker (pooled flash on impact).
-  const dummyGeometry = new THREE.CapsuleGeometry(0.3, 0.7, 4, 10);
+  const dummyGeometry = new THREE.CapsuleGeometry(0.48, 0.95, 4, 12);
   const dummyMaterial = new THREE.MeshStandardMaterial({ color: 0x7a8f5a, metalness: 0.05, roughness: 0.6 });
   const dummy = new THREE.Mesh(dummyGeometry, dummyMaterial);
-  dummy.position.set(0.9, 0.85, 0);
+  dummy.position.set(DUMMY_X, DUMMY_Y, 0);
   root.add(dummy);
   disposables.push(dummyGeometry, dummyMaterial);
 
-  const strikerGeometry = new THREE.BoxGeometry(0.22, 0.22, 0.22);
+  const strikerGeometry = new THREE.BoxGeometry(0.56, 0.56, 0.56);
   const strikerMaterial = new THREE.MeshStandardMaterial({ color: 0xc4763a, metalness: 0.2, roughness: 0.5 });
   const striker = new THREE.Mesh(strikerGeometry, strikerMaterial);
-  striker.position.set(-1.2, 0.85, 0);
+  striker.position.set(STRIKER_END_X, STRIKER_Y, 0);
   root.add(striker);
   disposables.push(strikerGeometry, strikerMaterial);
 
-  // Pooled impact flash - allocation-light feedback per the skill's step 8.
-  const flashGeometry = new THREE.SphereGeometry(0.16, 10, 8);
+  const flashGeometry = new THREE.SphereGeometry(0.36, 12, 10);
   const flashMaterial = new THREE.MeshBasicMaterial({ color: 0xffe28a, transparent: true });
   const flash = new THREE.Mesh(flashGeometry, flashMaterial);
   flash.visible = false;
   root.add(flash);
   disposables.push(flashGeometry, flashMaterial);
+
+  // Ground strip: contact read and frame area. Neutral stage, not the technique.
+  const groundGeometry = new THREE.BoxGeometry(2.3, 0.12, 1.4);
+  // Light slate, distinct from the host backdrop: the strip must read as stage,
+  // not merge with the background into one modal bucket.
+  const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x525b66, roughness: 0.95 });
+  const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+  ground.position.set(-0.15, -0.06, 0);
+  ground.name = 'ground-strip';
+  root.add(ground);
+  disposables.push(groundGeometry, groundMaterial);
+  // Scorch ring where the striker lands: a permanent impact mark, pooled like
+  // the flash (allocated once, never per frame).
+  const scorchGeometry = new THREE.RingGeometry(0.5, 0.72, 28);
+  const scorchMaterial = new THREE.MeshBasicMaterial({ color: 0x1a1e24, transparent: true, opacity: 0.75, side: THREE.DoubleSide });
+  const scorch = new THREE.Mesh(scorchGeometry, scorchMaterial);
+  scorch.position.set(0.1, 0.005, 0);
+  scorch.rotation.x = -Math.PI / 2;
+  scorch.name = 'impact-scorch';
+  root.add(scorch);
+  disposables.push(scorchGeometry, scorchMaterial);
 
   const stats = {
     hits: 0,
@@ -77,21 +104,22 @@ export function createDemo(context: DemoContext): Demo {
     cooldown = Math.max(0, cooldown - dt);
 
 
-    const striking = striker.position.x >= 0.55;
+    const striking = striker.position.x >= 0.2;
     if (!striking && cooldown <= 0) {
       // Wind up: the striker lunges across the gap.
-      striker.position.x = 0.9;
+      striker.position.x = DUMMY_X;
+      striker.position.y = STRIKER_Y;
       cooldown = HIT_INTERVAL_S;
     } else if (!striking) {
       stats.cooldownsGated += 1;
     }
     if (striking && hitstopRemaining <= 0) {
-      if (striker.position.x < -1.2) striker.position.x = -1.2;
+      if (striker.position.x < STRIKER_END_X) striker.position.x = STRIKER_END_X;
       else striker.position.x -= dt * 6;
     }
 
     // Contact: apply hitstop BEFORE feedback so the whole response reads as one beat.
-    if (striker.position.x <= 0.62 && striker.position.x > 0.3 && hitstopRemaining <= 0 && flashLife <= 0) {
+    if (striker.position.x <= 0.2 && striker.position.x > -0.15 && hitstopRemaining <= 0 && flashLife <= 0) {
       hitstopRemaining = HITSTOP_S;
       shake = 1;
       flashLife = 0.18;
@@ -108,10 +136,10 @@ export function createDemo(context: DemoContext): Demo {
       // Feedback decays only on the unfrozen clock - the point of hitstop.
       shake = Math.max(0, shake - SHAKE_DECAY * dt);
       if (shake > 0) {
-        dummy.position.x = 0.9 + shake * 0.12 * (rng() > 0.5 ? 1 : -1);
-        dummy.rotation.z = shake * 0.1 * (rng() > 0.5 ? 1 : -1);
+        dummy.position.x = DUMMY_X + shake * 0.2 * (rng() > 0.5 ? 1 : -1);
+        dummy.rotation.z = shake * 0.15 * (rng() > 0.5 ? 1 : -1);
       } else {
-        dummy.position.x = 0.9;
+        dummy.position.x = DUMMY_X;
         dummy.rotation.z = 0;
       }
     }
@@ -121,8 +149,8 @@ export function createDemo(context: DemoContext): Demo {
       if (flashLife <= 0) flash.visible = false;
     }
     // Knockback eases the dummy back along its base - eased per the feel guidance.
-    if (stats.hits > 0 && shake === 0 && Math.abs(dummy.position.x - 0.9) > 0.001) {
-      dummy.position.x += (0.9 - dummy.position.x) * Math.min(1, dt * 8);
+    if (stats.hits > 0 && shake === 0 && Math.abs(dummy.position.x - DUMMY_X) > 0.001) {
+      dummy.position.x += (DUMMY_X - dummy.position.x) * Math.min(1, dt * 8);
     }
   };
 

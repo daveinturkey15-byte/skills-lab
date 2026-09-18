@@ -26,6 +26,7 @@ import {
   DisposalRegistry,
   countDrawables,
   countTriangles,
+  makeDataTexture,
   makeRng,
   sideBySide,
   type Demo,
@@ -69,9 +70,22 @@ function buildWorld(THREE: ThreeNamespace, registry: DisposalRegistry, seed: num
   const world = new THREE.Group();
   world.name = 'code-generated-world';
 
+  // Build-grid finish on the scaffolded ground: construction lines suit a
+  // code-generated world, and they give the stage structured area to read.
+  // Finish only — the declared contract (verbs, contact plane) is untouched.
+  const grid = makeDataTexture(THREE, registry, 64, (x, y, out) => {
+    const line = x % 8 === 0 || y % 8 === 0;
+    const v = line ? 70 : 235;
+    out[0] = v;
+    out[1] = v + (line ? 4 : 0);
+    out[2] = v - (line ? 4 : 0);
+    out[3] = 255;
+  });
   const groundGeometry = registry.track(new THREE.PlaneGeometry(2, 2, 1, 1));
   groundGeometry.rotateX(-Math.PI / 2);
-  const groundMaterial = registry.track(new THREE.MeshStandardMaterial({ color: 0x53614a, roughness: 0.95 }));
+  const groundMaterial = registry.track(
+    new THREE.MeshStandardMaterial({ color: 0x53614a, roughness: 0.95, map: grid }),
+  );
   world.add(new THREE.Mesh(groundGeometry, groundMaterial));
 
   // The "verbs": a marked interaction volume the hero must face and reach.
@@ -141,12 +155,23 @@ export function createDemo(context: DemoContext): Demo {
 
   const naiveHero = buildHero(THREE, registry);
   naiveWorld.add(naiveHero);
+  // Framing honesty: the as-generated hero is tens of units tall and would collapse
+  // the shared frame onto one half. Normalise ONLY its scale by the same measured
+  // factor the full pass applies, so both halves read; pivot and facing stay
+  // exactly as generated (sunk and sideways).
+  const naiveBounds = new THREE.Box3().setFromObject(naiveHero);
+  const naiveSize = new THREE.Vector3();
+  naiveBounds.getSize(naiveSize);
+  naiveHero.scale.setScalar(
+    WORLD_CONTRACT.characterHeightMetres / Math.max(1e-6, naiveSize.y),
+  );
+  naiveHero.updateMatrixWorld(true);
 
   const fixedHero = buildHero(THREE, registry);
   fixedWorld.add(fixedHero);
   const report = harmonise(THREE, fixedHero);
 
-  const root = sideBySide(THREE, registry, naiveWorld, fixedWorld, 3.0);
+  const root = sideBySide(THREE, registry, naiveWorld, fixedWorld, 2.3);
   root.name = 'source-11:scaffold-world-generate-hero';
   root.userData.harmonisation = report;
 
@@ -154,14 +179,14 @@ export function createDemo(context: DemoContext): Demo {
     sourceId: 11,
     title: 'Scaffold in code, generate the hero asset',
     method:
-      'Code-generate the world and its verbs; generate only the hero prop. Then do the step the post omits: measure the delivered bounds, scale to the declared character height, re-seat the pivot on the contact plane, and rotate the asset forward axis onto the world verb axis.',
+      'Code-generate the world and its verbs; generate only the hero prop. Then do the step the post omits: measure the delivered bounds, scale to the declared character height, re-seat the pivot on the contact plane, and rotate the asset forward axis onto the world verb axis. The before half is shown at the same scale so the pair shares a frame; it sits sunk and sideways because its pivot was never re-seated and its facing never aligned — read the beltline, not the height.',
     adaptation: 'adapted' as const,
     sources: [
       'https://x.com/filiksyos/status/2089297181026951425',
       'post text read 2026-09-12 from the page served by x.com (og:description)',
     ],
     limitation:
-      'Opinion post with no repository and no licence; nothing upstream to pin or verify. No AI generator was invoked and no GLB was produced or loaded - the hero here is locally authored with deliberately wrong units, pivot and facing so the harmonisation pass has real defects to fix. Producing the asset is not the hard part, and this demo does not claim to have solved animation, gameplay or difficulty harmonisation.',
+      'Opinion post with no repository and no licence; nothing upstream to pin or verify. No AI generator was invoked and no GLB was produced or loaded - the hero here is locally authored with deliberately wrong units, pivot and facing so the harmonisation pass has real defects to fix. The before half is scale-normalised by the same measured factor (reported in counters) so the pair shares a frame; its pivot and facing are untouched. Producing the asset is not the hard part, and this demo does not claim to have solved animation, gameplay or difficulty harmonisation.',
     counters: {
       triangles: countTriangles(root),
       drawables: countDrawables(root),

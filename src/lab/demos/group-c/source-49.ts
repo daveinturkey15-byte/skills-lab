@@ -76,26 +76,44 @@ export class MotionContext {
 const CONTEXT_FRAMES = 4;
 const JOINTS = 5;
 const TARGETS = [-0.55, 0.5, -0.3, 0.62, 0.0];
+/** Tip-trail window in frames (~2.5 s at 60 Hz: a full target phase and more). */
+const TRAIL_MAX = 150;
 
 export function createDemo(context: DemoContext): Demo {
   const { THREE } = context;
   const root = new THREE.Group();
   root.name = 'source-49-constraint-placement-scaffold';
-  const { before, after } = beforeAfterPanels(THREE, 3.0);
+  const { before, after } = beforeAfterPanels(THREE, 2.4);
 
   // A deliberately schematic articulated chain. It is NOT the G1 skeleton and
   // NOT our 62-joint operator rig; it is five hinges so the placement is legible.
+  // Links are chunky and the stage is light grey so the pair reads at the
+  // host's fit distance; neither is a scale claim about any robot.
   function buildChain(group: import('three').Group, colour: number) {
     const segments: import('three').Mesh[] = [];
-    const geometry = new THREE.BoxGeometry(0.07, 0.34, 0.07);
-    geometry.translate(0, 0.17, 0);
-    const material = new THREE.MeshStandardMaterial({ color: colour, roughness: 0.6 });
+    const geometry = new THREE.BoxGeometry(0.17, 0.5, 0.17);
+    geometry.translate(0, 0.25, 0);
+    const beadGeometry = new THREE.SphereGeometry(0.115, 12, 8);
+    const base = new THREE.Color(colour);
+    const light = base.clone().offsetHSL(0, 0.02, 0.14);
+    const dark = base.clone().offsetHSL(0, 0.02, -0.1);
+    const materials = [
+      new THREE.MeshStandardMaterial({ color: light, roughness: 0.55 }),
+      new THREE.MeshStandardMaterial({ color: dark, roughness: 0.65 }),
+    ];
+    const beadMaterial = new THREE.MeshStandardMaterial({ color: base, roughness: 0.45 });
     let parent: import('three').Object3D = group;
     for (let i = 0; i < JOINTS; i += 1) {
       const pivot = new THREE.Group();
       pivot.name = `joint-${i}`;
-      pivot.position.y = i === 0 ? 0 : 0.34;
-      const segment = new THREE.Mesh(geometry, material);
+      pivot.position.y = i === 0 ? 0 : 0.5;
+      // Bead marks the joint itself: the constraint placement this exhibit is
+      // about happens here, so the joint reads even where links align.
+      const bead = new THREE.Mesh(beadGeometry, beadMaterial);
+      bead.name = `bead-${i}`;
+      pivot.add(bead);
+      // Alternate link shades so each hinge boundary carries a visible edge.
+      const segment = new THREE.Mesh(geometry, materials[i % 2]);
       segment.name = `segment-${i}`;
       pivot.add(segment);
       parent.add(pivot);
@@ -105,8 +123,39 @@ export function createDemo(context: DemoContext): Demo {
     return segments;
   }
 
-  buildChain(before, 0x8a6f6f);
-  buildChain(after, 0x6f8a85);
+  buildChain(before, 0xa8766a);
+  buildChain(after, 0x6fb894);
+
+  // Shared stage both chains stand on: identical staging for both halves, so
+  // only the placement differs. It carries a measurement grid (below) that the
+  // tip trails read against. Gives the pair area and a contact read.
+  // Motion-measurement grid baked as bytes (no external assets): pale lines
+  // over slate. Instrumentation finish only — never planner output.
+  const gridBytes = new Uint8Array(64 * 64 * 4);
+  for (let gy = 0; gy < 64; gy += 1) {
+    for (let gx = 0; gx < 64; gx += 1) {
+      const gridLine = gx % 8 === 0 || gy % 8 === 0;
+      const gv = gridLine ? 168 : 74;
+      const go = (gy * 64 + gx) * 4;
+      gridBytes[go] = gv;
+      gridBytes[go + 1] = gv + (gridLine ? 6 : 4);
+      gridBytes[go + 2] = gv + (gridLine ? 10 : 8);
+      gridBytes[go + 3] = 255;
+    }
+  }
+  const gridTexture = new THREE.DataTexture(gridBytes, 64, 64);
+  gridTexture.colorSpace = THREE.SRGBColorSpace;
+  gridTexture.magFilter = THREE.NearestFilter;
+  gridTexture.minFilter = THREE.NearestFilter;
+  gridTexture.needsUpdate = true;
+  const stageDisc = new THREE.Mesh(
+    new THREE.CircleGeometry(2.05, 48),
+    new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.92, map: gridTexture }),
+  );
+  stageDisc.rotation.x = -Math.PI / 2;
+  stageDisc.position.y = 0.002;
+  stageDisc.name = 'stage-disc';
+  root.add(stageDisc);
 
   const snapState: number[] = new Array(JOINTS).fill(0);
   const springState: SpringState[] = Array.from({ length: JOINTS }, () => ({
@@ -116,6 +165,52 @@ export function createDemo(context: DemoContext): Demo {
 
   const motionContext = new MotionContext(CONTEXT_FRAMES);
   motionContext.push(new Array(JOINTS).fill(0));
+
+  // Tip trails: the technique's visible record. BEFORE snaps with a corner,
+  // AFTER rides the spring; the paths diverge exactly where placement differs.
+  // Fixed buffers rewritten in place — no per-frame allocation.
+  function makeTrail(group: import('three').Group, colour: number) {
+    const history = new Float32Array(TRAIL_MAX * 3);
+    const positions = new Float32Array(TRAIL_MAX * 3);
+    const attr = new THREE.BufferAttribute(positions, 3);
+    const trailGeometry = new THREE.BufferGeometry();
+    trailGeometry.setAttribute('position', attr);
+    trailGeometry.setDrawRange(0, 0);
+    const line = new THREE.Line(
+      trailGeometry,
+      new THREE.LineBasicMaterial({ color: colour, toneMapped: false }),
+    );
+    line.name = 'tip-trail';
+    line.frustumCulled = false;
+    group.add(line);
+    return { history, attr, geometry: trailGeometry, count: 0 };
+  }
+  const beforeTrail = makeTrail(before, 0xd86450);
+  const afterTrail = makeTrail(after, 0x59d68c);
+  const beforeTip = before.getObjectByName('joint-4');
+  const afterTip = after.getObjectByName('joint-4');
+  const scratchV = new THREE.Vector3();
+  function pushTrail(
+    trail: { history: Float32Array; attr: import('three').BufferAttribute; geometry: import('three').BufferGeometry; count: number },
+    panel: import('three').Group,
+    tip: import('three').Object3D | undefined,
+  ) {
+    if (!tip) return;
+    tip.getWorldPosition(scratchV);
+    panel.worldToLocal(scratchV);
+    if (trail.count === TRAIL_MAX) {
+      trail.history.copyWithin(0, 3);
+      trail.count = TRAIL_MAX - 1;
+    }
+    const to = trail.count * 3;
+    trail.history[to] = scratchV.x;
+    trail.history[to + 1] = scratchV.y;
+    trail.history[to + 2] = scratchV.z;
+    trail.count += 1;
+    trail.attr.array.set(trail.history.subarray(0, trail.count * 3));
+    trail.attr.needsUpdate = true;
+    trail.geometry.setDrawRange(0, trail.count);
+  }
 
   let elapsed = 0;
   let peakSnapOvershoot = 0;
@@ -163,6 +258,11 @@ export function createDemo(context: DemoContext): Demo {
       };
       applyChain(before, snapState);
       applyChain(after, springState.map((state) => state.value));
+      // Trails read world placement, so compose the hierarchy first; the cost
+      // is one extra matrix pass over ~30 objects per frame.
+      root.updateMatrixWorld(true);
+      pushTrail(beforeTrail, before, beforeTip);
+      pushTrail(afterTrail, after, afterTip);
 
       // The rolling context: what was just produced becomes the context for
       // the next window. This is the autoregressive shape of the planner, with
@@ -170,7 +270,7 @@ export function createDemo(context: DemoContext): Demo {
       motionContext.push(springState.map((state) => state.value));
       planningWindows += 1;
     },
-    dispose: () => disposeTree(root),
+    dispose: () => disposeTree(root, [gridTexture]),
     metadata: {
       sourceId: 49,
       title: 'Critically-damped constraint placement with a rolling motion context',
@@ -178,7 +278,10 @@ export function createDemo(context: DemoContext): Demo {
         'Target pose constraints are placed by a critically-damped spring (zeta = 1, half-life '
         + 'parameterised) so the chain converges fast without overshoot, while the last four '
         + 'produced frames are retained as the context the next window would be planned from. '
-        + 'The before panel applies identical targets with a naive per-frame fraction.',
+        + 'The before panel applies identical targets with a naive per-frame fraction. The '
+        + 'end-joint path of each chain is drawn as a 150-frame tip trail (terracotta = snap '
+        + 'with its arrival corner, bright sage = spring) over a baked measurement-grid floor, '
+        + 'so the placement difference reads as drawn paths, not prose.',
       adaptation: 'adapted',
       sources: [
         'https://x.com/jichiep/status/2095157236658315288',
@@ -193,13 +296,14 @@ export function createDemo(context: DemoContext): Demo {
         + 'hinges, NOT the 34-joint Unitree G1 skeleton the released model requires and NOT the '
         + 'repository\'s 62-joint operator rig; no retarget is attempted or claimed, and the G1 '
         + 'retarget risk the register records (ankle pitch/roll instead of a toe base, no '
-        + 'fingers, 1.32 m stature) is untested. No .mbstyle primitive is present or shipped.',
+        + 'fingers, 1.32 m stature) is untested. No .mbstyle primitive is present or shipped. Links, beads, trails, grid and stage are presentation scale and finish for stage legibility, not a scale claim about any robot. Trails are drawn from live joint angles each frame (a 150-frame window); the grid is a baked byte texture, not a measurement of anything upstream.',
       localLights: [],
       counters: {
         joints: JOINTS,
         contextFrames: CONTEXT_FRAMES,
         contextHeld: motionContext.length,
         planningWindows,
+        trailWindowFrames: TRAIL_MAX,
         peakSnapOvershoot: Math.round(peakSnapOvershoot * 1000) / 1000,
         peakSpringOvershoot: Math.round(peakSpringOvershoot * 1000) / 1000,
         meshes: countDraws(root).meshes,

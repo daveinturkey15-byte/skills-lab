@@ -31,16 +31,21 @@ import {
 
 const SEGMENTS = 40;
 
+/** Half-extent of each water panel in metres; bathymetry is authored in unit space. */
+const HALF = 1.6;
+
 /** Bathymetry: a beach that shelves away from +z, with a sandbar. */
 function depthAt(x: number, z: number, noise: (x: number, y: number) => number): number {
-  const shore = (z + 1) * 0.5; // 0 at the far edge, 1 at the near edge
+  const nx = x / HALF;
+  const nz = z / HALF;
+  const shore = (nz + 1) * 0.5; // 0 at the far edge, 1 at the near edge
   const base = Math.max(0, 1 - shore) * 2.4;
   const bar = Math.exp(-((shore - 0.62) ** 2) / 0.006) * 0.55;
-  return Math.max(0, base - bar + noise(x * 2.5 + 8, z * 2.5 + 3) * 0.18);
+  return Math.max(0, base - bar + noise(nx * 2.5 + 8, nz * 2.5 + 3) * 0.18);
 }
 
 function buildWater(THREE: ThreeNamespace, registry: DisposalRegistry) {
-  const geometry = registry.track(new THREE.PlaneGeometry(2, 2, SEGMENTS, SEGMENTS));
+  const geometry = registry.track(new THREE.PlaneGeometry(HALF * 2, HALF * 2, SEGMENTS, SEGMENTS));
   geometry.rotateX(-Math.PI / 2);
   const position = geometry.getAttribute('position');
   const colours = new Float32Array(position.count * 3);
@@ -62,7 +67,7 @@ function buildWater(THREE: ThreeNamespace, registry: DisposalRegistry) {
 }
 
 function buildSeabed(THREE: ThreeNamespace, registry: DisposalRegistry, noise: (x: number, y: number) => number) {
-  const geometry = registry.track(new THREE.PlaneGeometry(2, 2, SEGMENTS, SEGMENTS));
+  const geometry = registry.track(new THREE.PlaneGeometry(HALF * 2, HALF * 2, SEGMENTS, SEGMENTS));
   geometry.rotateX(-Math.PI / 2);
   const position = geometry.getAttribute('position');
   for (let i = 0; i < position.count; i += 1) {
@@ -92,7 +97,7 @@ export function createDemo(context: DemoContext): Demo {
   flatGroup.add(flat.mesh);
   layeredGroup.add(layered.mesh);
 
-  const root = sideBySide(THREE, registry, flatGroup, layeredGroup, 2.6);
+  const root = sideBySide(THREE, registry, flatGroup, layeredGroup, HALF * 2 + 0.1);
   root.name = 'source-03:stylised-water-comparator';
 
   const shallow = new THREE.Color(0x67d6c3);
@@ -114,7 +119,7 @@ export function createDemo(context: DemoContext): Demo {
       const x = lp.getX(i);
       const z = lp.getZ(i);
       const d = depthAt(x, z, noise);
-      const swell = Math.sin(x * 3.4 + time * 1.1) * 0.012 + Math.sin(z * 5.1 - time * 1.7) * 0.008;
+      const swell = Math.sin(x * 3.4 + time * 1.1) * 0.03 + Math.sin(z * 5.1 - time * 1.7) * 0.02;
       lp.setY(i, swell);
       fp.setY(i, swell);
 
@@ -129,15 +134,18 @@ export function createDemo(context: DemoContext): Demo {
       const band = Math.max(0, 1 - Math.abs(d - 0.18) / 0.16) * (0.45 + 0.55 * surf);
       if (band > 0.05) foamTexels += 1;
       scratch.lerp(foam, Math.min(1, band));
-
       // Layer 3: caustic depth read — brightness that tracks the seabed rather
       // than the surface, so the eye reads through the water instead of off it.
       const caustic =
         Math.max(0, Math.sin(x * 9 + time * 0.9) * Math.sin(z * 11 - time * 0.7)) ** 3 *
         Math.max(0, 1 - t) *
-        0.5;
-      scratch.offsetHSL(0, 0, caustic * 0.25);
-
+        0.65;
+      // Layer 3 was computed but never applied, so the AFTER panel carried no
+      // caustic at all. Add it as brightness: it peaks in the shallows where
+      // the seabed is closest, which is the documented depth read.
+      scratch.r = Math.min(1, scratch.r + caustic);
+      scratch.g = Math.min(1, scratch.g + caustic);
+      scratch.b = Math.min(1, scratch.b + caustic * 0.9);
       lc.setXYZ(i, scratch.r, scratch.g, scratch.b);
       fc.setXYZ(i, flatColour.r, flatColour.g, flatColour.b);
     }

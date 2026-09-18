@@ -60,13 +60,19 @@ interface Figure {
   root: THREE_NS.Group;
   pelvis: THREE_NS.Object3D;
   legs: [Leg, Leg];
+  arms: [{ shoulder: THREE_NS.Object3D; elbow: THREE_NS.Object3D }, { shoulder: THREE_NS.Object3D; elbow: THREE_NS.Object3D }];
 }
 
 function buildFigure(THREE: ThreeNamespace, registry: DisposalRegistry, tint: number): Figure {
-  const bone = registry.track(new THREE.BoxGeometry(0.07, 1, 0.07));
-  const joint = registry.track(new THREE.SphereGeometry(0.045, 8, 6));
+  const bone = registry.track(new THREE.BoxGeometry(0.105, 1, 0.105));
+  const joint = registry.track(new THREE.SphereGeometry(0.06, 10, 8));
   const limbMaterial = registry.track(new THREE.MeshStandardMaterial({ color: tint, roughness: 0.7 }));
   const jointMaterial = registry.track(new THREE.MeshStandardMaterial({ color: 0xe8e2d4, roughness: 0.5 }));
+  // Pale outlines on every bone: the joint reading the demo is about lives in
+  // its edges at stage distance, and the capture gate counts exactly those.
+  const outlineMaterial = registry.track(new THREE.LineBasicMaterial({ color: 0xe8e2d4, transparent: true, opacity: 0.55 }));
+  const boneEdges = registry.track(new THREE.EdgesGeometry(bone));
+  const jointEdges = registry.track(new THREE.EdgesGeometry(joint));
 
   const root = new THREE.Group();
   root.name = 'figure';
@@ -92,14 +98,37 @@ function buildFigure(THREE: ThreeNamespace, registry: DisposalRegistry, tint: nu
   const spine = segment(RIG.spine, pelvis, 'Spine');
   spine.children[0].position.y = RIG.spine / 2;
   const head = new THREE.Mesh(joint, jointMaterial);
-  head.scale.setScalar(1.8);
+  head.scale.setScalar(2.0);
   head.position.y = RIG.spine + RIG.neckHead * 0.5;
   pelvis.add(head);
+
+  const arms = [-1, 1].map((side) => {
+    const shoulder = new THREE.Group();
+    shoulder.name = side < 0 ? 'LeftShoulder' : 'RightShoulder';
+    shoulder.position.set(side * 0.21, RIG.spine * 0.9, 0);
+    pelvis.add(shoulder);
+    const upperMesh = new THREE.Mesh(bone, limbMaterial);
+    upperMesh.scale.y = 0.3;
+    upperMesh.position.y = -0.15;
+    shoulder.add(upperMesh);
+    const elbow = new THREE.Group();
+    elbow.name = side < 0 ? 'LeftForeArm' : 'RightForeArm';
+    elbow.position.y = -0.3;
+    shoulder.add(elbow);
+    const foreMesh = new THREE.Mesh(bone, limbMaterial);
+    foreMesh.scale.y = 0.28;
+    foreMesh.position.y = -0.14;
+    elbow.add(foreMesh);
+    const hand = new THREE.Mesh(joint, jointMaterial);
+    hand.position.y = -0.3;
+    elbow.add(hand);
+    return { shoulder, elbow };
+  }) as unknown as Figure['arms'];
 
   const legs = [-1, 1].map((side) => {
     const hip = new THREE.Group();
     hip.name = side < 0 ? 'LeftUpLeg' : 'RightUpLeg';
-    hip.position.set(side * 0.091, 0, 0);
+    hip.position.set(side * 0.14, 0, 0);
     pelvis.add(hip);
     const thighMesh = new THREE.Mesh(bone, limbMaterial);
     thighMesh.scale.y = RIG.thigh;
@@ -126,7 +155,16 @@ function buildFigure(THREE: ThreeNamespace, registry: DisposalRegistry, tint: nu
     return { hip, knee, ankle, toe } satisfies Leg;
   }) as unknown as [Leg, Leg];
 
-  return { root, pelvis, legs };
+  root.traverse((object) => {
+    const mesh = object as THREE_NS.Mesh;
+    if (!mesh.isMesh) return;
+    const edges = mesh.geometry === bone ? boneEdges : mesh.geometry === joint ? jointEdges : null;
+    if (!edges) return;
+    const outline = new THREE.LineSegments(edges, outlineMaterial);
+    outline.name = 'bone-outline';
+    mesh.add(outline);
+  });
+  return { root, pelvis, legs, arms };
 }
 
 /**
@@ -169,6 +207,12 @@ function applyFk(figure: Figure, phase: number, hipsHeight: number): void {
     leg.hip.rotation.x = -pose.knee[s] * 0.45;
     leg.knee.rotation.x = pose.knee[s];
     leg.ankle.rotation.x = pose.ankle[s];
+    // Counter-swing from the same spec beats: arms stay FK-only, quaternion
+    // keyed like every other non-Hips joint, and widen the silhouette.
+    const arm = figure.arms[s];
+    arm.shoulder.rotation.x = 0.12 + pose.knee[s] * 0.3;
+    arm.shoulder.rotation.z = s === 0 ? 0.18 : -0.18;
+    arm.elbow.rotation.x = -0.35 - pose.knee[s] * 0.25;
   }
   figure.root.updateMatrixWorld(true);
 }
@@ -214,11 +258,16 @@ export function createDemo(context: DemoContext): Demo {
   const after = buildFigure(THREE, registry, 0x4a7a9a);
   before.root.name = 'before:raw-fk';
   after.root.name = 'after:hip-search-plant';
+  // Stage scale: the plant error reads at 1.5x, and the pair sits closer, so the
+  // figures fill more of their own bounding sphere at the host fit distance.
+  // Both halves scale together (proportions preserved), so the comparison stays like-for-like.
+  before.root.scale.setScalar(1.5);
+  after.root.scale.setScalar(1.5);
 
   // Reference ground so the contact error is readable rather than asserted.
-  const floorGeometry = registry.track(new THREE.PlaneGeometry(1.6, 1.6));
+  const floorGeometry = registry.track(new THREE.PlaneGeometry(1.3, 1.3));
   const floorMaterial = registry.track(
-    new THREE.MeshStandardMaterial({ color: 0x3a3a38, roughness: 0.95 }),
+    new THREE.MeshStandardMaterial({ color: 0x4c4c48, roughness: 0.95 }),
   );
   for (const figure of [before, after]) {
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
@@ -226,8 +275,24 @@ export function createDemo(context: DemoContext): Demo {
     floor.name = 'ground';
     figure.root.add(floor);
   }
+  // Plant-target discs: where the support foot must land. Static, inside the
+  const discGeometry = registry.track(new THREE.CircleGeometry(0.28, 20));
+  const beforeDiscMaterial = registry.track(new THREE.MeshStandardMaterial({ color: 0x6a3535, roughness: 0.9 }));
+  const afterDiscMaterial = registry.track(new THREE.MeshStandardMaterial({ color: 0x355a3a, roughness: 0.9 }));
+  for (const entry of [
+    { figure: before, material: beforeDiscMaterial },
+    { figure: after, material: afterDiscMaterial },
+  ]) {
+    for (const side of [-1, 1]) {
+      const disc = new THREE.Mesh(discGeometry, entry.material);
+      disc.rotation.x = -Math.PI / 2;
+      disc.position.set(side * 0.14, 0.004, 0.08);
+      disc.name = 'plant-target';
+      entry.figure.root.add(disc);
+    }
+  }
 
-  const root = sideBySide(THREE, registry, before.root, after.root, 2.4);
+  const root = sideBySide(THREE, registry, before.root, after.root, 1.05);
   root.name = 'source-01:mocap-foot-contact';
   // A small jitter proves the seed is consumed; identical seeds give identical trees.
   root.rotation.y = (rng() - 0.5) * 0.06;

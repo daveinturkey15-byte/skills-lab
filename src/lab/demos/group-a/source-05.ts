@@ -49,13 +49,18 @@ const KEY = [255, 0, 255] as const;
  * on a magenta field. Locally authored pixels, no model involved.
  */
 function drawFrame(out: Uint8Array, offset: number, phase: number): void {
+  // Two-pixel brush: the clip reads at stage distance only if the figure
+  // carries enough pixels to survive the capture frame.
   const px = (x: number, y: number, r: number, g: number, b: number) => {
-    if (x < 0 || y < 0 || x >= TILE || y >= TILE) return;
-    const i = offset + (y * TILE + x) * 4;
-    out[i] = r;
-    out[i + 1] = g;
-    out[i + 2] = b;
-    out[i + 3] = 255;
+    for (let ox = 0; ox < 2; ox += 1) {
+      const xx = x + ox;
+      if (xx < 0 || y < 0 || xx >= TILE || y >= TILE) return;
+      const i = offset + (y * TILE + xx) * 4;
+      out[i] = r;
+      out[i + 1] = g;
+      out[i + 2] = b;
+      out[i + 3] = 255;
+    }
   };
   for (let y = 0; y < TILE; y += 1) {
     for (let x = 0; x < TILE; x += 1) px(x, y, KEY[0], KEY[1], KEY[2]);
@@ -63,16 +68,18 @@ function drawFrame(out: Uint8Array, offset: number, phase: number): void {
   const swing = Math.sin(phase * Math.PI * 2);
   const lift = Math.max(0, Math.sin(phase * Math.PI * 2)) * 3;
   const cx = 16;
-  const hip = 18 - Math.round(lift);
-  for (let y = 6; y <= hip; y += 1) px(cx, y, 230, 210, 180); // torso
-  for (let dy = 0; dy < 4; dy += 1) {
-    for (let dx = -2; dx <= 2; dx += 1) px(cx + dx, 4 + dy, 240, 225, 195); // head
+  const hip = 19 - Math.round(lift);
+  for (let y = 9; y <= hip; y += 1) {
+    for (let dx = -1; dx <= 1; dx += 1) px(cx + dx, y, 230, 210, 180); // torso
   }
-  for (let t = 0; t < 8; t += 1) {
-    const k = t / 7;
+  for (let dy = 0; dy < 6; dy += 1) {
+    for (let dx = -3; dx <= 2; dx += 1) px(cx + dx, 3 + dy, 240, 225, 195); // head
+  }
+  for (let t = 0; t < 11; t += 1) {
+    const k = t / 10;
     px(cx + Math.round(swing * 5 * k), hip + t, 200, 160, 120); // near leg
     px(cx - Math.round(swing * 5 * k), hip + t, 170, 130, 95); // far leg
-    px(cx + Math.round(swing * 6 * k), 9 + t, 210, 175, 135); // near arm
+    px(cx + Math.round(swing * 6 * k), 10 + t, 210, 175, 135); // near arm
   }
 }
 
@@ -141,7 +148,7 @@ export function createDemo(context: DemoContext): Demo {
   rawTexture.minFilter = THREE.NearestFilter;
   rawTexture.needsUpdate = true;
 
-  const quad = registry.track(new THREE.PlaneGeometry(0.9, 0.9));
+  const quad = registry.track(new THREE.PlaneGeometry(1.75, 1.75));
   const rawMaterial = registry.track(new THREE.MeshBasicMaterial({ map: rawTexture, toneMapped: false }));
   const atlasMaterial = registry.track(
     new THREE.MeshBasicMaterial({ map: atlasTexture, transparent: true, alphaTest: 0.5, toneMapped: false }),
@@ -149,14 +156,42 @@ export function createDemo(context: DemoContext): Demo {
 
   const before = new THREE.Mesh(quad, rawMaterial);
   before.name = 'before:raw-clip-uniform-timing-magenta-present';
-  before.position.y = 0.5;
+  before.position.y = 0.55;
   const after = new THREE.Mesh(quad, atlasMaterial);
   after.name = 'after:pose-extremes-keyed-atlas';
-  after.position.y = 0.5;
+  after.position.y = 0.55;
 
-  const root = sideBySide(THREE, registry, before, after, 2.2);
+  // Centres 1.9 apart: the 1.75 m quads must clear each other, otherwise the
+  // before quad's magenta shows through the after quad's keyed regions and the
+  // comparison reads as a keying failure. Both halves keep identical scale.
+  const root = sideBySide(THREE, registry, before, after, 1.9);
   root.name = 'source-05:sprite-atlas-from-clip';
   root.rotation.y = (rng() - 0.5) * 0.02;
+  // Atlas filmstrip: the packed extremes shown whole with a playhead, so the
+  // packing step is visible rather than asserted. The billboard above stays
+  // the timing demonstration; this strip is its annotation.
+  const stripTexture = registry.track(new THREE.DataTexture(atlas, atlasW, atlasH, THREE.RGBAFormat));
+  stripTexture.colorSpace = THREE.SRGBColorSpace;
+  stripTexture.magFilter = THREE.NearestFilter;
+  stripTexture.minFilter = THREE.NearestFilter;
+  stripTexture.needsUpdate = true;
+  const stripQuad = registry.track(new THREE.PlaneGeometry(1.9, 0.45));
+  const stripMaterial = registry.track(
+    new THREE.MeshBasicMaterial({ map: stripTexture, transparent: true, alphaTest: 0.5, toneMapped: false }),
+  );
+  const strip = new THREE.Mesh(stripQuad, stripMaterial);
+  strip.position.y = -0.62;
+  strip.name = 'atlas-strip:packed-extremes';
+  root.add(strip);
+  const stripSlotW = 1.9 / ATLAS_COLS;
+  const cursorGeometry = registry.track(new THREE.PlaneGeometry(stripSlotW - 0.04, 0.51));
+  const cursorMaterial = registry.track(
+    new THREE.MeshBasicMaterial({ color: 0xffe28a, wireframe: true, toneMapped: false }),
+  );
+  const cursor = new THREE.Mesh(cursorGeometry, cursorMaterial);
+  cursor.position.set(-0.95 + stripSlotW / 2, -0.62, 0.01);
+  cursor.name = 'atlas-playhead';
+  root.add(cursor);
 
   // Per-extreme hold times: the timing half of step 3. Extremes are held longer
   // than pass-throughs, which is what makes a 4-frame atlas read as a move.
@@ -208,6 +243,7 @@ export function createDemo(context: DemoContext): Demo {
           (slot % ATLAS_COLS) / ATLAS_COLS,
           1 - (Math.floor(slot / ATLAS_COLS) + 1) / Math.max(1, rows),
         );
+        cursor.position.x = -0.95 + stripSlotW / 2 + (slot % ATLAS_COLS) * stripSlotW;
       }
     },
     dispose() {

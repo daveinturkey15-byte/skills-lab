@@ -40,10 +40,10 @@ type Prop = {
 };
 
 const PROPS: readonly Prop[] = [
-  { name: 'crate', position: [-0.45, 0.18, 0.1], size: [0.36, 0.36, 0.36], albedo: [0.55, 0.42, 0.28] },
-  { name: 'barrel', position: [0.3, 0.22, -0.25], size: [0.3, 0.44, 0.3], albedo: [0.32, 0.38, 0.34] },
-  { name: 'panel', position: [0.05, 0.3, 0.55], size: [0.7, 0.6, 0.06], albedo: [0.48, 0.48, 0.5] },
-  { name: 'block', position: [0.62, 0.12, 0.35], size: [0.24, 0.24, 0.24], albedo: [0.6, 0.3, 0.26] },
+  { name: 'crate', position: [-0.77, 0.31, 0.17], size: [0.61, 0.61, 0.61], albedo: [0.55, 0.42, 0.28] },
+  { name: 'barrel', position: [0.51, 0.37, -0.43], size: [0.51, 0.75, 0.51], albedo: [0.32, 0.38, 0.34] },
+  { name: 'panel', position: [0.09, 0.51, 0.94], size: [1.19, 1.02, 0.1], albedo: [0.48, 0.48, 0.5] },
+  { name: 'block', position: [1.05, 0.2, 0.6], size: [0.41, 0.41, 0.41], albedo: [0.6, 0.3, 0.26] },
 ];
 
 /** The bake the after-panel refuses: irradiance folded into the albedo. */
@@ -58,9 +58,9 @@ function bakedShade(
   const dy = lightAt[1] - y;
   const dz = lightAt[2] - z;
   const distance = Math.hypot(dx, dy, dz) || 1;
-  const falloff = Math.min(1, 1.1 / (distance * distance));
+  const falloff = Math.min(1, 2.6 / (distance * distance));
   const lambert = Math.max(0.12, dy / distance);
-  const irradiance = 0.16 + falloff * lambert * 1.5;
+  const irradiance = 0.22 + falloff * lambert * 1.5;
   return [albedo[0] * irradiance, albedo[1] * irradiance, albedo[2] * irradiance];
 }
 
@@ -69,9 +69,21 @@ export function createDemo(context: DemoContext): Demo {
   const root = new THREE.Group();
   root.name = 'source-43-lighting-as-parameter';
   const { before, after } = beforeAfterPanels(THREE, 3.0);
+  // Ground boards: contact read and frame area under both panels alike.
+  for (const panel of [before, after]) {
+    const board = new THREE.Mesh(
+      new THREE.BoxGeometry(2.6, 0.1, 2.6),
+      // Mid slate, distinct from the host backdrop — a stage that merges with
+      // the background reads as void and inflates the empty-frame share.
+      new THREE.MeshStandardMaterial({ color: 0x3d454f, roughness: 0.95 }),
+    );
+    board.position.y = -0.05;
+    board.name = 'stage-board';
+    panel.add(board);
+  }
 
   // The light position the BEFORE panel was baked at, once, and forever.
-  const BAKE_POSITION: readonly [number, number, number] = [-0.9, 1.1, 0.6];
+  const BAKE_POSITION: readonly [number, number, number] = [-1.53, 1.87, 1.02];
 
   // BEFORE — one merged mesh. The props are not separable: they share a single
   // geometry and their lighting is vertex paint.
@@ -80,7 +92,11 @@ export function createDemo(context: DemoContext): Demo {
     const geometry = new THREE.BoxGeometry(prop.size[0], prop.size[1], prop.size[2], 2, 2, 2);
     geometry.translate(prop.position[0], prop.position[1], prop.position[2]);
     paintVertices(THREE, geometry, (x, y, z) => bakedShade(prop.albedo, x, y, z, BAKE_POSITION));
-    mergedParts.push(geometry);
+    // BoxGeometry is indexed; a manual attribute concat that drops the index
+    // renders soup, not boxes. De-index first — still one mesh, one draw.
+    const soup = geometry.toNonIndexed();
+    geometry.dispose();
+    mergedParts.push(soup);
   }
   // Merge by concatenating attributes: one mesh, one draw, nothing addressable.
   let mergedVertexCount = 0;
@@ -117,6 +133,9 @@ export function createDemo(context: DemoContext): Demo {
     new THREE.MeshBasicMaterial({ vertexColors: true }),
   );
   mergedMesh.name = 'baked-merged-reconstruction';
+  // Never culled: a hand-merged buffer must not depend on an auto-computed
+  // bound to stay in frame, and the host fits to visible geometry.
+  mergedMesh.frustumCulled = false;
   before.add(mergedMesh);
 
   // AFTER — separable objects with plain albedo, lit by a parameter.
@@ -135,7 +154,7 @@ export function createDemo(context: DemoContext): Demo {
     after.add(mesh);
   }
 
-  const light = new THREE.PointLight(0xfff0d8, 2.2, 4.5, 2);
+  const light = new THREE.PointLight(0xfff0d8, 3.2, 8, 2);
   light.name = 'reconstructed-key-light';
   light.position.set(BAKE_POSITION[0], BAKE_POSITION[1], BAKE_POSITION[2]);
   after.add(light);
@@ -150,7 +169,7 @@ export function createDemo(context: DemoContext): Demo {
       // Move the parameter. Only one panel can follow it.
       elapsed += dt;
       const angle = elapsed * 0.7;
-      light.position.set(Math.cos(angle) * 1.0, 1.1, Math.sin(angle) * 0.9);
+      light.position.set(Math.cos(angle) * 1.7, 1.87, Math.sin(angle) * 1.53);
     },
     dispose: () => disposeTree(root),
     metadata: {

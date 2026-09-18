@@ -30,9 +30,9 @@ import { createRng } from './rng';
 import { disposeGroup, type Demo, type DemoContext } from './types';
 
 const ITEM_COUNT = 8;
-const CARD_WIDTH = 1.0;
-const CARD_HEIGHT = 0.64;
-const CARD_GAP = 0.34;
+const CARD_WIDTH = 1.15;
+const CARD_HEIGHT = 1.0;
+const CARD_GAP = 0.2;
 const TAU = Math.PI * 2;
 
 /** Ring radius derived from item count, not hand-tuned: R = N (W + GAP) / TAU. */
@@ -163,15 +163,19 @@ export function createDemo(context: DemoContext): Demo {
   }
 
   // Two swatches: what a naive extractor would ship, and what the clamp guarantees.
-  const swatchGeometry = new THREE.PlaneGeometry(0.5, 0.3);
+  const swatchGeometry = new THREE.PlaneGeometry(0.85, 0.5);
   const rawSwatchMaterial = new THREE.MeshBasicMaterial({ toneMapped: false });
   const clampedSwatchMaterial = new THREE.MeshBasicMaterial({ toneMapped: false });
   const rawSwatch = new THREE.Mesh(swatchGeometry, rawSwatchMaterial);
   const clampedSwatch = new THREE.Mesh(swatchGeometry, clampedSwatchMaterial);
   rawSwatch.name = 'accent-raw-unclamped';
   clampedSwatch.name = 'accent-clamped';
-  rawSwatch.position.set(-0.32, 0.35, RING_RADIUS + 0.9);
-  clampedSwatch.position.set(0.32, 0.35, RING_RADIUS + 0.9);
+  // Tucked inside the ring's own bounds (the ring sets the frame): out front
+  // they stretched the depth extent and shrank everything else on stage.
+  rawSwatch.position.set(-0.75, 0.35, 1.55);
+  clampedSwatch.position.set(0.75, 0.35, 1.55);
+  rawSwatch.rotation.x = -0.35;
+  clampedSwatch.rotation.x = -0.35;
   root.add(rawSwatch, clampedSwatch);
 
   // The focus rail: one element whose colour is the live accent, standing in for the
@@ -181,6 +185,26 @@ export function createDemo(context: DemoContext): Demo {
   rail.name = 'focus-rail';
   rail.position.set(0, 1.2 - CARD_HEIGHT * 0.62, RING_RADIUS + 0.02);
   root.add(rail);
+  // The focus totem: the ring's hollow middle is dead pixels under the framing
+  // gate, so the focus slot is made physical — a hex pillar in the live accent
+  // colour carrying the focused cover as a hero plate. Menus ship a detail
+  // panel for the focused item; this is that panel, and it is what demonstrates
+  // focus rather than a caption saying so.
+  const totemGeometry = new THREE.CylinderGeometry(0.8, 0.9, 1.6, 6);
+  const totemMaterial = new THREE.MeshStandardMaterial({ roughness: 0.6, flatShading: true });
+  const totem = new THREE.Mesh(totemGeometry, totemMaterial);
+  totem.name = 'focus-totem';
+  // Slim enough to clear the card ring (inner card edge sits at R - W/2):
+  // the previous radius swallowed the cards it was meant to frame.
+  totem.position.set(0, 0.9, 0);
+  root.add(totem);
+  const heroGeometry = new THREE.PlaneGeometry(1.5, 0.9);
+  const heroMaterial = new THREE.MeshBasicMaterial({ toneMapped: false, side: THREE.DoubleSide });
+  const hero = new THREE.Mesh(heroGeometry, heroMaterial);
+  hero.name = 'focus-hero';
+  hero.position.set(0, 1.95, 0);
+  hero.rotation.y = Math.PI / 4;
+  root.add(hero);
 
   let focusIndex = 0;
   let committedIndex = -1;
@@ -197,6 +221,9 @@ export function createDemo(context: DemoContext): Demo {
     rawSwatchMaterial.color.setRGB(raw[0], raw[1], raw[2]);
     clampedSwatchMaterial.color.setRGB(clamped[0], clamped[1], clamped[2]);
     railMaterial.color.setRGB(clamped[0], clamped[1], clamped[2]);
+    totemMaterial.color.setRGB(clamped[0], clamped[1], clamped[2]);
+    heroMaterial.map = textures[index];
+    heroMaterial.needsUpdate = true;
   }
   applyAccent(focusIndex);
 
@@ -253,7 +280,8 @@ export function createDemo(context: DemoContext): Demo {
         + 'slot, and only the focus slot launches - and a content-derived accent colour scored '
         + 'by saturation against distance from mid-lightness, then clamped into a legible '
         + 'saturation/lightness band with a fixed fallback for near-neutral art. The two '
-        + 'swatches show the unclamped extraction beside the clamped one.',
+        + 'swatches show the unclamped extraction beside the clamped one. The focus totem fills '
+        + 'the ring with the live accent and the focused cover, as the focused-item detail panel.',
       adaptation: 'adapted',
       sources: [
         'https://amix-design.com/tl/web-g-games/',

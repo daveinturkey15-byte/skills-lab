@@ -70,7 +70,7 @@ export const manifest: ManifestEntry[] = [
       'https://github.com/squall01337/abyssal-ocean',
     ],
     limitation:
-      'One CPU cascade at N=32, not three GPU cascades at 512^2; no reflection, refraction, caustics or buoyancy.',
+      'One CPU cascade at N=32, not three GPU cascades at 512^2; no reflection, refraction, caustics or buoyancy. Display only: wave-height scale and foam response gain are raised so N=32 relief reads on stage; spectrum, threshold and test unchanged.',
     createDemo: createSource02,
   },
   {
@@ -117,7 +117,7 @@ export const manifest: ManifestEntry[] = [
     adaptation: 'adapted',
     sources: ['https://github.com/img2threejs/img2threejs'],
     limitation:
-      'No reference image, vision probe or upstream material gate was run; the spec was authored by hand to the documented shape.',
+      'No reference image, vision probe or upstream material gate was run; the spec was authored by hand to the documented shape. Halves staged close and paint lifted for stage legibility; spec dimensions, sockets and gate unchanged.',
     createDemo: createSource06,
   },
   {
@@ -180,11 +180,11 @@ export const manifest: ManifestEntry[] = [
     sourceId: 11,
     title: 'Scaffold in code, generate the hero asset',
     method:
-      'Separation of concerns plus the harmonisation step the post omits: measure the hero asset bounds, normalise scale, re-seat the pivot on the contact plane and align facing to the world verb axis.',
+      'Separation of concerns plus the harmonisation step the post omits: measure the hero asset bounds, normalise scale, re-seat the pivot on the contact plane and align facing to the world verb axis. The before half shares the after half’s scale so the pair fits one frame; it sits sunk and sideways.',
     adaptation: 'adapted',
     sources: ['https://x.com/filiksyos/status/2089297181026951425'],
     limitation:
-      'Opinion post with no repository and no licence. No AI generator was invoked; the hero stand-in is locally authored with a deliberately wrong scale, pivot and facing so the harmonisation step has something real to fix.',
+      'Opinion post with no repository and no licence. No AI generator was invoked; the hero stand-in is locally authored with a deliberately wrong scale, pivot and facing so the harmonisation step has something real to fix. Before half scale-normalised by the same measured factor; pivot and facing untouched.',
     createDemo: createSource11,
   },
   {

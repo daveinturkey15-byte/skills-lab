@@ -50,36 +50,71 @@ export {
 } from './passability';
 export type { Obstacle, Station, SweepResult } from './passability';
 
-const LENGTH = 9.0;
+const LENGTH = 6.2;
 const WIDTH = 2.2;
 
 export function createDemo(context: DemoContext): Demo {
   const { THREE } = context;
   const root = new THREE.Group();
   root.name = 'source-50-mechanical-passability-sweep';
-  const { before, after } = beforeAfterPanels(THREE, 3.6);
+  const { before, after } = beforeAfterPanels(THREE, 3.0);
 
   const defective = sweepCorridor(LENGTH, WIDTH, DEFECTIVE_OBSTACLES);
   const cleared = sweepCorridor(LENGTH, WIDTH, CLEARED_OBSTACLES);
 
-  const floorGeometry = new THREE.PlaneGeometry(WIDTH, LENGTH, 1, 1);
-  floorGeometry.rotateX(-Math.PI / 2);
-  const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x3a3d40, roughness: 0.96 });
-  const obstacleGeometry = new THREE.CylinderGeometry(1, 1, 0.4, 14);
+  // One floor per panel: the sweep's answer is washed into its vertex colours,
+  // and the two panels disagree, so the geometry cannot be shared.
+  const floorMaterial = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.96 });
+  const obstacleGeometry = new THREE.CylinderGeometry(1, 1, 0.75, 14);
   const obstacleMaterial = new THREE.MeshStandardMaterial({ color: 0x6b5f4e, roughness: 0.88 });
   const stationGeometry = new THREE.CircleGeometry(PLAYER_RADIUS, 16);
   stationGeometry.rotateX(-Math.PI / 2);
+  const curbGeometry = new THREE.BoxGeometry(0.1, 0.14, LENGTH);
+  const curbMaterial = new THREE.MeshStandardMaterial({ color: 0x4a4e52, roughness: 0.9 });
 
   function build(
     group: import('three').Group,
     obstacles: readonly Obstacle[],
     result: SweepResult,
   ): void {
-    group.add(new THREE.Mesh(floorGeometry, floorMaterial));
+    const floorGeometry = new THREE.PlaneGeometry(WIDTH, LENGTH, 1, 24);
+    floorGeometry.rotateX(-Math.PI / 2);
+    const floorPositions = floorGeometry.getAttribute('position');
+    const wash = new Float32Array(floorPositions.count * 3);
+    const baseWash = new THREE.Color(0x3a3d40);
+    const passWash = new THREE.Color(0x2f8f5b);
+    const blockWash = new THREE.Color(0xc0392b);
+    const mixed = new THREE.Color();
+    for (let v = 0; v < floorPositions.count; v += 1) {
+      const vz = floorPositions.getZ(v);
+      let nearestPassable = true;
+      let nearestDist = Number.POSITIVE_INFINITY;
+      for (const station of result.stations) {
+        const d = Math.abs(station.z - vz);
+        if (d < nearestDist) {
+          nearestDist = d;
+          nearestPassable = station.passable;
+        }
+      }
+      mixed.copy(baseWash).lerp(nearestPassable ? passWash : blockWash, 0.38);
+      wash[v * 3] = mixed.r;
+      wash[v * 3 + 1] = mixed.g;
+      wash[v * 3 + 2] = mixed.b;
+    }
+    floorGeometry.setAttribute('color', new THREE.BufferAttribute(wash, 3));
+    const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.name = 'floor-answer-wash';
+    group.add(floor);
+    for (const side of [-1, 1]) {
+      const curb = new THREE.Mesh(curbGeometry, curbMaterial);
+      curb.position.set(side * (WIDTH / 2 + 0.05), 0.07, 0);
+      curb.name = 'edging';
+      group.add(curb);
+    }
     for (const obstacle of obstacles) {
       const mesh = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
       mesh.scale.set(obstacle.radius, 1, obstacle.radius);
-      mesh.position.set(obstacle.x, 0.2, obstacle.z);
+      mesh.position.set(obstacle.x, 0.375, obstacle.z);
       mesh.name = 'collider';
       group.add(mesh);
     }
@@ -101,7 +136,7 @@ export function createDemo(context: DemoContext): Demo {
         stationGeometry,
         station.passable ? passableMaterial : blockedMaterial,
       );
-      disc.position.set(0, 0.012, station.z);
+      disc.position.set(0, 0.02, station.z);
       disc.name = station.passable ? 'station-passable' : 'station-blocked';
       group.add(disc);
     }
@@ -123,7 +158,8 @@ export function createDemo(context: DemoContext): Demo {
         + 'width, finds the widest continuous gap, and passes only if a disc of the player radius '
         + 'fits. Runs of blocked stations are collapsed into regions, and the companion script '
         + 'exits non-zero when any station is blocked. Counts are reported before timings, '
-        + 'deliberately, because headless wall-clock on a shared machine drifts run to run.',
+        + 'deliberately, because headless wall-clock on a shared machine drifts run to run. The '
+        + 'floor carries the same verdict as a wash, so the sweep reads at a glance.',
       adaptation: 'adapted',
       sources: [
         'https://github.com/PhiloLabs/fable51-worlds',

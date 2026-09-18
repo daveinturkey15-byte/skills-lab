@@ -42,17 +42,30 @@ interface Half {
   group: THREE_NS.Group;
   mesh: THREE_NS.Mesh;
   material: THREE_NS.MeshStandardMaterial;
+  disc: THREE_NS.Mesh;
 }
 
 function buildHalf(THREE: ThreeNamespace, colour: number, name: string): Half {
   const group = new THREE.Group();
   group.name = name;
-  const geometry = new THREE.TorusKnotGeometry(0.3, 0.1, 72, 10);
+  // Sized to own the frame once the host fits the pair: the knot's outer
+  // radius (~0.85) nearly spans its half, instead of rattling in it.
+  const geometry = new THREE.TorusKnotGeometry(0.62, 0.2, 96, 12);
   const material = new THREE.MeshStandardMaterial({ color: colour, roughness: 0.35, metalness: 0.25 });
   const mesh = new THREE.Mesh(geometry, material);
-  mesh.position.y = 0.5;
+  mesh.position.y = 0.85;
   group.add(mesh);
-  return { group, mesh, material };
+  // Ground disc: neutral stage shared by both halves (not part of the defect
+  // story, which concerns the knot). Gives the pair area and a contact read.
+  const disc = new THREE.Mesh(
+    new THREE.CircleGeometry(1.15, 40),
+    new THREE.MeshStandardMaterial({ color: new THREE.Color(colour).multiplyScalar(0.35), roughness: 0.9 }),
+  );
+  disc.rotation.x = -Math.PI / 2;
+  disc.position.y = 0.01;
+  disc.name = 'stage-disc';
+  group.add(disc);
+  return { group, mesh, material, disc };
 }
 
 export function createDemo(context: DemoContext): Demo {
@@ -63,9 +76,12 @@ export function createDemo(context: DemoContext): Demo {
   const clean = buildHalf(THREE, 0x3b8a5a, 'after:hoisted-scratch-and-registered-disposal');
 
   // The AFTER half registers everything it creates. The BEFORE half deliberately
-  // does not, which is the defect.
+  // registers only its neutral stage disc — the KNOT (per-frame allocation and
+  // geometry swaps) is the defect, and it stays untracked.
   registry.track(clean.mesh.geometry as THREE_NS.BufferGeometry);
   registry.track(clean.material);
+  registry.track(clean.disc.geometry as THREE_NS.BufferGeometry);
+  registry.track(clean.disc.material as THREE_NS.Material);
 
   const root = sideBySide(THREE, registry, leaky.group, clean.group, 2.0);
   root.name = 'source-09:frame-loop-and-disposal-audit';
@@ -96,7 +112,7 @@ export function createDemo(context: DemoContext): Demo {
       'millionco/react-doctor@e183c3519010599d929ed14d99a18bf1f8f8a44c skills/improve-threejs/SKILL.md:10,34-48,56-67,93-103 (Modified MIT)',
     ],
     limitation:
-      'The upstream skill was not installed and `npx react-doctor` was not run: installing executes third-party code, which is an owner decision, and the Modified MIT carve-outs restrict use as training/evaluation data. The rubric rows that require rendered evidence - z-fighting, shadow acne, colour space, resize/DPR - stay OPEN in this lane because no browser or GPU job runs here. Our own restated scanner covers the static half only.',
+      'The upstream skill was not installed and `npx react-doctor` was not run: installing executes third-party code, which is an owner decision, and the Modified MIT carve-outs restrict use as training/evaluation data. This scene demonstrates only the allocation/disposal half with live counters; the rubric rows needing rendered evidence - z-fighting, shadow acne, colour space, resize/DPR - stay OPEN. Our own restated scanner covers the static half only.',
     counters: {
       triangles: countTriangles(root),
       drawables: countDrawables(root),
@@ -119,7 +135,7 @@ export function createDemo(context: DemoContext): Demo {
       leaky.material.color.copy(leakyBase).lerp(tint, 0.5);
       if (Math.floor(time * 2) % 30 === 0) {
         // A geometry rebuilt periodically and never disposed: the unbounded half.
-        const replacement = new THREE.TorusKnotGeometry(0.3, 0.1, 72, 10);
+        const replacement = new THREE.TorusKnotGeometry(0.62, 0.2, 96, 12);
         abandoned.push(replacement);
         leaky.mesh.geometry = replacement;
         leakedResources += 1;
@@ -141,6 +157,8 @@ export function createDemo(context: DemoContext): Demo {
       abandoned.length = 0;
       (leaky.mesh.geometry as THREE_NS.BufferGeometry).dispose();
       leaky.material.dispose();
+      (leaky.disc.geometry as THREE_NS.BufferGeometry).dispose();
+      (leaky.disc.material as THREE_NS.Material).dispose();
       registry.run();
     },
     metadata,

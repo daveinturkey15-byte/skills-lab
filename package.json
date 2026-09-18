@@ -10,7 +10,8 @@
     "build:nocheck": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "check": "tsc --noEmit",
-    "verify": "node scripts/verify-catalog.mjs"
+    "verify": "node scripts/verify-catalog.mjs",
+    "qa:publish": "node -e \"const fs=require('node:fs');const src='qa/captures/report.json';const out='public/assets/skills-lab/captures';if(!fs.existsSync(src)){console.log('qa:publish: no capture run to publish — site builds without evidence.');process.exit(0);}fs.mkdirSync(out,{recursive:true});fs.copyFileSync(src,out+'/report.json');let n=1;for(const f of fs.readdirSync('qa/captures')){if(f.endsWith('.png')){fs.copyFileSync('qa/captures/'+f,out+'/'+f);n++;}}console.log('qa:publish: published '+n+' files to '+out+'/');\""
   },
   "dependencies": {
     "three": "0.185.1"

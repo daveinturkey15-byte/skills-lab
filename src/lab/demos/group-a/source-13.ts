@@ -203,9 +203,27 @@ export function createDemo(context: DemoContext): Demo {
   const final = buildArtefact(THREE, registry, result.accepted?.features ?? [], context.seed);
   first.name = 'before:round-0-artefact';
   final.name = result.accepted ? 'after:accepted-artefact' : 'after:not-accepted';
+  // Presentation scale only: the loop judges FEATURES, but the round-0 artefact
+  // is a 13 cm box the host fits into invisibility. Both halves scale equally,
+  // so the before/after size difference (the readable-scale feature) is kept.
+  first.scale.setScalar(2.6);
+  final.scale.setScalar(2.6);
+  for (const half of [first, final]) {
+    const disc = new THREE.Mesh(
+      new THREE.CircleGeometry(0.95, 40),
+      // Light stage against a dark host: the judged artefact keeps its earned
+      // colours, but its silhouette must read against something.
+      new THREE.MeshStandardMaterial({ color: 0x8b95a1, roughness: 0.95 }),
+    );
+    disc.rotation.x = -Math.PI / 2;
+    disc.position.y = 0.005;
+    disc.name = 'stage-disc';
+    half.add(disc);
+    registry.track(disc.geometry);
+    registry.track(disc.material);
+  }
 
-  const root = sideBySide(THREE, registry, first, final, 1.6);
-  root.name = 'source-13:gauntlet-loop';
+  const root = sideBySide(THREE, registry, first, final, 2.2);
   root.userData.gauntlet = { log: result.log, frozen: result.frozen, bar: BAR };
 
   const metadata = {

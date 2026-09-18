@@ -129,19 +129,27 @@ export function worstVelocityJump(clip: Clip): number {
  *  stand-in rig needs; a real retarget also needs rest-pose correspondence. */
 function buildRig(THREE: ThreeNamespace, registry: DisposalRegistry, _joints: number, tint: number) {
   const group = new THREE.Group();
-  const boneGeometry = registry.track(new THREE.BoxGeometry(0.05, 0.14, 0.05));
+  const boneGeometry = registry.track(new THREE.BoxGeometry(0.12, 0.22, 0.12));
   const material = registry.track(new THREE.MeshStandardMaterial({ color: tint, roughness: 0.6 }));
+  // One shared joint marker: the retarget maps source joints onto OUR pivots,
+  // so the pivots themselves are drawn. Twelve beads keep the chain readable
+  // at the host's fit distance; without them it is a thin stick that the
+  // framing gate cannot see.
+  const jointGeometry = registry.track(new THREE.SphereGeometry(0.095, 10, 8));
   const chain: THREE_NS.Object3D[] = [];
   let parent: THREE_NS.Object3D = group;
   // One visible chain of 12 links driven by the first 12 source joints; the
   // remaining channels are carried but not visualised.
   for (let i = 0; i < 12; i += 1) {
     const pivot = new THREE.Group();
-    pivot.position.y = i === 0 ? 0.1 : 0.15;
+    pivot.position.y = i === 0 ? 0.16 : 0.22;
     parent.add(pivot);
     const mesh = new THREE.Mesh(boneGeometry, material);
-    mesh.position.y = 0.075;
+    mesh.position.y = 0.11;
     pivot.add(mesh);
+    const bead = new THREE.Mesh(jointGeometry, material);
+    bead.name = `joint-${i}`;
+    pivot.add(bead);
     chain.push(pivot);
     parent = pivot;
   }

@@ -1,0 +1,723 @@
+{
+  "generatedAt": "2026-09-17",
+  "method": "Lane R deep sweep, 2026-09-17 evening. Read in full: all 62 rows of public/assets/skills-lab/source-catalog.json (wave 3); all four lab group manifests and src/lab/runtime.ts; qa/captures/report.json (54-demo WebGPU snapshot, capturedAt 2026-09-17T19:25:59.739Z, adapter nvidia/blackwell); all five intake research reports under skills-lab-intake-20260917/research/ (repos-and-assets, faces-into-games, mixamo-rigging-addendum, weather-clouds-grade, ue5-agr-c2m); full bodies of all 22 Skills/game-development skills plus the six catalogue-mapped skills that live outside that folder (threejs-procedural-vegetation, threejs-frame-loop-audit, realtime-browser-qa, unreal-content-pipeline, visual-gauntlet-loop, local-video-generation). Did not do: re-fetch any external URL (catalogue evidence dates stand as recorded); run or re-run the capture harness (the report rotates as build lanes iterate — verdicts quoted here are from the 19:25:59Z snapshot and will age); re-verify the capture gate's own thresholds. Known limits of this analysis: the gate measures framing, not technique correctness, so a blocking verdict does not indict the underlying method; qa report.json's readout field is defective (one constant string on all 54 rows) and its four group-d rows carry sourceId null, so verdict joins for those four go by slug; the byte-exact factory counts below were taken from the manifest imports and src/lab/runtime.ts, not from a build.",
+  "gaps": [
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 1,
+      "summary": "Catalogue records source 1's demo as implemented, but the 19:25Z WebGPU capture returns UNFRAMED (91% flat tone).",
+      "detail": "modalToneShare 0.91, edgeDensity 0.0195, tier blocking. The gate measures framing, not technique correctness; closing this is a framing repair under the 3-cycle budget, not a rewrite.",
+      "evidence": "source-catalog.json sources[sourceId=1].demo.status='implemented'; qa/captures/report.json results[sourceId=1].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 2,
+      "summary": "Catalogue records source 2's demo as implemented, but the 19:25Z capture returns UNFRAMED (85% flat tone).",
+      "detail": "modalToneShare 0.85, edgeDensity 0.0301, blocking. Framing repair pass needed.",
+      "evidence": "source-catalog.json sources[sourceId=2].demo.status='implemented'; qa/captures/report.json results[sourceId=2].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 3,
+      "summary": "Source 3 (comparator) is catalogued with a built demo, but its 19:25Z capture is UNFRAMED (82% flat tone).",
+      "detail": "The demo is explicitly our own formulation of a comparator list, so nothing upstream is indicted — but as shipped it fails the framing gate.",
+      "evidence": "source-catalog.json sources[sourceId=3].demo.status='implemented', status='comparator'; qa/captures/report.json results[sourceId=3].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 4,
+      "summary": "Catalogue records source 4's demo as implemented, but the 19:25Z capture is UNFRAMED (83% flat tone).",
+      "detail": "modalToneShare 0.83, edgeDensity 0.0287, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=4].demo.status='implemented'; qa/captures/report.json results[sourceId=4].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 5,
+      "summary": "Source 5's licence-blocked row still claims a built demo, and its 19:25Z capture is UNFRAMED (98% flat tone).",
+      "detail": "The demo is the licence-neutral chroma-key half only (no H3 model or output used); it currently draws almost nothing resolvable.",
+      "evidence": "source-catalog.json sources[sourceId=5].demo.status='implemented', status='blocked'; qa/captures/report.json results[sourceId=5].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 6,
+      "summary": "Catalogue records source 6's demo as implemented, but the 19:25Z capture is UNFRAMED (96% flat tone).",
+      "detail": "modalToneShare 0.96, edgeDensity 0.0164, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=6].demo.status='implemented'; qa/captures/report.json results[sourceId=6].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 7,
+      "summary": "Catalogue records source 7's demo as implemented, but the 19:25Z capture is UNFRAMED (81% flat tone).",
+      "detail": "modalToneShare 0.81, edgeDensity 0.0856 — the highest edge density of group A; likely one framing fix from passing.",
+      "evidence": "source-catalog.json sources[sourceId=7].demo.status='implemented'; qa/captures/report.json results[sourceId=7].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 8,
+      "summary": "Catalogue records source 8's demo as implemented, but the 19:25Z capture is UNFRAMED (93% flat tone).",
+      "detail": "modalToneShare 0.93, edgeDensity 0.0689, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=8].demo.status='implemented'; qa/captures/report.json results[sourceId=8].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 9,
+      "summary": "Catalogue records source 9's demo as implemented, but the 19:25Z capture is UNFRAMED (92% flat tone).",
+      "detail": "modalToneShare 0.92, edgeDensity 0.0439, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=9].demo.status='implemented'; qa/captures/report.json results[sourceId=9].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 10,
+      "summary": "Catalogue records source 10's demo as implemented, but the 19:25Z capture is UNFRAMED (95% flat tone).",
+      "detail": "modalToneShare 0.95, edgeDensity 0.0235, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=10].demo.status='implemented'; qa/captures/report.json results[sourceId=10].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 11,
+      "summary": "Catalogue records source 11's demo as implemented, but the 19:25Z capture is UNFRAMED (87% flat tone).",
+      "detail": "modalToneShare 0.87, edgeDensity 0.0144, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=11].demo.status='implemented'; qa/captures/report.json results[sourceId=11].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 12,
+      "summary": "Catalogue records source 12's demo as implemented, but the 19:25Z capture is UNFRAMED (98% flat tone).",
+      "detail": "modalToneShare 0.98, edgeDensity 0.0101, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=12].demo.status='implemented'; qa/captures/report.json results[sourceId=12].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 13,
+      "summary": "Catalogue records source 13's demo as implemented, but the 19:25Z capture is UNFRAMED (97% flat tone).",
+      "detail": "modalToneShare 0.97, edgeDensity 0.0128, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=13].demo.status='implemented'; qa/captures/report.json results[sourceId=13].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 14,
+      "summary": "Source 14 (comparator, no licence, no source) is catalogued with a built demo whose 19:25Z capture is UNFRAMED (97% flat tone).",
+      "detail": "Comparator-only row with empty skillMappings; the demo currently fails the gate and no skill consumes it — candidate for stop-citing or comparator-badge-only rendering.",
+      "evidence": "source-catalog.json sources[sourceId=14].demo.status='implemented', skillMappings=[]; qa/captures/report.json results[sourceId=14].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 16,
+      "summary": "Catalogue records source 16's demo as implemented, but the 19:25Z capture is UNFRAMED (97% flat tone).",
+      "detail": "modalToneShare 0.97, edgeDensity 0.0203, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=16].demo.status='implemented'; qa/captures/report.json results[sourceId=16].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 17,
+      "summary": "Source 17 (comparator, method never determined) is catalogued with a built demo whose 19:25Z capture is UNFRAMED (78% flat tone).",
+      "detail": "Edge density 0.0760 suggests real content; likely loose framing rather than absence.",
+      "evidence": "source-catalog.json sources[sourceId=17].demo.status='implemented', status='comparator'; qa/captures/report.json results[sourceId=17].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 18,
+      "summary": "Catalogue records source 18's demo as implemented, but the 19:25Z capture is UNFRAMED (78% flat tone).",
+      "detail": "modalToneShare 0.78, edgeDensity 0.0745 — OVERNIGHT's own calibration example of a working demo that sits in empty space; the LOOSE/UNFRAMED boundary case.",
+      "evidence": "source-catalog.json sources[sourceId=18].demo.status='implemented'; qa/captures/report.json results[sourceId=18].verdict; OVERNIGHT.md section 7 calibration record"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 19,
+      "summary": "Catalogue records source 19's demo as implemented, but the 19:25Z capture is UNFRAMED (89% flat tone).",
+      "detail": "modalToneShare 0.89, edgeDensity 0.043, blocking. The alias entry 21 captures the identical frame and must never be counted separately.",
+      "evidence": "source-catalog.json sources[sourceId=19].demo.status='implemented', sources[sourceId=21] alias; qa/captures/report.json results[sourceId=19].verdict and results[sourceId=21] identical metrics, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 20,
+      "summary": "Catalogue records source 20's demo as delivered, but the 19:25Z capture is UNFRAMED (87% flat tone).",
+      "detail": "modalToneShare 0.87, edgeDensity 0.0213, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=20].demo.status='delivered'; qa/captures/report.json results[sourceId=20].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "medium",
+      "sourceId": 21,
+      "summary": "Alias row 21 is counted inside the catalogue's 29 demo-built rows but shares source 19's factory and frame by design.",
+      "detail": "One of the 29 is not a distinct technique; any Atlas count must dedupe the alias or it overstates coverage by one.",
+      "evidence": "source-catalog.json sources[sourceId=21].status='alias' with demo entrypoint group-b/source-19.ts; src/lab/demos/group-b/index.ts createSource21Alias delegating to createSource19"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 23,
+      "summary": "Catalogue records source 23's demo as implemented, but the 19:25Z capture is UNFRAMED (83% flat tone).",
+      "detail": "modalToneShare 0.83, edgeDensity 0.0162, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=23].demo.status='implemented'; qa/captures/report.json results[sourceId=23].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 26,
+      "summary": "Catalogue records source 26's demo as implemented, but the 19:25Z capture is UNFRAMED (94% flat tone).",
+      "detail": "modalToneShare 0.94, edgeDensity 0.0399, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=26].demo.status='implemented'; qa/captures/report.json results[sourceId=26].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 27,
+      "summary": "Catalogue records source 27's demo as delivered, but the 19:25Z capture is UNFRAMED (94% flat tone).",
+      "detail": "modalToneShare 0.94, edgeDensity 0.0076, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=27].demo.status='delivered'; qa/captures/report.json results[sourceId=27].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 28,
+      "summary": "Catalogue records source 28's demo as delivered, but the 19:25Z capture is UNFRAMED (87% flat tone).",
+      "detail": "modalToneShare 0.87, edgeDensity 0.0458, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=28].demo.status='delivered'; qa/captures/report.json results[sourceId=28].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 29,
+      "summary": "Catalogue records source 29's demo as delivered, but the 19:25Z capture is UNFRAMED (83% flat tone).",
+      "detail": "modalToneShare 0.83, edgeDensity 0.1043 — the repo's highest edge density; closest UNFRAMED to the pass line.",
+      "evidence": "source-catalog.json sources[sourceId=29].demo.status='delivered'; qa/captures/report.json results[sourceId=29].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 31,
+      "summary": "Catalogue records source 31's demo as delivered, but the 19:25Z capture is UNFRAMED (93% flat tone).",
+      "detail": "modalToneShare 0.93, edgeDensity 0.0147, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=31].demo.status='delivered'; qa/captures/report.json results[sourceId=31].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 33,
+      "summary": "Source 33 is the ONLY catalogue demo-built row that passes the 19:25Z gate (DREW SOMETHING) — 28 of the 29 fail it.",
+      "detail": "modalToneShare 0.57, edgeDensity 0.0327. This one passing row, not the catalogue's 29, is today's honest 'demo accepted' count for the wave-1/2 rows.",
+      "evidence": "qa/captures/report.json results[sourceId=33].verdict='DREW SOMETHING'; jq census of source-catalog.json: demoBuilt=29 (23 implemented + 6 delivered)"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 34,
+      "summary": "Catalogue records source 34's demo as delivered, but the 19:25Z capture is UNFRAMED (94% flat tone).",
+      "detail": "modalToneShare 0.94, edgeDensity 0.026, blocking.",
+      "evidence": "source-catalog.json sources[sourceId=34].demo.status='delivered'; qa/captures/report.json results[sourceId=34].verdict, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 36,
+      "summary": "Source 36's catalogue demo is a Blender artefact, the lab ships a remesh exhibit with a factory, and its 19:25Z capture is UNFRAMED (67% flat tone).",
+      "detail": "The catalogue entrypoint still points at the old repo's .blend; the join to the actual exhibit needs re-staging alongside the framing fix.",
+      "evidence": "source-catalog.json sources[sourceId=36].demo.entrypoint='source-assets: docs/technique-lab/group-c/blender/source-36-remesh.blend'; src/lab/demos/group-c/source-36.ts createDemo; qa/captures/report.json results[sourceId=36].verdict"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 37,
+      "summary": "Source 37 has a real, PASSING demo (DREW SOMETHING) that the catalogue records as demo.status absent.",
+      "detail": "modalToneShare 0.56, edgeDensity 0.0384. The catalogue understates coverage here; the Z-up-to-Y-up boundary exhibit is accepted by the gate today.",
+      "evidence": "src/lab/demos/group-c/index.ts entry sourceId 37 with createSource37; qa/captures/report.json results[sourceId=37].verdict; source-catalog.json sources[sourceId=37].demo.status='absent'"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 39,
+      "summary": "Source 39 has a real, PASSING demo (DREW SOMETHING) that the catalogue records as demo.status absent.",
+      "detail": "modalToneShare 0.58, edgeDensity 0.0353. The editor-operation replay-log exhibit passes the gate; the catalogue has not been re-staged.",
+      "evidence": "src/lab/demos/group-c/index.ts entry sourceId 39 with createSource39; qa/captures/report.json results[sourceId=39].verdict; source-catalog.json sources[sourceId=39].demo.status='absent'"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 42,
+      "summary": "Source 42 has a real, PASSING demo (DREW SOMETHING) that the catalogue records as demo.status absent.",
+      "detail": "modalToneShare 0.48, edgeDensity 0.0645 — the best frame in the whole capture. The CGA shape-grammar exhibit is accepted; the catalogue still says absent.",
+      "evidence": "src/lab/demos/group-c/index.ts entry sourceId 42 with createSource42; qa/captures/report.json results[sourceId=42].verdict; source-catalog.json sources[sourceId=42].demo.status='absent'"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 47,
+      "summary": "Source 47 has a real, PASSING demo (DREW SOMETHING) that the catalogue records as demo.status absent.",
+      "detail": "modalToneShare 0.56, edgeDensity 0.111. The street-cell exhibit passes; catalogue re-staging would move it to the accepted set.",
+      "evidence": "src/lab/demos/group-c/index.ts entry sourceId 47 with createSource47; qa/captures/report.json results[sourceId=47].verdict; source-catalog.json sources[sourceId=47].demo.status='absent'"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "medium",
+      "summary": "Eleven further sources (35, 38, 40, 41, 43, 45, 46, 48, 49, 50, 51) have real createDemo factories in the lab while the catalogue still records demo.status absent.",
+      "detail": "The demo tree covers source ids 1-51; the catalogue's demoBuilt=29 snapshot predates tonight's group-C/D builds. Of these eleven, 46 captures FLAT and 49 BLANK; the rest are UNFRAMED at 19:25Z.",
+      "evidence": "src/lab/demos/group-c/index.ts and group-d/index.ts manifests with factories for those ids; source-catalog.json demo.status='absent' for each; qa/captures/report.json verdicts, capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 49,
+      "summary": "Source 49's demo captures BLANK (100% flat, zero edge density) — the only blank frame in the repo.",
+      "detail": "The critically-damped constraint exhibit draws nothing resolvable on the WebGPU adapter; it needs a real rebuild, not a framing nudge.",
+      "evidence": "qa/captures/report.json results[sourceId=49].verdict='BLANK', modalToneShare 1.0, edgeDensity 0; src/lab/demos/group-c/source-49.ts exists with createDemo"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 46,
+      "summary": "Source 46's Beer-Lambert/backscatter exhibit captures FLAT — and it is the only existing demonstration of the water skill's core physical stack.",
+      "detail": "threejs-webgpu-water's build order says steps 1-3 (absorption, backscatter, breaking foam) must ship and be measured before cascades; the one demo exercising them currently renders flat on the adapter.",
+      "evidence": "qa/captures/report.json results[sourceId=46].verdict='FLAT', modalToneShare 0.55; Skills/game-development/threejs-webgpu-water/SKILL.md 'The physical water stack' sections 1-3"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 57,
+      "summary": "The catalogue's only WGSL-compute route for water is pinned to three r186 and throws on this repository's 0.185.1 today.",
+      "detail": "cuda-webshader's three-bridge hard-throws unless THREE.REVISION==='186'; this repo pins 0.185.1. The method (two-scale JONSWAP, GPU-resident vertices) is transferable; the bridge module is not, without a 0.185.1 re-pin and interop re-test.",
+      "evidence": "source-catalog.json sources[sourceId=57].limitations; skills-lab-intake-20260917/research/repos-and-assets.md section 2a (verbatim throw at src/runtime/three-bridge.js); CONTEXT.md hard rule 4 (three pinned 0.185.1); node_modules/three/package.json version 0.185.1"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "high",
+      "sourceId": 5,
+      "summary": "The vault skill local-video-generation teaches a MiniMax H3 image-to-video workflow while catalogue row 5 records that model and its output as licence-excluded in the UK.",
+      "detail": "Row 5's blocker (MiniMax Community License excludes UK/EU/US/KR for the model AND its output, register re-verified 2026-08-26) directly conflicts with the skill's step-3 workflow instructions built around MiniMaxH3ReferenceToVideo. One of the two records is wrong and the discrepancy is load-bearing for any generated-animation lane.",
+      "evidence": "source-catalog.json sources[sourceId=5].blocker.reason; Skills/creative/local-video-generation/SKILL.md step 3 (MiniMaxH3ReferenceToVideo / MiniMaxH3ImageToVideo, references/minimax-h3-reference-workflow.md)"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "medium",
+      "sourceId": 16,
+      "summary": "game-animation-asset-pipeline still says register row 16's licences are 'not yet inspected', but catalogue row 16 records the licence files as read.",
+      "detail": "Catalogue row 16 evidence: kimodo.cpp Apache-2.0 read as file body; SOMA/G1 GGUF under NVIDIA Open Model License with no country exclusion; SMPL-X RP checkpoint internal-R&D and must NOT be used. The skill's Lane A2 hazard section contradicts this and would send a lane back to re-do the reading.",
+      "evidence": "Skills/game-development/game-animation-asset-pipeline/SKILL.md Lane A2 'Licence hazard' final bullet; source-catalog.json sources[sourceId=16].evidence[] licence observations at pin 92341f3"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "medium",
+      "sourceId": 15,
+      "summary": "threejs-rtx-runtime-route says row 15's sources have 'no pinned commit or an inspected licence yet', but catalogue row 15 pins threepp and reads its MIT licence.",
+      "detail": "Catalogue row 15 evidence entry 2 pins threepp @ 367ec39 with MIT LICENSE fetched (1,103 B) and records the port caveat. The skill's live-source contract is stale on this exact point.",
+      "evidence": "Skills/game-development/threejs-rtx-runtime-route/SKILL.md live-source contract bullet for row 15; source-catalog.json sources[sourceId=15].evidence[] pin 367ec39 + MIT licence observation"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "medium",
+      "summary": "qa/captures/report.json's readout field is the same constant string on all 54 rows, so it cannot serve as per-demo evidence.",
+      "detail": "Every result carries readout 'WebGPU Claude skill (dgreenheck)' regardless of the demo's own title field. The Atlas must join on sourceId/slug and ignore readout until the capture harness binds it per demo.",
+      "evidence": "qa/captures/report.json results[0..53].readout vs results[].title (jq census, capturedAt 2026-09-17T19:25:59.739Z)"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "medium",
+      "summary": "The four group-d rows in qa/captures/report.json carry sourceId null, so they cannot be joined to source 51 by id.",
+      "detail": "Their slugs are also null-prefixed. Any Gaps or Ladder view consuming report.json must fall back to slug matching for the cloud/shadow/grade/storm entries.",
+      "evidence": "qa/captures/report.json results with .sourceId==null and slugs 'null-cloud-shadows…', 'null-cumulus-congestus…', 'null-lift-gamma-gain…', 'null-one-storminess…', capturedAt 2026-09-17T19:25:59.739Z"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "low",
+      "sourceId": 51,
+      "summary": "group-d/index.ts's header claims the host dedupes manifest rows by sourceId keeping the first, which src/lab/runtime.ts does not do.",
+      "detail": "refreshGroups groups variants per sourceId and only rejects duplicate titles; all four source-51 demos are reachable as variants and all four were captured. The stale comment, not the host, is wrong.",
+      "evidence": "src/lab/demos/group-d/index.ts header comment lines 4-8; src/lab/runtime.ts refreshGroups lines 1716-1743 (variant push per entry, title-only duplicate guard)"
+    },
+    {
+      "kind": "contradiction",
+      "severity": "low",
+      "summary": "Tonight's repos-and-assets report states 'no rigging skill' in the catalogue, but Skills/game-development/generated-asset-rigging/ exists (SKILL.md mtime 18:24, before the report file's 18:59 write).",
+      "detail": "The skill fully covers SkinTokens/UniRig/Mixamo/Rigify/Tripo with licence readings. The report's local-check section was likely written earlier in the pass and not updated at final write; the report line needs a correction note, and the catalogue needs rows for the rigging-source family.",
+      "evidence": "skills-lab-intake-20260917/research/repos-and-assets.md 'Local starting position' table ('no rigging skill'); Skills/game-development/generated-asset-rigging/SKILL.md (mtime 2026-09-17T18:24:13Z vs report mtime 18:59:44Z)"
+    },
+    {
+      "kind": "skill-missing",
+      "severity": "medium",
+      "sourceId": 35,
+      "skill": "brief-driven-scene-production",
+      "summary": "Row 35 maps to a skill that does not exist anywhere in the vault, and its own catalogue note says 'skill authorship OPEN'.",
+      "detail": "The one-page-brief pattern (atmosphere pin, verb whitelist, all-procedural clause, departures appendix) has no carrier skill; the glob for the name across Skills/ returns nothing.",
+      "evidence": "source-catalog.json sources[sourceId=35].skillMappings[0] ('brief-driven-scene-production', 'HF-416; skill authorship OPEN'); Skills/** glob for brief-driven-scene-production/SKILL.md returns no files"
+    },
+    {
+      "kind": "skill-missing",
+      "severity": "medium",
+      "sourceId": 36,
+      "skill": "atomic-acres-production-asset-governance",
+      "summary": "Row 36's candidate mapping targets a skill that does not exist in the vault.",
+      "detail": "Either write the governance skill or re-point the mapping at the existing atomic-acres-asset-authoring, which already carries manifest/provenance conventions.",
+      "evidence": "source-catalog.json sources[sourceId=36].skillMappings[0] ('atomic-acres-production-asset-governance', candidate); Skills/** glob returns no such skill; Skills/game-development/atomic-acres-asset-authoring/SKILL.md pipeline overview"
+    },
+    {
+      "kind": "skill-missing",
+      "severity": "medium",
+      "sourceId": 40,
+      "skill": "atomic-acres-destructible-world",
+      "summary": "Row 40's candidate mapping targets a skill that does not exist in the vault.",
+      "detail": "The voxel structural-failure atom has no carrier; write it or drop the mapping rather than leaving a candidate that can never be verified.",
+      "evidence": "source-catalog.json sources[sourceId=40].skillMappings[0] ('atomic-acres-destructible-world', candidate); Skills/** glob returns no such skill"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "high",
+      "sourceId": 19,
+      "summary": "Source 19 (classic ray tracer) has a built demo and empty skillMappings, yet its method is already restated inside threejs-rtx-runtime-route — the mapping is simply not recorded.",
+      "detail": "The skill's live-source contract cites row 19 with its pin and the CC0-1.0 direct-adaptation exception. Closing this is a catalogue edit adding the mapping, not new work.",
+      "evidence": "source-catalog.json sources[sourceId=19].skillMappings=[]; Skills/game-development/threejs-rtx-runtime-route/SKILL.md live-source contract rows 15 and 19"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "high",
+      "sourceId": 20,
+      "summary": "Source 20 (armour/ballistics plate resolution) has a delivered demo and feeds no skill at all.",
+      "detail": "Frame-localised shell-vs-plate penetration is a gameplay-ready technique with no carrier. Write a ballistics/armour skill or accept that the demo is the only record.",
+      "evidence": "source-catalog.json sources[sourceId=20].skillMappings=[] with status='implemented', demo.status='delivered'"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 23,
+      "summary": "Source 23 (persistent terrain deformation state) has a built demo and feeds no skill.",
+      "detail": "The accumulate-never-clear pattern (ping-ponged float state, texel-snapped toroidal window, banked recovery) is a reusable technique with no carrier skill.",
+      "evidence": "source-catalog.json sources[sourceId=23].skillMappings=[] with status='implemented'"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 33,
+      "summary": "Source 33 (LOD by projected geometric error with hysteresis) has a built demo and feeds no skill.",
+      "detail": "The screen-space-error + neighbour-constraint method is the natural core of a terrain-streaming skill; today it exists only in the demo and the catalogue row.",
+      "evidence": "source-catalog.json sources[sourceId=33].skillMappings=[] with status='implemented'"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 34,
+      "summary": "Source 34 (subsystem-contract decomposition) has a delivered demo and feeds no skill; open-world-city-art-loop cites it in prose without a mapping.",
+      "detail": "The single-owner subsystem + typed event vocabulary pattern is referenced by the city skill's section 1 but recorded nowhere as a mapping.",
+      "evidence": "source-catalog.json sources[sourceId=34].skillMappings=[]; Skills/game-development/open-world-city-art-loop/SKILL.md section 1 ('already carried there and in technique-register rows 13 and 34')"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "low",
+      "sourceId": 14,
+      "summary": "Source 14 (Modern Claudefare comparator) has empty skillMappings although atomic-acres-asset-authoring's body cites it.",
+      "detail": "The asset-authoring skill names the Claudefare comparator as informing weapon/arm silhouette and material contrast; the catalogue row records no mapping. Add it or leave the row comparator-only.",
+      "evidence": "source-catalog.json sources[sourceId=14].skillMappings=[]; Skills/game-development/atomic-acres-asset-authoring/SKILL.md 'External technique sources' paragraph"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "low",
+      "sourceId": 17,
+      "summary": "Source 17 (Cadle quality bar) is a comparator with a built demo and no skill carrier, which is arguably correct.",
+      "detail": "The row's method is 'owner's judgement of polish'; it should stay a measurable comparator, not grow a skill. Recommend rendering it as comparator-only in the Atlas.",
+      "evidence": "source-catalog.json sources[sourceId=17].skillMappings=[], method 'No portable method… quality bar'"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "low",
+      "sourceId": 21,
+      "summary": "Alias row 21 correctly carries no mapping; it must stay uncounted as a technique.",
+      "detail": "No action needed; the Atlas must dedupe it against row 19.",
+      "evidence": "source-catalog.json sources[sourceId=21].status='alias', limitation 'must never be counted as a distinct technique'"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "low",
+      "sourceId": 22,
+      "summary": "Source 22 (three comparator sites, nothing retrievable) is correctly unmapped.",
+      "detail": "Blocked comparator row with no primary source; no skill should be written from it.",
+      "evidence": "source-catalog.json sources[sourceId=22].status='comparator', skillMappings=[], blocker 'No repository, no published technique, no licence'"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 24,
+      "summary": "Source 24 (TAKEN) is blocked with no source; its mapping emptiness is correct but its comparator properties (dense ground cover, night sky) duplicate rows 18/38's coverage.",
+      "detail": "Recommend marking the row archive-after-block rather than leaving it as an apparently open gap.",
+      "evidence": "source-catalog.json sources[sourceId=24].status='blocked', skillMappings=[], blocker 'register search closed negative 2026-08-24'"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 26,
+      "summary": "Row 26's only mapping is 'candidate' into game-hud-menu-overhaul, but that skill's body already restates row 26 verbatim — the candidate can be promoted.",
+      "detail": "The skill's pre-match shell section cites 'technique register row 26 (AMIX GAMES)' and carries the roster-as-DOM, degradation branches, two-stage commit and clamped-accent rules. This lane read both bodies; they agree.",
+      "evidence": "source-catalog.json sources[sourceId=26].skillMappings[0].relation='candidate' ('skill body NOT re-read this lane'); Skills/game-development/game-hud-menu-overhaul/SKILL.md pre-match section reference line"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 36,
+      "summary": "Row 36's only mapping is an unverified candidate into a skill that does not exist.",
+      "detail": "The per-asset provenance/licence decision pattern it gestures at is already implemented in atomic-acres-asset-authoring's manifest conventions; re-point or drop.",
+      "evidence": "source-catalog.json sources[sourceId=36].skillMappings[0].relation='candidate'; missing target confirmed by Skills/** glob"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 37,
+      "summary": "Source 37's passing coordinate-boundary demo has no skill carrier.",
+      "detail": "Z-up-centimetres-to-Y-up-metres at the ingest boundary is exactly the class of conversion the prop-ingestion skill's adaptation section touches but does not own. Fold in as a section or leave demo-only.",
+      "evidence": "src/lab/demos/group-c/index.ts entry 37 (passing capture); source-catalog.json sources[sourceId=37].skillMappings=[]"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 39,
+      "summary": "Source 39's passing editor-operation-replay demo has no skill carrier.",
+      "detail": "A typed, precondition-checked replayable operation log is a reusable level-tooling pattern; no skill owns it.",
+      "evidence": "src/lab/demos/group-c/index.ts entry 39 (passing capture); source-catalog.json sources[sourceId=39].skillMappings=[]"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "low",
+      "sourceId": 41,
+      "summary": "Source 41 (the technique-demo hub format) has no mapping, but this repository is itself the format's adoption.",
+      "detail": "The lab IS the adopted artefact; a mapping would be self-referential. Record the adoption in the row's method note instead.",
+      "evidence": "source-catalog.json sources[sourceId=41].skillMappings=[], method 'the FORMAT is the reusable object'; CONTEXT.md lab description"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "low",
+      "sourceId": 44,
+      "summary": "Source 44 (thin comparators) is correctly unmapped — the row's own finding is that no technique exists.",
+      "detail": "No action; the register records the absence as the finding.",
+      "evidence": "source-catalog.json sources[sourceId=44].skillMappings=[], limitations 'Thin comparators; no technique content'"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 49,
+      "summary": "Row 49's candidate mapping into game-animation-asset-pipeline can be promoted: that skill's Lane A3 fully restates MotionBricks.",
+      "detail": "The skill carries the planner contract (context-not-prompt, 24-64-frame windows, record-then-retarget, G1-vs-SOMA skeleton question) with row 49 cited. This lane read both bodies; the candidate's 'verify before ingestion' condition is satisfied.",
+      "evidence": "source-catalog.json sources[sourceId=49].skillMappings[0].relation='candidate'; Skills/game-development/game-animation-asset-pipeline/SKILL.md Lane A3 (register row 49)"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "low",
+      "sourceId": 55,
+      "summary": "Source 55 (Project Aether) is correctly unmapped: the release is unverified and the artefact is a fan game redistributing Activision content.",
+      "detail": "Research verdict NOT ADOPTABLE regardless of the Discord-only source; keep as comparator, no skill.",
+      "evidence": "source-catalog.json sources[sourceId=55].skillMappings=[]; repos-and-assets.md section 3 (single outbound link is a Discord invite; GitHub searches negative)"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "low",
+      "sourceId": 58,
+      "summary": "Row 58's candidate mapping into game-animation-asset-pipeline is miscategorised: DERMIS is explicitly not a likeness route and the natural boundary skill is likeness-to-game-character.",
+      "detail": "The candidate ('CC0-base + procedural hair/skin pipeline plausible') describes renderer technique, not animation pipeline. Re-file or drop.",
+      "evidence": "source-catalog.json sources[sourceId=58].skillMappings[0] and limitations ('EXPLICITLY NOT A FACE-CAPTURE OR LIKENESS ROUTE'); Skills/game-development/likeness-to-game-character/SKILL.md scope"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "low",
+      "sourceId": 60,
+      "summary": "Row 60's candidate mapping into img2threejs is a scope mismatch: Tesana is image-to-playable-game, not image-to-model.",
+      "detail": "img2threejs rebuilds a reference image as a procedural model; an image-to-game product has no mapping into it. Drop or refile as an ai-3d-asset-generation-loop comparator.",
+      "evidence": "source-catalog.json sources[sourceId=60].skillMappings[0].relation='candidate'; Skills/game-development/img2threejs/SKILL.md 'When To Use'"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 61,
+      "summary": "Row 61's candidate mapping targets unreal-content-pipeline, whose body carries no LiveLink content; the research was actually ingested into game-recording-to-engine-import.",
+      "detail": "The new game-recording skill carries the full LiveLink route (UDP Messaging, subjects/roles, Take Recorder, -messaging/Shipping limits). Re-point the mapping there.",
+      "evidence": "source-catalog.json sources[sourceId=61].skillMappings[0].skill='unreal-content-pipeline'; Skills/software-development/unreal-content-pipeline/SKILL.md (no LiveLink section); Skills/game-development/game-recording-to-engine-import/SKILL.md Tier 2 LiveLink PoC"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "medium",
+      "sourceId": 62,
+      "summary": "Row 62's candidate mapping targets unreal-content-pipeline for the same reason as row 61; the carrier is game-recording-to-engine-import.",
+      "detail": "The AGR/T6GR falsifier, C2M/C2UE licence table and Sequencer-importer analysis all live in the new game-recording skill. Re-point.",
+      "evidence": "source-catalog.json sources[sourceId=62].skillMappings[0].skill='unreal-content-pipeline'; Skills/game-development/game-recording-to-engine-import/SKILL.md AGR correction and route table"
+    },
+    {
+      "kind": "source-no-skill",
+      "severity": "low",
+      "sourceId": 59,
+      "summary": "Source 59 (Graalitoo X article, body unretrievable) is correctly unmapped — nothing is established to map.",
+      "detail": "Method 'Not established'; revisit only if the article body is ever recovered.",
+      "evidence": "source-catalog.json sources[sourceId=59].skillMappings=[], method='Not established', limitations 'Article contents UNKNOWN'"
+     },
+     {
+       "kind": "skill-no-source",
+       "severity": "medium",
+      "skill": "likeness-to-game-character",
+      "summary": "The likeness skill is fed by tonight's face-capture research family, none of which exists as a catalogue row.",
+      "detail": "KeenTools FaceBuilder, MPFB2, ICT-FaceKit, MediaPipe, MakeHuman, CMU Mocap and 100STYLE are load-bearing for the skill and absent from the 62-row catalogue; row 58 (DERMIS) is the nearest row and explicitly not a likeness route.",
+      "evidence": "Skills/game-development/likeness-to-game-character/SKILL.md recommended pipeline; faces-into-games.md and mixamo-rigging-addendum.md sections; source-catalog.json has no row for any of those sources"
+    },
+    {
+      "kind": "skill-no-source",
+      "severity": "medium",
+      "skill": "generated-asset-rigging",
+      "summary": "The rigging skill's load-bearing sources (SkinTokens, UniRig, Puppeteer, RigAnything, RigNet) have no catalogue rows.",
+      "detail": "The skill's route table rests on MIT/Apache weight readings from tonight's research; the catalogue's only adjacent rows are 52/58 comparators. The evidence family should become rows before any lane treats the catalogue as complete.",
+      "evidence": "Skills/game-development/generated-asset-rigging/SKILL.md route-selection table; repos-and-assets.md section 6 verdict table; source-catalog.json (no rows for VAST-AI or Seed3D repos)"
+    },
+    {
+      "kind": "skill-no-source",
+      "severity": "medium",
+      "skill": "game-recording-to-engine-import",
+      "summary": "The game-recording skill's format sources (advancedfx, afx-blender-scripts, C2Mv3, C2UE, Greyhound, T6GR tooling) have no catalogue rows.",
+      "detail": "Rows 61/62 are adjacent comparators, but the formats and tools the skill's parsers and PoCs depend on are unrecorded, including their licence table.",
+      "evidence": "Skills/game-development/game-recording-to-engine-import/SKILL.md legal boundaries table; ue5-agr-c2m.md findings tables; source-catalog.json rows 61-62 are post-based comparators only"
+    },
+    {
+      "kind": "skill-no-source",
+      "severity": "medium",
+      "skill": "reference-image-catalog",
+      "summary": "The reference-image-catalog skill cites a single external source (@0xrishi post) that has no catalogue row.",
+      "detail": "The frozen-reference-bar technique's provenance lives only in the skill body; the catalogue cannot answer 'which source feeds this skill'.",
+      "evidence": "Skills/game-development/reference-image-catalog/SKILL.md source-technique paragraph (x.com/0xrishi/status/2096079663126970796); source-catalog.json contains no such row"
+    },
+    {
+      "kind": "skill-no-source",
+      "severity": "low",
+      "skill": "open-world-city-art-loop",
+      "summary": "The city skill names register row 47 as its source, but the catalogue maps row 47 only to visual-gauntlet-loop.",
+      "detail": "The skill's measured numbers (18-20 fps reference telemetry, density-at-3x-frame-rate framing) come from row 47's post; the mapping is missing on the catalogue side.",
+      "evidence": "Skills/game-development/open-world-city-art-loop/SKILL.md section 1 ('register row 47'); source-catalog.json sources[sourceId=47].skillMappings targets visual-gauntlet-loop only"
+    },
+    {
+      "kind": "skill-no-source",
+      "severity": "low",
+      "skill": "making-decent-games",
+      "summary": "First-party by design: the skill is a router built from our own gotchas, so no source feeding it is the correct state.",
+      "detail": "Legitimate orphan; its citations are Agent-Memory gotcha files, not external techniques.",
+      "evidence": "Skills/game-development/making-decent-games/SKILL.md intro ('A bootstrap and router, not a technique'); bracketed gotcha citations"
+    },
+    {
+      "kind": "skill-no-source",
+      "severity": "low",
+      "skill": "game-release-benchmark-guard",
+      "summary": "First-party release-discipline skill with no external evidence expected.",
+      "detail": "Legitimate orphan.",
+      "evidence": "Skills/game-development/game-release-benchmark-guard/SKILL.md (repo release-contract workflow, no external technique sources)"
+    },
+    {
+      "kind": "skill-no-source",
+      "severity": "low",
+      "skill": "webgpu-tsl-arena-forging",
+      "summary": "First-party arena-migration process skill with no external evidence expected.",
+      "detail": "Legitimate orphan; its r185 RenderPipeline guidance matches the installed pin.",
+      "evidence": "Skills/game-development/webgpu-tsl-arena-forging/SKILL.md workflow; node_modules/three build contains RenderPipeline at 0.185.1"
+    },
+    {
+      "kind": "skill-no-source",
+      "severity": "low",
+      "skill": "atomic-acres-procedural-art-authoring",
+      "summary": "First-party Atomic Acres authoring conventions; no external source expected.",
+      "detail": "Legitimate orphan.",
+      "evidence": "Skills/game-development/atomic-acres-procedural-art-authoring/SKILL.md hard rules and modes"
+    },
+    {
+      "kind": "skill-no-source",
+      "severity": "low",
+      "skill": "atomic-acres-asset-authoring",
+      "summary": "First-party repo-convention skill; its one external citation (row 14 comparator) has no recorded mapping.",
+      "detail": "Legitimate orphan apart from the row-14 mapping gap recorded separately.",
+      "evidence": "Skills/game-development/atomic-acres-asset-authoring/SKILL.md external-technique-sources paragraph; source-catalog.json sources[sourceId=14].skillMappings=[]"
+    },
+    {
+      "kind": "skill-no-source",
+      "severity": "low",
+      "skill": "procedural-sdf-raymarched-worlds",
+      "summary": "First-party maths/route-decision skill; no external evidence expected.",
+      "detail": "Legitimate orphan.",
+      "evidence": "Skills/game-development/procedural-sdf-raymarched-worlds/SKILL.md route decision and math-core references"
+    },
+    {
+      "kind": "stale-evidence",
+      "severity": "high",
+      "summary": "Tonight's weather/cloud/grade research is verified against three r186 while this repository pins 0.185.1.",
+      "detail": "Headline APIs verified present in the installed 0.185.1 build (RenderPipeline class, VolumeNodeMaterial, SkyMesh cloudCoverage uniform), so the risk is API-detail drift rather than absence — but every API the report cites must still be confirmed against node_modules before use, and the report's own OPEN list says r187dev deltas were not surveyed.",
+      "evidence": "weather-clouds-grade.md header ('Revision checked: r186'); node -e require('./node_modules/three/package.json').version → 0.185.1; grep counts for VolumeNodeMaterial/RenderPipeline/cloudCoverage in the installed build; CONTEXT.md hard rule 4"
+    },
+    {
+      "kind": "stale-evidence",
+      "severity": "medium",
+      "sourceId": 45,
+      "summary": "Row 45's licence evidence is the oldest load-bearing entry (TRELLIS.2/Pixal3D licence files read 2026-09-02) and two skills have since refined it without the catalogue catching up.",
+      "detail": "comfyui-3d-native-pipeline resolves the 'Comfy-Org repackage discrepancy': the repackaged repos carry no LICENSE file, only an 'mit' card field, and the DINOv3 encoder is Meta's custom licence with attribution conditions. The row's limitation still just says 're-verify at install'.",
+      "evidence": "source-catalog.json sources[sourceId=45].evidence inspectedAt 2026-09-02; Skills/game-development/comfyui-3d-native-pipeline/SKILL.md 'Licence reality' section"
+    },
+    {
+      "kind": "stale-evidence",
+      "severity": "medium",
+      "summary": "All 29 catalogue demo entrypoints point at src/map3/technique-lab paths that do not exist in this repository.",
+      "detail": "The extraction moved demos to src/lab/demos/group-*/source-NN.ts; a join on the recorded entrypoint fails for every built row until the rows are re-staged.",
+      "evidence": "source-catalog.json sources[].demo.entrypoint (e.g. 'src/map3/technique-lab/demos/group-a/source-01.ts'); workspace tree has no src/map3 (glob src/**/*.ts)"
+    },
+    {
+      "kind": "licence-unverified",
+      "severity": "high",
+      "sourceId": 53,
+      "summary": "verdant-forest has no licence file (five-name probe 404) and is learn-only, yet it is the 'cool forest' that prompted this project and feeds threejs-procedural-vegetation.",
+      "detail": "The same author's claude-of-duty and sakura-realm are MIT, zero-asset and ADOPTABLE per tonight's mechanical verification — better adoption targets than the unlicensed forest; its textures are Poly Haven CC0 and can be sourced directly. The catalogue row records none of this.",
+      "evidence": "source-catalog.json sources[sourceId=53].limitations and evidence (five-candidate 404 probe at 4252ffd5); repos-and-assets.md section 1 verdict table and 'Better siblings' table"
+    },
+    {
+      "kind": "licence-unverified",
+      "severity": "medium",
+      "sourceId": 38,
+      "summary": "Rows 33/38 rest on super-terrain pin e417c04 (2026-08-23) which predates the MIT licence added at HEAD b82e823 (2026-09-01); adoption requires re-pin plus licence file-read at the new revision.",
+      "detail": "Both rows self-record this; nothing has re-pinned. Any vegetation skill ingestion from row 38 is riding an all-rights-reserved revision.",
+      "evidence": "source-catalog.json sources[sourceId=33].evidence and sources[sourceId=38].evidence (b82e823 re-pin notes); src/lab/demos/group-c/index.ts entry 38 limitation ('Licence state conflicts with the register')"
+    },
+    {
+      "kind": "licence-unverified",
+      "severity": "medium",
+      "sourceId": 52,
+      "summary": "The Tripo comparator rows (52, 56) do not record tonight's decisive ToS finding: the free tier's outputs are Tripo-owned and non-commercial.",
+      "detail": "ToS §5.2.1 has Tripo retaining all rights over free-tier Inputs and Outputs; commercial use requires paid tiers (§5.2.2). Both rows treat Tripo as an unqualified comparator; the ai-3d-asset-generation-loop route notes also predate this finding.",
+      "evidence": "repos-and-assets.md section 4 (ToS §5.2.1/§5.2.2 verbatim, pricing table); source-catalog.json sources[sourceId=52] and sources[sourceId=56]"
+    },
+    {
+      "kind": "licence-unverified",
+      "severity": "medium",
+      "sourceId": 61,
+      "summary": "Rows 61/62's CoD content constraint and the unlicensed tooling chain (C2Mv3, C2UE, UECast, T5-Demo-Ripper) are recorded in the rows but not in the catalogue's mapping targets.",
+      "detail": "Extracted assets are private-use only; the tools are free-to-download, not licensed. The game-recording skill carries the full boundary; the rows' candidate mappings do not point at it.",
+      "evidence": "source-catalog.json sources[sourceId=61].limitations and sources[sourceId=62].limitations; Skills/game-development/game-recording-to-engine-import/SKILL.md legal boundaries"
+    },
+    {
+      "kind": "licence-unverified",
+      "severity": "medium",
+      "sourceId": 45,
+      "summary": "Row 45's DINOv3 encoder licence (Meta custom, attribution conditions, card claims MIT) is resolved in the comfyui skill but the catalogue limitation still defers it.",
+      "detail": "Nothing is non-commercial, so the route stands; the open item is the attribution condition if output ships publicly.",
+      "evidence": "Skills/game-development/comfyui-3d-native-pipeline/SKILL.md 'Licence reality' and ai-3d-asset-generation-loop row-45 section; source-catalog.json sources[sourceId=45].limitations"
+    },
+    {
+      "kind": "licence-unverified",
+      "severity": "medium",
+      "sourceId": 1,
+      "summary": "The Mixamo position is OPEN and misread in the wild: the binding clause is Adobe General Terms §3.6 (silent on delivery mechanism), §3.5 Sample Files is a different stricter clause, and the famous 'no raw files' table is a 2022 community forum post, not Adobe policy.",
+      "detail": "Tonight's two reports converge: FAQ (frozen 2021-09-14) grants royalty-free video-game use with no redistribution text; §3.6's 'stand-alone basis' wording is what governs and no Adobe document distinguishes web delivery. Recommended licence-clean path: CMU Mocap + 100STYLE for motion, SkinTokens/UniRig (MIT) for rigging. Catalogue rows 1 and 52 and game-animation-asset-pipeline do not yet carry this position.",
+      "evidence": "repos-and-assets.md section 6 Mixamo subsection (§3.6 verbatim, second-party re-fetch via AEM fragment); mixamo-rigging-addendum.md section 1 and animation-source licence table; faces-into-games.md 'The Mixamo question'"
+    }
+  ]
+}

@@ -73,7 +73,7 @@ export const manifest: ManifestEntry[] = [
       + 'Blender. No UV atlas, no normal/ORM texture bake, no tangents, and none of its TRELLIS '
       + 'generation stage. Nearest-surface transfer has no cage; no vertex flipped against the '
       + 'normals this scene replaces, and Blender\'s own 97.7 degree outlier does not reproduce '
-      + 'there and is not claimed as one.',
+      + 'there and is not claimed as one. Display finish is a gloss and the panels sit closer than authored; transferred normals unchanged.',
     createDemo: createSource36,
   },
   {
@@ -297,7 +297,7 @@ export const manifest: ManifestEntry[] = [
     limitation:
       'NO MOTION IS GENERATED: the network is native C++/GGML with browser inference explicitly '
       + 'deferred upstream and its weights absent. Five schematic hinges, not the G1 skeleton '
-      + 'and not the operator rig; no retarget is attempted or claimed.',
+      + 'and not the operator rig; no retarget is attempted or claimed. Links, beads and stage are presentation scale for legibility.',
     createDemo: createSource49,
   },
   {

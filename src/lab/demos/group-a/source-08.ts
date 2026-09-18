@@ -101,19 +101,19 @@ function buildCanopy(
   const group = new THREE.Group();
   const rng = makeRng(seed);
 
-  const trunkGeometry = registry.track(new THREE.CylinderGeometry(0.035, 0.055, 1.1, 7, 1));
+  const trunkGeometry = registry.track(new THREE.CylinderGeometry(0.05, 0.07, 1.5, 7, 1));
   const trunkMaterial = registry.track(
     new THREE.MeshStandardMaterial({ color: 0x5a4634, roughness: 0.95, side: THREE.FrontSide }),
   );
-  for (let i = 0; i < 3; i += 1) {
+  for (let i = 0; i < 5; i += 1) {
     const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-    trunk.position.set((rng() - 0.5) * 1.2, 0.55, (rng() - 0.5) * 1.2);
+    trunk.position.set((rng() - 0.5) * 0.8, 0.75, (rng() - 0.5) * 0.8);
     trunk.name = `trunk-${i}`;
     group.add(trunk);
   }
 
   // Leaf cards as one InstancedMesh: layered silhouettes at one draw call.
-  const cardGeometry = registry.track(new THREE.PlaneGeometry(0.22, 0.3));
+  const cardGeometry = registry.track(new THREE.PlaneGeometry(0.36, 0.48));
   const cardMaterial = registry.track(
     new THREE.MeshStandardMaterial({
       map: texture,
@@ -123,7 +123,7 @@ function buildCanopy(
       roughness: 0.78,
     }),
   );
-  const count = 96;
+  const count = 200;
   const cards = new THREE.InstancedMesh(cardGeometry, cardMaterial, count);
   cards.name = 'leaf-cards';
   const matrix = new THREE.Matrix4();
@@ -133,10 +133,10 @@ function buildCanopy(
   const scale = new THREE.Vector3();
   for (let i = 0; i < count; i += 1) {
     const layer = i % 3; // three canopy layers, as the prompt's system 2 asks
-    position.set((rng() - 0.5) * 1.5, 0.55 + layer * 0.28 + rng() * 0.2, (rng() - 0.5) * 1.5);
+    position.set((rng() - 0.5) * 1.0, 0.45 + layer * 0.4 + rng() * 0.2, (rng() - 0.5) * 1.0);
     euler.set((rng() - 0.5) * 0.9, rng() * Math.PI * 2, (rng() - 0.5) * 0.7);
     quaternion.setFromEuler(euler);
-    const s = 0.7 + rng() * 0.7;
+    const s = 0.9 + rng() * 0.7;
     scale.set(s, s, s);
     matrix.compose(position, quaternion, scale);
     cards.setMatrixAt(i, matrix);
@@ -168,7 +168,7 @@ export function createDemo(context: DemoContext): Demo {
   before.group.name = 'before:premultiplied-baker-dark-leaf-outline';
   after.group.name = 'after:straight-alpha-with-edge-bleed';
 
-  const root = sideBySide(THREE, registry, before.group, after.group, 2.6);
+  const root = sideBySide(THREE, registry, before.group, after.group, 1.6);
   root.name = 'source-08:procedural-canopy-texture-bake';
 
   const metadata = {

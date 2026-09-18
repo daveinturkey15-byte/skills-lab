@@ -24,9 +24,9 @@ import { disposeGroup, type Demo, type DemoContext } from './types';
 import type { Group, Object3D, Vector3 } from 'three';
 
 
-const UPPER_LEN = 0.55;
-const FORE_LEN = 0.48;
-const HAND_LEN = 0.16;
+const UPPER_LEN = 0.7;
+const FORE_LEN = 0.62;
+const HAND_LEN = 0.22;
 const MAX_CURL_RAD = Math.PI * 0.62;
 
 interface FingerChain {
@@ -89,7 +89,7 @@ function boneSegment(
   const joint = new THREE.Object3D();
   parent.add(joint);
   const geometry = new THREE.CapsuleGeometry(radius, length - radius * 2, 3, 8);
-  const material = new THREE.MeshStandardMaterial({ color, metalness: 0.05, roughness: 0.55 });
+  const material = new THREE.MeshStandardMaterial({ color, metalness: 0.05, roughness: 0.55, flatShading: true });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.y = length / 2;
   joint.add(mesh);
@@ -113,18 +113,19 @@ function buildArm(
   root.add(shoulderAnchor);
   const color = posed ? 0x9c6f4d : 0x888888;
 
-  const elbowAnchor = boneSegment(THREE, UPPER_LEN, 0.07, color, shoulderAnchor, disposables);
-  const handAnchor = boneSegment(THREE, FORE_LEN, 0.055, color, elbowAnchor, disposables);
+  const elbowAnchor = boneSegment(THREE, UPPER_LEN, 0.135, color, shoulderAnchor, disposables);
+  const handAnchor = boneSegment(THREE, FORE_LEN, 0.105, color, elbowAnchor, disposables);
   const hand = new THREE.Object3D();
   hand.position.y = 0;
   handAnchor.add(hand);
-  const palmGeometry = new THREE.BoxGeometry(0.11, HAND_LEN, 0.05);
+  const palmGeometry = new THREE.BoxGeometry(0.21, HAND_LEN, 0.1);
   const palmMaterial = new THREE.MeshStandardMaterial({
     color,
     transparent: !posed,
     opacity,
     metalness: 0.05,
     roughness: 0.55,
+    flatShading: true,
   });
   const palm = new THREE.Mesh(palmGeometry, palmMaterial);
   palm.position.y = HAND_LEN / 2;
@@ -134,20 +135,36 @@ function buildArm(
   const fingers: FingerChain[] = [];
   for (let f = 0; f < 4; f += 1) {
     const knuckle = new THREE.Object3D();
-    knuckle.position.set(-0.0375 + f * 0.025, HAND_LEN * 0.9, 0.02);
+    knuckle.position.set(-0.05 + f * 0.033, HAND_LEN * 0.9, 0.02);
     hand.add(knuckle);
     const joints: Object3D[] = [];
     const weights = [1, 0.85, 0.7];
     let parent: Object3D = knuckle;
     for (let j = 0; j < 3; j += 1) {
-      const segment = boneSegment(THREE, 0.05, 0.012, color, parent, disposables);
-      segment.position.y = j === 0 ? 0 : 0.05;
+      const segment = boneSegment(THREE, 0.08, 0.026, color, parent, disposables);
+      segment.position.y = j === 0 ? 0 : 0.08;
       joints.push(segment);
       parent = segment;
     }
     fingers.push({ joints, weights });
   }
 
+  // The IK chain made readable: one marker per solved pivot, in a contrasting
+  // basic material so the joints read at the host's fit distance. Without them
+  // the demo is two thin capsules the framing gate cannot see.
+  const markerMaterial = new THREE.MeshBasicMaterial({ color: posed ? 0xffc861 : 0xcfcfcf, wireframe: true });
+  disposables.push(markerMaterial);
+  const markers: Array<[Object3D, number, string]> = [
+    [shoulderAnchor, 0.115, 'ik-root'],
+    [elbowAnchor, 0.1, 'ik-elbow'],
+    [hand, 0.08, 'ik-hand'],
+  ];
+  for (const [pivot, radius, name] of markers) {
+    const marker = new THREE.Mesh(new THREE.SphereGeometry(radius, 12, 8), markerMaterial);
+    marker.name = name;
+    pivot.add(marker);
+    disposables.push(marker.geometry);
+  }
   // Transfers ownership of materials to the caller for opacity control.
   return { shoulder: shoulderAnchor, elbow: elbowAnchor, hand, fingers };
 }
@@ -157,11 +174,11 @@ export function createDemo(context: DemoContext): Demo {
   const root = new THREE.Group();
   const disposables: { dispose: () => void }[] = [];
 
-  const posed = buildArm(THREE, -0.55, true, root, disposables);
-  const ghost = buildArm(THREE, 0.55, false, root, disposables);
+  const posed = buildArm(THREE, -0.42, true, root, disposables);
+  const ghost = buildArm(THREE, 0.42, false, root, disposables);
 
   // Handle target (the author's blue handle bone) and its reach indicator.
-  const handleGeometry = new THREE.SphereGeometry(0.045, 12, 8);
+  const handleGeometry = new THREE.SphereGeometry(0.115, 12, 8);
   const handleMaterial = new THREE.MeshBasicMaterial({ color: 0x3fa7ff });
   const handle = new THREE.Mesh(handleGeometry, handleMaterial);
   root.add(handle);
@@ -189,9 +206,9 @@ export function createDemo(context: DemoContext): Demo {
   const update = (time: number, _dt: number): void => {
     // Handle moves on a bounded loop; curl breathes with it.
     handle.position.set(
-      -0.55 + 0.3 * Math.sin(time * 0.9),
-      -0.15 + 0.28 * Math.sin(time * 1.3 + 1.1),
-      0.28 + 0.12 * Math.cos(time * 0.7),
+      -0.42 + 0.36 * Math.sin(time * 0.9),
+      -0.05 + 0.34 * Math.sin(time * 1.3 + 1.1),
+      0.3 + 0.15 * Math.cos(time * 0.7),
     );
     const curl = 0.5 + 0.5 * Math.sin(time * 0.8);
     const { reachRatio } = solveTwoBoneIK(

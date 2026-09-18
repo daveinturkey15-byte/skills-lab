@@ -30,7 +30,9 @@ import {
 } from './_shared';
 import type * as THREE_NS from 'three';
 
-const SEG = 44;
+const SEG = 52;
+/** Water plane edge length. Sized so the pair owns the frame once fitted. */
+const PLANE = 3.0;
 
 interface Surface {
   group: THREE_NS.Group;
@@ -43,7 +45,7 @@ function buildSurface(THREE: ThreeNamespace, registry: DisposalRegistry, name: s
   const group = new THREE.Group();
   group.name = name;
 
-  const geometry = registry.track(new THREE.PlaneGeometry(2, 2, SEG, SEG));
+  const geometry = registry.track(new THREE.PlaneGeometry(PLANE, PLANE, SEG, SEG));
   geometry.rotateX(-Math.PI / 2);
   const colours = new Float32Array(geometry.getAttribute('position').count * 3);
   geometry.setAttribute('color', new THREE.BufferAttribute(colours, 3));
@@ -62,9 +64,13 @@ function buildSurface(THREE: ThreeNamespace, registry: DisposalRegistry, name: s
   water.renderOrder = 2;
   group.add(water);
 
-  const bodyGeometry = registry.track(new THREE.CapsuleGeometry(0.11, 0.34, 6, 12));
+  const bodyGeometry = registry.track(new THREE.CapsuleGeometry(0.15, 0.52, 6, 14));
   bodyGeometry.rotateZ(Math.PI / 2);
-  const bodyMaterial = registry.track(new THREE.MeshStandardMaterial({ color: 0x4b5b63, roughness: 0.55 }));
+  // Pale metal against dark water: the displaced volume must read THROUGH the
+  // transparent surface, otherwise the dome looks like a free spike.
+  const bodyMaterial = registry.track(
+    new THREE.MeshStandardMaterial({ color: 0xa8bec8, roughness: 0.35, metalness: 0.35 }),
+  );
   const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
   body.name = 'submerged-body';
   group.add(body);
@@ -78,8 +84,7 @@ export function createDemo(context: DemoContext): Demo {
 
   const domed = buildSurface(THREE, registry, 'before:dome-and-laminar-only');
   const cut = buildSurface(THREE, registry, 'after:dome-plus-naive-waterline-cut');
-
-  const root = sideBySide(THREE, registry, domed.group, cut.group, 2.6);
+  const root = sideBySide(THREE, registry, domed.group, cut.group, 3.0);
   root.name = 'source-04:underwater-volume-and-waterline-cut';
 
   const surfaceColour = new THREE.Color(0x1c6f8c);
@@ -95,9 +100,7 @@ export function createDemo(context: DemoContext): Demo {
   const write = (time: number) => {
     // Deterministic path: a slow circuit, so the laminar term has a real heading.
     const angle = time * 0.55;
-    bodyPos.set(Math.cos(angle) * 0.5, -0.16, Math.sin(angle) * 0.5);
-    heading.set(-Math.sin(angle), Math.cos(angle));
-
+    bodyPos.set(Math.cos(angle) * 0.62, -0.1, Math.sin(angle) * 0.62);
     tornVertices = 0;
     for (const [surface, applyCut] of [
       [domed, false],
@@ -116,28 +119,44 @@ export function createDemo(context: DemoContext): Demo {
         const r = Math.hypot(dx, dz);
 
         // Dome: displaced volume pushed up, falling off with radius and depth.
+        // Wide falloff so the swell reads as a displaced VOLUME rather than a spike.
         const depth = Math.max(0.02, -bodyPos.y);
-        const dome = (0.075 / depth) * Math.exp(-(r * r) / 0.045);
+        const dome = (0.085 / depth) * Math.exp(-(r * r) / 0.11);
 
         // Laminar deflection: the surface is pushed forward of the body and drawn
         // in behind it, keyed on the component of the offset along the heading.
         const along = (dx * heading.x + dz * heading.y) / Math.max(1e-3, r);
         const laminar = dome * along * 0.85;
 
-        const swell = Math.sin(x * 4.1 + time) * 0.006;
-        const y = swell + dome * 0.55 + laminar * 0.4;
+        // Short-crested chop over the whole sheet: two directional components so
+        // the surface carries real slope variation (and hence edges) everywhere,
+        // not only at the dome. Amplitudes kept small — this is texture, not swell.
+        const chopA = Math.sin(x * 6.3 + time * 1.7) * Math.sin(z * 5.1 - time * 1.3);
+        const chopB = Math.sin((x + z) * 11.7 + time * 2.3);
+        const chop = chopA * 0.016 + chopB * 0.007;
+        const y = chop + dome * 0.55 + laminar * 0.4;
         position.setXYZ(i, x, y, z);
 
         scratch.copy(surfaceColour).lerp(domeColour, Math.min(1, dome * 6));
+        // Crest sparkle from the chop slope: honest shading variation, no texture.
+        const sparkle = Math.max(0, chopA) * 0.35 + Math.max(0, chopB) * 0.2;
+        scratch.r = Math.min(1, scratch.r + sparkle * 0.5);
+        scratch.g = Math.min(1, scratch.g + sparkle * 0.6);
+        scratch.b = Math.min(1, scratch.b + sparkle * 0.55);
 
         if (applyCut) {
-          // The naive cut: any vertex whose surface height falls below the body's
-          // top is pulled to the body silhouette. At grid resolution this tears.
-          const bodyTop = bodyPos.y + 0.11;
-          if (r < 0.22 && y < bodyTop) {
+          // The naive cut, full-bore: everything inside the body waterline is
+          // flattened to the body plane. No cap, no blend — the stair-stepped
+          // red mesa rim is the unsolved artefact, left visible and counted.
+          const bodyTop = bodyPos.y + 0.15;
+          if (r < 0.3) {
             position.setY(i, bodyTop);
             scratch.copy(tearColour);
             tornVertices += 1;
+          } else if (r < 0.44) {
+            // Strained rim: the sheet tearing up over the mesa edge, flagged hot.
+            const rim = 1 - (r - 0.3) / 0.14;
+            scratch.copy(surfaceColour).lerp(tearColour, 0.35 + rim * 0.65);
           }
         }
         colour.setXYZ(i, scratch.r, scratch.g, scratch.b);

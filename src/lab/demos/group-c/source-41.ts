@@ -42,7 +42,7 @@ export const EXHIBITS: readonly Exhibit[] = [
     index: 1,
     title: 'Recursive Rounded Grid',
     build: (THREE) => {
-      const geometry = new THREE.BoxGeometry(0.5, 0.06, 0.5, 4, 1, 4);
+      const geometry = new THREE.BoxGeometry(0.72, 0.09, 0.72, 4, 1, 4);
       return new THREE.Mesh(
         geometry,
         new THREE.MeshStandardMaterial({ color: 0x8892a6, roughness: 0.5, metalness: 0.2 }),
@@ -53,7 +53,7 @@ export const EXHIBITS: readonly Exhibit[] = [
     index: 2,
     title: 'Animated Subdivision Pillars',
     build: (THREE) => {
-      const geometry = new THREE.CylinderGeometry(0.1, 0.12, 0.6, 12, 6);
+      const geometry = new THREE.CylinderGeometry(0.15, 0.18, 0.9, 12, 6);
       return new THREE.Mesh(
         geometry,
         new THREE.MeshStandardMaterial({ color: 0xa8896b, roughness: 0.65 }),
@@ -64,10 +64,10 @@ export const EXHIBITS: readonly Exhibit[] = [
     index: 3,
     title: 'Noise-Driven Voxel Cube',
     build: (THREE, rng) => {
-      const geometry = new THREE.BoxGeometry(0.42, 0.42, 0.42, 3, 3, 3);
+      const geometry = new THREE.BoxGeometry(0.62, 0.62, 0.62, 3, 3, 3);
       const position = geometry.getAttribute('position');
       for (let i = 0; i < position.count; i += 1) {
-        position.setY(i, position.getY(i) + (rng() - 0.5) * 0.08);
+        position.setY(i, position.getY(i) + (rng() - 0.5) * 0.12);
       }
       geometry.computeVertexNormals();
       return new THREE.Mesh(
@@ -80,7 +80,7 @@ export const EXHIBITS: readonly Exhibit[] = [
     index: 4,
     title: 'Proximity Fracture Sphere',
     build: (THREE, rng) => {
-      const geometry = new THREE.IcosahedronGeometry(0.26, 1);
+      const geometry = new THREE.IcosahedronGeometry(0.4, 1);
       const position = geometry.getAttribute('position');
       for (let i = 0; i < position.count; i += 1) {
         const push = 1 + rng() * 0.18;
@@ -113,7 +113,7 @@ export function createDemo(context: DemoContext): Demo {
   const { THREE, seed } = context;
   const root = new THREE.Group();
   root.name = 'source-41-catalogue-format';
-  const { before, after } = beforeAfterPanels(THREE, 3.6);
+  const { before, after } = beforeAfterPanels(THREE, 2.7);
 
   // BEFORE — one scene, four techniques piled together, nothing named, nothing
   // separately reachable. The group is flat on purpose: the children have no
@@ -125,9 +125,9 @@ export function createDemo(context: DemoContext): Demo {
     const mesh = exhibit.build(THREE, mergedRng);
     mesh.name = '';
     mesh.position.set(
-      (mergedRng() - 0.5) * 0.9,
-      0.3 + (mergedRng() - 0.5) * 0.4,
-      (mergedRng() - 0.5) * 0.9,
+      (mergedRng() - 0.5) * 1.0,
+      0.55 + (mergedRng() - 0.5) * 0.5,
+      (mergedRng() - 0.5) * 1.0,
     );
     merged.add(mesh);
   }
@@ -135,7 +135,7 @@ export function createDemo(context: DemoContext): Demo {
 
   // AFTER — one pedestal per exhibit, each carrying its index and title, each a
   // named group that can be resolved, shown or disposed on its own.
-  const pedestalGeometry = new THREE.CylinderGeometry(0.22, 0.24, 0.14, 16);
+  const pedestalGeometry = new THREE.CylinderGeometry(0.3, 0.33, 0.4, 16);
   const pedestalMaterial = new THREE.MeshStandardMaterial({
     color: 0x2f3338,
     roughness: 0.9,
@@ -147,16 +147,16 @@ export function createDemo(context: DemoContext): Demo {
     // The name carries the number and the title, so the exhibit is
     // self-describing in a scene graph dump as well as on screen.
     bay.name = `exhibit-${String(exhibit.index).padStart(2, '0')}-${exhibit.title}`;
-    bay.position.set(-1.35 + (exhibit.index - 1) * 0.9, 0, 0);
+    bay.position.set(-1.2 + (exhibit.index - 1) * 0.8, 0, 0);
 
     const pedestal = new THREE.Mesh(pedestalGeometry, pedestalMaterial);
-    pedestal.position.y = 0.07;
+    pedestal.position.y = 0.2;
     pedestal.name = 'pedestal';
     bay.add(pedestal);
 
     const piece = exhibit.build(THREE, createRng(seed + exhibit.index));
     piece.name = 'subject';
-    piece.position.y = 0.42;
+    piece.position.y = 0.8;
     bay.add(piece);
 
     after.add(bay);

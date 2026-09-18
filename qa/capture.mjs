@@ -251,13 +251,21 @@ const catalog = JSON.parse(readFileSync(catalogPath, 'utf8'));
 const { browser, child } = await launchChrome(chromium);
 const ctx = browser.contexts()[0] ?? (await browser.newContext());
 const page = await ctx.newPage();
-page.setDefaultTimeout(45000);
+page.setDefaultTimeout(120000);
 
 const consoleErrors = [];
 page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 300)); });
 page.on('pageerror', (e) => consoleErrors.push(`pageerror: ${String(e.message).slice(0, 300)}`));
 
-await page.goto(`${BASE}?view=lab`, { waitUntil: 'networkidle' });
+// `networkidle` is the wrong wait for this page and it cost a whole night.
+// Under fleet contention a 756-byte request went from 22 s to 60 s+, the fixed
+// 45 s goto could never settle, and every lane got a hard timeout — so four
+// waves of real work were measured as "no change" by an instrument that was
+// itself failing. Wait for the thing we actually need instead: the gallery
+// populated. Serve from `vite preview` (static) rather than the dev server when
+// anything else is running.
+await page.goto(`${BASE}?view=lab`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+await page.waitForSelector('button.tl-item', { timeout: 120000 });
 
 const adapter = await page.evaluate(`(async () => {
   if (!navigator.gpu) return { hasGpu: false };

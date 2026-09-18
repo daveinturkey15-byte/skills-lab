@@ -219,7 +219,7 @@ export function compareNormals(
   return { maxDegrees, meanDegrees: total / count, flipped };
 }
 
-const PANEL_SEPARATION = 2.75;
+const PANEL_SEPARATION = 1.9;
 
 export function createDemo(context: DemoContext): Demo {
   const { THREE } = context;
@@ -265,9 +265,9 @@ export function createDemo(context: DemoContext): Demo {
   const comparison = compareNormals(bakedNormals, geometricNormals);
 
   const surface = () => new THREE.MeshStandardMaterial({
-    color: 0x9aa4b0,
-    roughness: 0.62,
-    metalness: 0.05,
+    color: 0x8b95a3,
+    roughness: 0.28,
+    metalness: 0.08,
   });
 
   const stations: Array<[string, import('three').BufferGeometry, number]> = [
@@ -330,7 +330,8 @@ export function createDemo(context: DemoContext): Demo {
         + 'provenance record and NOT claimed as a transfer flip. Reduction here is '
         + '82 percent, not the product\'s advertised 99 percent, and its client-side TRELLIS '
         + 'GENERATION stage is absent entirely. Geometry is quantised to Int16 positions and Int8 '
-        + 'normals for portability, which is itself a small loss.',
+        + 'normals for portability, which is itself a small loss. Display finish is a presentation '
+        + 'gloss and the panels sit closer than authored; the transferred normals are unchanged.',
       localLights: [],
       counters: {
         highpolyTriangles: asset.counts.highpolyTriangles,

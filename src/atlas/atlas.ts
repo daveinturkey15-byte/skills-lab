@@ -13,17 +13,21 @@ import { renderSkills } from './views/skills';
 import { emptySourcesState, renderSources } from './views/sources';
 import { renderLadder } from './views/ladder';
 import { renderAbout } from './views/about';
+import { renderEvidence } from './views/evidence';
+import { renderGaps } from './views/gaps';
 
 export interface AtlasOptions {
   baseUrl?: string;
 }
 
-type AtlasTab = 'skills' | 'sources' | 'ladder' | 'about';
+type AtlasTab = 'skills' | 'sources' | 'ladder' | 'evidence' | 'gaps' | 'about';
 
 const TABS: Array<{ key: AtlasTab; label: string }> = [
   { key: 'skills', label: 'Skills' },
   { key: 'sources', label: 'Sources' },
   { key: 'ladder', label: 'Ladder' },
+  { key: 'evidence', label: 'Evidence' },
+  { key: 'gaps', label: 'Gaps' },
   { key: 'about', label: 'About' },
 ];
 
@@ -100,6 +104,10 @@ export function mountAtlas(container: HTMLElement, options: AtlasOptions = {}): 
         ladderSort = sort;
         render();
       });
+    } else if (active === 'evidence') {
+      renderEvidence(panel, baseUrl);
+    } else if (active === 'gaps') {
+      renderGaps(panel, baseUrl);
     } else {
       renderAbout(panel, catalog);
     }
@@ -153,7 +161,7 @@ export function mountAtlas(container: HTMLElement, options: AtlasOptions = {}): 
     button.addEventListener('keydown', (event) => {
       if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
       event.preventDefault();
-      const order: AtlasTab[] = ['skills', 'sources', 'ladder', 'about'];
+      const order: AtlasTab[] = ['skills', 'sources', 'ladder', 'evidence', 'gaps', 'about'];
       const at = order.indexOf(active);
       const next = order[(at + (event.key === 'ArrowRight' ? 1 : order.length - 1)) % order.length];
       setActive(next);

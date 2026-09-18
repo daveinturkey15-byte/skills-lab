@@ -82,7 +82,7 @@ interface SculptRuntime {
   destructionGroups: Record<string, string[]>;
 }
 
-const MATERIAL_TINT = { steel: 0x9aa0a6, rubber: 0x2b2b2d, paint: 0x3f5d3a } as const;
+const MATERIAL_TINT = { steel: 0x9aa0a6, rubber: 0x2b2b2d, paint: 0x557a41 } as const;
 
 function buildFromSpec(
   THREE: ThreeNamespace,
@@ -200,7 +200,7 @@ export function createDemo(context: DemoContext): Demo {
   probe.name = 'socket-probe';
   gated.runtime?.sockets.pour.add(probe);
 
-  const root = sideBySide(THREE, registry, ungated.group, gated.group, 1.4);
+  const root = sideBySide(THREE, registry, ungated.group, gated.group, 0.5);
   root.name = 'source-06:image-to-procedural-model-contract';
 
   const metadata = {
@@ -214,7 +214,7 @@ export function createDemo(context: DemoContext): Demo {
       'img2threejs/img2threejs@d6673386f89673a58736f8d398dd16ece67874f5 docs/ARCHITECTURE.md:9-17,67-72,88-89,133-134 (Apache-2.0)',
     ],
     limitation:
-      'No reference image, no vision probe and no suitability/material gates were run - the upstream stages 1-3 need the installed skill and an agent with vision, and running third-party code is an owner decision. The spec here was authored by hand to the documented shape. A single image cannot establish hidden geometry, so this lane is static hard-surface props only, never deforming characters.',
+      'No reference image, no vision probe and no suitability/material gates were run - the upstream stages 1-3 need the installed skill and an agent with vision, and running third-party code is an owner decision. The spec here was authored by hand to the documented shape. A single image cannot establish hidden geometry, so this lane is static hard-surface props only, never deforming characters. Halves staged close and paint lifted for stage legibility; spec dimensions, sockets and gate unchanged.',
     counters: {
       triangles: countTriangles(root),
       drawables: countDrawables(root),

@@ -47,9 +47,9 @@ export interface AcceptanceCriteria {
 }
 
 export const CRITERIA: AcceptanceCriteria = {
-  minTriangles: 60,
-  maxTriangles: 800,
-  heightMetres: [0.45, 0.75],
+  minTriangles: 120,
+  maxTriangles: 1500,
+  heightMetres: [1.3, 2.6],
   maxDegenerateTriangles: 0,
   requireFinite: true,
   maxAspect: 3.2,
@@ -101,21 +101,36 @@ function proposeCandidate(
 ): { group: THREE_NS.Group; geometry: THREE_NS.BufferGeometry } {
   const group = new THREE.Group();
   group.name = `candidate-${attempt}`;
-  // Attempt 0 is deliberately too tall and too thin; later attempts converge.
-  const height = attempt === 0 ? 1.35 : 0.4 + rng() * 0.35;
-  const radius = attempt === 0 ? 0.06 : 0.12 + rng() * 0.12;
-  const segments = attempt === 0 ? 5 : 10 + Math.floor(rng() * 6);
+  // Attempt 0 is deliberately too short and coarse; later attempts converge
+  // into the declared band. The accepted body uses the upper half of the
+  // height range: a squat pot fills no pixels once the host fits both panels
+  // around it. The cap-top bound (height + 0.6 * radius + plinth) stays
+  // inside the 2.6 m ceiling for every rng draw.
+  const height = attempt === 0 ? 0.5 : 1.65 + rng() * 0.15;
+  const radius = attempt === 0 ? 0.5 : 0.85 + rng() * 0.15;
+  const segments = attempt === 0 ? 5 : 12 + Math.floor(rng() * 6);
 
   const geometry = registry.track(new THREE.CylinderGeometry(radius * 0.75, radius, height, segments, 2));
   const material = registry.track(
-    new THREE.MeshStandardMaterial({ color: attempt === 0 ? 0x8a3b3b : 0x3f7f6a, roughness: 0.55, metalness: 0.2 }),
+    new THREE.MeshStandardMaterial({ color: attempt === 0 ? 0x8a3b3b : 0x3f7f6a, roughness: 0.55, metalness: 0.2, flatShading: true }),
   );
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.y = height / 2;
-  group.add(mesh);
+  mesh.name = 'candidate-body';
 
-  const capGeometry = registry.track(new THREE.SphereGeometry(radius * 0.9, segments, 6));
+  const capGeometry = registry.track(new THREE.SphereGeometry(radius * 0.6, segments, 6));
   const cap = new THREE.Mesh(capGeometry, material);
+  // Stage plinth both candidates stand on: identical staging for both, so the
+  // verdict marks — not the presentation — carry the difference.
+  const plinthGeometry = registry.track(new THREE.CylinderGeometry(radius * 1.05, radius * 1.12, 0.1, 20));
+  const plinthMaterial = registry.track(
+    new THREE.MeshStandardMaterial({ color: 0x2e3236, roughness: 0.9 }),
+  );
+  const plinth = new THREE.Mesh(plinthGeometry, plinthMaterial);
+  plinth.position.y = -0.05;
+  plinth.name = 'plinth';
+  group.add(plinth);
+  group.add(mesh);
   cap.position.y = height;
   group.add(cap);
 
@@ -174,17 +189,33 @@ export function createDemo(context: DemoContext): Demo {
 
   // Mark the rejected candidate so the reason is on screen, not only in JSON.
   if (rejected) {
-    const flagGeometry = registry.track(new THREE.PlaneGeometry(0.3, 0.06));
+    const flagGeometry = registry.track(new THREE.PlaneGeometry(0.95, 0.2));
     const flagMaterial = registry.track(
       new THREE.MeshBasicMaterial({ color: 0xd94f3d, toneMapped: false, side: THREE.DoubleSide }),
     );
     const flag = new THREE.Mesh(flagGeometry, flagMaterial);
-    flag.position.y = 1.5;
+    // Sit just above the measured top like the accept flag: attempt 0 is only
+    // 0.5 m tall, so a fixed height floats in empty air and inflates the
+    // framed bounds with nothing in them.
+    flag.position.y = new THREE.Box3().setFromObject(rejected).max.y + 0.12;
     flag.name = `rejected:${reports[0]?.failures.join('; ') || 'unknown'}`;
     rejected.add(flag);
   }
-
-  const root = sideBySide(THREE, registry, left, right, 2.0);
+  // Mark the accepted candidate symmetrically: the pass verdict belongs on
+  // screen next to the rejection reasons, not only in userData.
+  if (accepted) {
+    const passGeometry = registry.track(new THREE.PlaneGeometry(0.95, 0.2));
+    const passMaterial = registry.track(
+      new THREE.MeshBasicMaterial({ color: 0x2f8f5b, toneMapped: false, side: THREE.DoubleSide }),
+    );
+    const pass = new THREE.Mesh(passGeometry, passMaterial);
+    // Sit just above the measured top: a fixed height inflates the framed
+    // bounds with empty air once the body mesh is part of the group.
+    pass.position.y = new THREE.Box3().setFromObject(accepted).max.y + 0.15;
+    pass.name = 'accepted:criteria-met';
+    accepted.add(pass);
+  }
+  const root = sideBySide(THREE, registry, left, right, 1.0);
   root.name = 'source-12:closed-loop-asset-acceptance';
   root.userData.candidateReports = reports;
 
@@ -199,7 +230,7 @@ export function createDemo(context: DemoContext): Demo {
       'post text read 2026-09-12 from the page served by x.com (og:description)',
     ],
     limitation:
-      'The browser visual self-verification leg - the half the author says closed the loop - is OPEN. No browser, screenshot or GPU job runs in this lane, so only CPU-inspectable criteria are enforced and rendered quality is unverified. fal.ai and Gemini are paid external APIs and were never invoked; no image or image-to-3D generation happened. No repository exists upstream to pin.',
+      'The browser visual self-verification leg - the half the author says closed the loop - is OPEN. Only CPU-inspectable criteria are enforced here; rendered quality judgement is unverified. fal.ai and Gemini are paid external APIs and were never invoked; no image or image-to-3D generation happened. No repository exists upstream to pin. The demo scene itself is pixel-verified headless (see qa/captures), which is evidence the exhibit draws, not that generation works.',
     counters: {
       triangles: countTriangles(root),
       drawables: countDrawables(root),

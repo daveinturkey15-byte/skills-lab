@@ -39,12 +39,12 @@ const SUBSYSTEMS = ['weapons', 'physics', 'fx', 'audio', 'ui', 'ai'] as const;
 type Subsystem = (typeof SUBSYSTEMS)[number];
 
 const POSITIONS: Record<Subsystem, [number, number, number]> = {
-  weapons: [-1.8, 0.75, 0],
-  physics: [-0.6, -0.6, 0],
-  fx: [0.6, 0.75, 0],
-  audio: [1.8, -0.6, 0],
-  ui: [0.6, -0.6, 0],
-  ai: [1.8, 0.75, 0],
+  weapons: [-0.9, 0.38, 0],
+  physics: [-0.3, -0.3, 0],
+  fx: [0.3, 0.38, 0],
+  audio: [0.9, -0.3, 0],
+  ui: [0.3, -0.3, 0],
+  ai: [0.9, 0.38, 0],
 };
 
 const BOX_COLORS: Record<Subsystem, number> = {
@@ -85,8 +85,11 @@ export function createDemo(context: DemoContext): Demo {
     lastFalloff: 0,
   };
 
-  const boxGeometry = new THREE.BoxGeometry(0.52, 0.34, 0.3);
+  const boxGeometry = new THREE.BoxGeometry(0.55, 0.5, 0.34);
   disposables.push(boxGeometry);
+  const boxEdges = new THREE.EdgesGeometry(boxGeometry);
+  const outlineMaterial = new THREE.LineBasicMaterial({ color: 0xd8dce2, transparent: true, opacity: 0.8 });
+  disposables.push(boxEdges, outlineMaterial);
   const boxMaterials = {} as Record<Subsystem, MeshStandardMaterial>;
   for (const name of SUBSYSTEMS) {
     const material = new THREE.MeshStandardMaterial({
@@ -101,6 +104,9 @@ export function createDemo(context: DemoContext): Demo {
     const mesh = new THREE.Mesh(boxGeometry, material);
     mesh.position.set(...POSITIONS[name]);
     root.add(mesh);
+    const outline = new THREE.LineSegments(boxEdges, outlineMaterial);
+    outline.position.copy(mesh.position);
+    root.add(outline);
   }
 
   // Contracted edges: one line per declared producer->consumer pair.
@@ -123,7 +129,7 @@ export function createDemo(context: DemoContext): Demo {
   disposables.push(edgeGeometry, edgeMaterial);
 
   // Pulse pool. Contracted pulses ride declared edges; broadcast pulses fly to EVERY box.
-  const pulseGeometry = new THREE.SphereGeometry(0.045, 8, 6);
+  const pulseGeometry = new THREE.SphereGeometry(0.06, 8, 6);
   disposables.push(pulseGeometry);
   const pulses: Pulse[] = [];
   for (let i = 0; i < 40; i += 1) {

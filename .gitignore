@@ -25,3 +25,17 @@ night.py
 run-night.cmd
 plan-night.mjs
 logs/
+
+# Capture output from ANY lane, not just the default directory. A lane wrote to
+# qa/captures-N1/ with its own Chrome profile inside, and the narrower
+# `qa/captures/` rule let thousands of profile files into `git add -A`.
+qa/captures*/
+**/.chrome-profile-*
+
+# Lane scratch. Lanes spawn their own Chrome profiles and debug scripts; without
+# these, `git add -A` stages tens of thousands of profile files.
+qa/tmp-*/
+qa/dbg*.mjs
+qa/probe-*.mjs
+s4u-probe.cmd
+launch-lanes.cmd

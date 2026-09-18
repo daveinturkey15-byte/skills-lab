@@ -131,10 +131,40 @@ export function createDemo(context: DemoContext): Demo {
 
   const bad = buildViewmodel(THREE, registry, false);
   const good = buildViewmodel(THREE, registry, true);
+  // Stage scale: the rubric reads at arm's length, not at true size. Both
+  // halves scale together so the before/after comparison stays like-for-like.
+  bad.group.scale.setScalar(2.0);
+  good.group.scale.setScalar(2.0);
+  // Pale outlines on the weapon furniture: the rubric's contrast reading lives
+  // in edges at stage distance. One shared material, per-mesh edge geometry.
+  const outlineMaterial = registry.track(new THREE.LineBasicMaterial({ color: 0xd8dce2, transparent: true, opacity: 0.6 }));
+  for (const half of [bad.group, good.group]) {
+    half.traverse((object) => {
+      const mesh = object as THREE_NS.Mesh;
+      if (!mesh.isMesh) return;
+      const edges = registry.track(new THREE.EdgesGeometry(mesh.geometry));
+      const outline = new THREE.LineSegments(edges, outlineMaterial);
+      outline.name = 'weapon-outline';
+      mesh.add(outline);
+    });
+  }
+
   bad.group.name = 'before:floating-weapon-one-material-no-local-light';
   good.group.name = 'after:offscreen-connected-contrasted-muzzle-lit';
 
-  const root = sideBySide(THREE, registry, bad.group, good.group, 1.8);
+  const root = sideBySide(THREE, registry, bad.group, good.group, 1.2);
+  // Display slabs ground each half. They parent to the unscaled root at the
+  // halves' final addresses, so the x2.0 viewmodel scale cannot amplify them.
+  // Props, not technique.
+  const slabGeometry = registry.track(new THREE.BoxGeometry(1.4, 0.1, 2.8));
+  const slabMaterial = registry.track(new THREE.MeshStandardMaterial({ color: 0x5a5e68, roughness: 0.9 }));
+  for (const half of [bad.group, good.group]) {
+    const slab = new THREE.Mesh(slabGeometry, slabMaterial);
+    slab.position.set(half.position.x, -0.05, 0.1);
+    slab.name = 'display-slab';
+    root.add(slab);
+  }
+
   root.name = 'source-14:viewmodel-comparator';
 
   const metadata = {

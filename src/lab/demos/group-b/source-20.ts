@@ -215,19 +215,19 @@ function applyDispersion(
 function buildPlates(): PlateDef[] {
   return [
     {
-      name: 'glacis', kind: 'main', frame: 'hull', thicknessMm: 150, color: 0x5a6f4a,
+      name: 'glacis', kind: 'main', frame: 'hull', thicknessMm: 150, color: 0x8a9a68,
       verts: [[-0.9, 0.15, 1.35], [0.9, 0.15, 1.35], [0.9, 0.75, 0.85], [-0.9, 0.75, 0.85]],
     },
     {
-      name: 'rear', kind: 'main', frame: 'hull', thicknessMm: 45, color: 0x4a6f5a,
+      name: 'rear', kind: 'main', frame: 'hull', thicknessMm: 45, color: 0x7a9a88,
       verts: [[0.9, 0.2, -1.3], [-0.9, 0.2, -1.3], [-0.9, 0.75, -1.1], [0.9, 0.75, -1.1]],
     },
     {
-      name: 'turretFront', kind: 'main', frame: 'turret', thicknessMm: 120, color: 0x6f5a4a,
+      name: 'turretFront', kind: 'main', frame: 'turret', thicknessMm: 120, color: 0x9a7c5c,
       verts: [[-0.55, 0.0, 0.55], [0.55, 0.0, 0.55], [0.55, 0.45, 0.35], [-0.55, 0.45, 0.35]],
     },
     {
-      name: 'turretSide', kind: 'spaced', frame: 'turret', thicknessMm: 60, color: 0x4a6f5a,
+      name: 'turretSide', kind: 'spaced', frame: 'turret', thicknessMm: 60, color: 0x7a8a88,
       verts: [[0.55, 0.0, 0.55], [0.55, 0.0, -0.6], [0.55, 0.45, -0.6], [0.55, 0.45, 0.35]],
     },
   ];
@@ -265,6 +265,8 @@ export function createDemo(context: DemoContext): Demo {
   // Tank: plate meshes (double side so misses-through show), module box, barrel.
   const plates = buildPlates();
   const plateMaterials: MeshStandardMaterial[] = [];
+  const outlineMaterial = new THREE.LineBasicMaterial({ color: 0xe8e4da, transparent: true, opacity: 0.85 });
+  disposables.push(outlineMaterial);
   for (const plate of plates) {
     const geometry = quadGeometry(THREE, plate.verts);
     const material = new THREE.MeshStandardMaterial({
@@ -277,15 +279,26 @@ export function createDemo(context: DemoContext): Demo {
     if (plate.frame === 'turret') mesh.position.set(0, TURRET_PIVOT_Y, 0);
     plateMaterials.push(material);
     root.add(mesh);
-    disposables.push(geometry, material);
+    const edges = new THREE.EdgesGeometry(geometry);
+    const outline = new THREE.LineSegments(edges, outlineMaterial);
+    outline.position.copy(mesh.position);
+    outline.name = `${plate.name}-outline`;
+    root.add(outline);
+    disposables.push(geometry, material, edges);
   }
 
   // Turret roof cap so the turret reads as a volume, not a floating pair of quads.
   const roofGeometry = new THREE.BoxGeometry(1.1, 0.08, 1.1);
-  const roofMaterial = new THREE.MeshStandardMaterial({ color: 0x59614d, metalness: 0.2, roughness: 0.7 });
+  const roofMaterial = new THREE.MeshStandardMaterial({ color: 0x7d8871, metalness: 0.2, roughness: 0.7 });
   const roof = new THREE.Mesh(roofGeometry, roofMaterial);
   roof.position.set(0, TURRET_PIVOT_Y + 0.47, 0);
   root.add(roof);
+  const roofEdges = new THREE.EdgesGeometry(roofGeometry);
+  const roofOutline = new THREE.LineSegments(roofEdges, outlineMaterial);
+  roofOutline.position.copy(roof.position);
+  roofOutline.name = 'roof-outline';
+  root.add(roofOutline);
+  disposables.push(roofEdges);
   disposables.push(roofGeometry, roofMaterial);
 
   // Barrel in the gun-follow frame: parented under a pivot at the trunnion.
@@ -294,10 +307,14 @@ export function createDemo(context: DemoContext): Demo {
   const barrelGeometry = new THREE.CylinderGeometry(0.055, 0.07, 1.5, 10);
   barrelGeometry.rotateX(Math.PI / 2);
   barrelGeometry.translate(0, 0, 0.75);
-  const barrelMaterial = new THREE.MeshStandardMaterial({ color: 0x3d4237, metalness: 0.5, roughness: 0.5 });
+  const barrelMaterial = new THREE.MeshStandardMaterial({ color: 0x61665e, metalness: 0.5, roughness: 0.5 });
   const barrel = new THREE.Mesh(barrelGeometry, barrelMaterial);
   gunPivot.add(barrel);
-  root.add(gunPivot);
+  const barrelEdges = new THREE.EdgesGeometry(barrelGeometry, 30);
+  const barrelOutline = new THREE.LineSegments(barrelEdges, outlineMaterial);
+  barrelOutline.name = 'barrel-outline';
+  gunPivot.add(barrelOutline);
+  disposables.push(barrelEdges);
   disposables.push(barrelGeometry, barrelMaterial);
 
   // Ammo module box (wireframe box) - the AABB the resolver also tests.
@@ -319,9 +336,28 @@ export function createDemo(context: DemoContext): Demo {
   );
   root.add(ammoMesh);
   disposables.push(ammoGeometry, ammoMaterial);
+  // Firing-lane apron: a tight ground plane in a second tone, so the stage
+  // reads as lane plus target instead of target plus void. Sized to the
+  // armour footprint so it cannot inflate the frame fit.
+  const apronGeometry = new THREE.PlaneGeometry(2.2, 2.9);
+  const apronMaterial = new THREE.MeshStandardMaterial({ color: 0x3a3f45, roughness: 0.95 });
+  const apron = new THREE.Mesh(apronGeometry, apronMaterial);
+  apron.rotation.x = -Math.PI / 2;
+  apron.position.set(0, -0.005, 0.2);
+  apron.name = 'firing-apron';
+  root.add(apron);
+  const stripGeometry = new THREE.BoxGeometry(0.14, 0.02, 2.9);
+  const stripMaterial = new THREE.MeshBasicMaterial({ color: 0x9aa0a8 });
+  for (const side of [-1.06, 1.06]) {
+    const strip = new THREE.Mesh(stripGeometry, stripMaterial);
+    strip.position.set(side, 0.005, 0.2);
+    strip.name = 'apron-edge';
+    root.add(strip);
+  }
+  disposables.push(apronGeometry, apronMaterial, stripGeometry, stripMaterial);
 
   // Impact markers: pooled small boxes colored by resolution (red pen, blue bounce).
-  const markerGeometry = new THREE.BoxGeometry(0.07, 0.07, 0.07);
+  const markerGeometry = new THREE.BoxGeometry(0.16, 0.16, 0.16);
   const markerPool: { mesh: Mesh; material: MeshBasicMaterial; life: number }[] = [];
   for (let i = 0; i < 12; i += 1) {
     const material = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true });
@@ -333,7 +369,7 @@ export function createDemo(context: DemoContext): Demo {
   disposables.push(markerGeometry, ...markerPool.map((m) => m.material));
 
   // Tracer for the in-flight shell.
-  const tracerGeometry = new THREE.SphereGeometry(0.05, 8, 6);
+  const tracerGeometry = new THREE.SphereGeometry(0.12, 8, 6);
   const tracerMaterial = new THREE.MeshBasicMaterial({ color: 0xffe28a });
   const tracer = new THREE.Mesh(tracerGeometry, tracerMaterial);
   tracer.visible = false;

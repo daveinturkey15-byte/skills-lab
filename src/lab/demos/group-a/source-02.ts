@@ -211,7 +211,7 @@ function makeField(): Field {
 }
 
 /** PASS 2 + PASS 3 + the Jacobian foam test, per frame, on the CPU. */
-function evaluate(s: Spectrum, t: number, field: Field, work: Float64Array[]): number {
+function evaluate(s: Spectrum, t: number, field: Field, work: Float64Array[], foamGain: number): number {
   const [hre, him, xre, xim, zre, zim] = work;
   for (let i = 0; i < N * N; i += 1) {
     const w = s.omega[i];
@@ -267,7 +267,7 @@ function evaluate(s: Spectrum, t: number, field: Field, work: Float64Array[]): n
       const dzdx = (field.dispZ[ix] - field.dispZ[i]) * (N / L);
       const j = (1 + dxdx) * (1 + dzdz) - dxdz * dzdx;
       minJacobian = Math.min(minJacobian, j);
-      field.foam[i] = j < FOAM_THRESHOLD ? Math.min(1, (FOAM_THRESHOLD - j) * 2.2) : 0;
+      field.foam[i] = j < FOAM_THRESHOLD ? Math.min(1, (FOAM_THRESHOLD - j) * foamGain) : 0;
     }
   }
   return minJacobian;
@@ -301,11 +301,17 @@ export function createDemo(context: DemoContext): Demo {
   spectral.mesh.name = 'after:jonswap-tma-spectral';
   gerstner.mesh.name = 'before:three-summed-gerstner-sines';
 
-  const root = sideBySide(THREE, registry, gerstner.mesh, spectral.mesh, 2.6);
+  const root = sideBySide(THREE, registry, gerstner.mesh, spectral.mesh, 2.2);
   root.name = 'source-02:spectral-fft-ocean';
 
   const scaleXZ = 2 / N;
-  const heightScale = 0.32;
+  // Presentation scales only: the spectrum, dispersion and foam test are
+  // untouched, but N=32 waves are gentle at true scale and the stage needs
+  // relief and visible foam to read. Stated in the limitation below.
+  // 2.2 m separation is the tightest honest layout (2 m patches, 0.2 m gap);
+  // foam gain 4.5 widens only the whitening response, never the test.
+  const heightScale = 0.55;
+  const foamGain = 4.5;
   const restSpectral = spectral.geometry.getAttribute('position').clone();
   const restGerstner = gerstner.geometry.getAttribute('position').clone();
 
@@ -317,7 +323,7 @@ export function createDemo(context: DemoContext): Demo {
   let minJacobian = 1;
 
   const writeSpectral = (time: number) => {
-    minJacobian = evaluate(spectrum, time, field, work);
+    minJacobian = evaluate(spectrum, time, field, work, foamGain);
     const position = spectral.geometry.getAttribute('position');
     const colour = spectral.geometry.getAttribute('color');
     for (let i = 0; i < N * N; i += 1) {
@@ -328,7 +334,9 @@ export function createDemo(context: DemoContext): Demo {
         h,
         restSpectral.getZ(i) + field.dispZ[i] * scaleXZ * heightScale,
       );
-      const lift = Math.min(1, Math.max(0, h * 3 + 0.5));
+      // Matched to the raised display scale so the ramp spans deep to crest
+      // instead of saturating; identical on both halves for a fair read.
+      const lift = Math.min(1, Math.max(0, h * 1.6 + 0.45));
       scratch.copy(deepColour).lerp(crestColour, lift).lerp(foamColour, field.foam[i]);
       colour.setXYZ(i, scratch.r, scratch.g, scratch.b);
     }
@@ -348,7 +356,7 @@ export function createDemo(context: DemoContext): Demo {
         0.05 * Math.sin(5.7 * z + time * 1.9) +
         0.03 * Math.sin(9.3 * (x + z) + time * 2.7);
       position.setY(i, h);
-      const lift = Math.min(1, Math.max(0, h * 3 + 0.5));
+      const lift = Math.min(1, Math.max(0, h * 1.6 + 0.45));
       scratch.copy(deepColour).lerp(crestColour, lift);
       colour.setXYZ(i, scratch.r, scratch.g, scratch.b);
     }
@@ -372,7 +380,7 @@ export function createDemo(context: DemoContext): Demo {
       'squall01337/abyssal-ocean@142265f5013b6f27bea4f4f819b832dec75c7bad index.html:239-241,513-518,532-567,581-699',
     ],
     limitation:
-      'One cascade at N=32 on the CPU, not three GPU cascades at 512^2 with a butterfly lookup texture and MRT passes; cos^2s spreading stands in for Donelan-Banner; foam is a per-frame Jacobian test with no temporal accumulation; no reflection, refraction, caustics or buoyancy. Source is MIT and no code was copied - the algorithm was re-implemented from the named passes.',
+      'One cascade at N=32 on the CPU, not three GPU cascades at 512^2 with a butterfly lookup texture and MRT passes; cos^2s spreading stands in for Donelan-Banner; foam is a per-frame Jacobian test with no temporal accumulation; no reflection, refraction, caustics or buoyancy. Source is MIT and no code was copied - the algorithm was re-implemented from the named passes. Display only: wave-height scale and foam response gain are raised so N=32 relief reads on stage; spectrum, threshold and test unchanged.',
     counters: {
       triangles: countTriangles(root),
       drawables: countDrawables(root),
