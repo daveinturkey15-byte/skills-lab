@@ -132,8 +132,8 @@ export const room: RoomDefinition = {
         emissive: 0xc05a40, emissiveIntensity: 0.15,
       })),
     );
-    rawMesh.position.set(-3.3, 2.2, 0.5);
-    rawMesh.scale.setScalar(1.25);
+    rawMesh.position.set(-3.3, 2.6, 0.1);
+    rawMesh.scale.setScalar(1.5);
     rawMesh.frustumCulled = false;
     root.add(rawMesh);
 
@@ -144,8 +144,8 @@ export const room: RoomDefinition = {
         emissive: 0x46c79b, emissiveIntensity: 0.15,
       })),
     );
-    cleanMesh.position.set(3.3, 2.2, 0.5);
-    cleanMesh.scale.setScalar(1.25);
+    cleanMesh.position.set(3.3, 2.6, 0.1);
+    cleanMesh.scale.setScalar(1.5);
     cleanMesh.frustumCulled = false;
     root.add(cleanMesh);
 
@@ -154,7 +154,7 @@ export const room: RoomDefinition = {
       color: 0x1a0500, emissive: 0xff4d2a, emissiveIntensity: 2.2, roughness: 0.5,
     }));
     const ring = new THREE.Mesh(track(new THREE.TorusGeometry(0.62, 0.11, 10, 28)), ringMat);
-    ring.position.set(-2.2, 2.2, 0.5);
+    ring.position.set(-1.0, 2.6, 0.1);
     ring.rotation.y = Math.PI / 2;
     root.add(ring);
 
@@ -164,7 +164,7 @@ export const room: RoomDefinition = {
         color: 0x46c79b, roughness: 0.3, emissive: 0x46c79b, emissiveIntensity: 0.15,
       })),
     );
-    sealed.position.set(4.4, 2.2, 0.5);
+    sealed.position.set(4.4, 2.6, 0.1);
     sealed.scale.set(1, 0.9, 0.35);
     root.add(sealed);
 

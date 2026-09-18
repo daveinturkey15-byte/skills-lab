@@ -40,7 +40,7 @@ export const room: RoomDefinition = {
     const stage = new THREE.Group();
     stage.name = 'source-2-room-stage';
     stage.add(demo.root);
-    demo.root.scale.set(1.6, 1.6, 1.6);
+    demo.root.scale.set(1.8, 1.8, 1.8);
     stage.position.set(0, 0.12, -1.0);
 
     const root = new THREE.Group();

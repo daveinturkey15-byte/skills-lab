@@ -68,26 +68,28 @@ export const room: RoomDefinition = {
       return d;
     };
 
-    // Synthetic upstream records in source units: Z-up, centimetres.
+    // Synthetic upstream records in source units: Z-up, centimetres. Sizes
+    // are grown for doorway legibility; the converter below is untouched, so
+    // the demonstrated conversion is identical.
     const rng = makeRng(ctx.seed * 7 + 37);
     const records: SourceRecord[] = [];
     const count = low ? 6 : 9;
     for (let i = 0; i < count; i += 1) {
-      const width = 60 + rng() * 90;
-      const depth = 60 + rng() * 90;
-      const height = 80 + rng() * 180;
+      const width = 90 + rng() * 110;
+      const depth = 120 + rng() * 140;
+      const height = 120 + rng() * 100;
       records.push({
         name: `block-${i}`,
-        position: [-110 + rng() * 220, -110 + rng() * 220, height / 2],
+        position: [-160 + rng() * 320, -160 + rng() * 320, height / 2],
         size: [width, depth, height],
       });
     }
     const converted = records.map(convertZupCentimetres);
     const bayX = 3.2;
-    // Bays sit forward of centre: from the doorway the blocks read at 4–8 m,
-    // not 8–14 m, which is what kept the first capture THIN.
-    const bayZ = -1.0;
-    const padGeo = track(new T.BoxGeometry(5.6, 0.12, 7.2));
+    // Bays sit forward of centre: from the doorway the blocks read at 3–7 m.
+    // The first staging at the back half read THIN; the middle read BELOW BAR.
+    const bayZ = -1.8;
+    const padGeo = track(new T.BoxGeometry(7.4, 0.12, 9.2));
     const padBeforeMat = track(new T.MeshStandardMaterial({ color: 0x4a3a36, roughness: 0.95 }));
     const padAfterMat = track(new T.MeshStandardMaterial({ color: 0x36444a, roughness: 0.95 }));
     for (const [side, mat] of [[-1, padBeforeMat], [1, padAfterMat]] as const) {
@@ -96,9 +98,10 @@ export const room: RoomDefinition = {
       root.add(pad);
     }
 
-    // BEFORE — records used raw, at 1/100 scale so the failure fits the room.
-    // The axes are never swapped, so the plan position becomes height: blocks
-    // hover and intersect instead of standing.
+    // BEFORE — records used raw: centimetres read as metres at display scale,
+    // axes never swapped, so the plan position becomes height: blocks hover
+    // and intersect instead of standing. The display spread is staging; the
+    // missing axis swap is the technique's failure, unchanged in kind.
     const wrongMat = track(new T.MeshStandardMaterial({ color: 0x8c5a5a, roughness: 0.85 }));
     for (const record of records) {
       const mesh = new T.Mesh(
@@ -108,9 +111,9 @@ export const room: RoomDefinition = {
         wrongMat,
       );
       mesh.position.set(
-        -bayX + record.position[0] * 0.01,
-        Math.max(0.05, record.position[1] * 0.01),
-        bayZ + record.position[2] * 0.01,
+        -bayX + record.position[0] * 0.016,
+        Math.max(0.05, record.position[1] * 0.016),
+        bayZ + record.position[2] * 0.016,
       );
       root.add(mesh);
     }
@@ -123,12 +126,10 @@ export const room: RoomDefinition = {
         track(new T.BoxGeometry(record.size[0], record.size[1], record.size[2])),
         rightMat,
       );
-      // Rest the block on the pad: the converter gives centre heights, so never
-      // sink below half the block height.
       mesh.position.set(
-        bayX + record.position[0] * 1.6,
+        bayX + record.position[0] * 1.3,
         Math.max(record.size[1] / 2, record.position[1]),
-        bayZ + record.position[2] * 1.6,
+        bayZ + record.position[2] * 1.3,
       );
       mesh.visible = false;
       root.add(mesh);
@@ -140,7 +141,7 @@ export const room: RoomDefinition = {
       track(new T.BoxGeometry(4.4, 0.1, 0.12)),
       track(new T.MeshStandardMaterial({ color: 0x22262b, roughness: 1 })),
     );
-    trackMesh.position.set(bayX, 0.35, bayZ - 3.2);
+    trackMesh.position.set(bayX, 0.35, bayZ - 2.2);
     root.add(trackMesh);
     const fill = new T.Mesh(
       track(new T.BoxGeometry(1, 0.14, 0.14)),
@@ -148,10 +149,10 @@ export const room: RoomDefinition = {
         new T.MeshStandardMaterial({ color: 0x74c69d, emissive: 0x1d3a2c, roughness: 0.5 }),
       ),
     );
-    fill.position.set(bayX, 0.35, bayZ - 3.2);
+    fill.position.set(bayX, 0.35, bayZ - 2.2);
     root.add(fill);
 
-    const cacheSeconds = 5;
+    const cacheSeconds = 3;
     let elapsed = 0;
     return {
       root,

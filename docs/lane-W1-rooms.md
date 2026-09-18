@@ -2,132 +2,131 @@
 
 13 rooms owned (brief `W1-rooms.md`, wave of 2026-09-18). 3 room files edited,
 1 report (this file). No other files touched. Never killed anything; never ran
-a git write command. Shared preview on :5199 used as-is.
+a git write command.
 
-Scope note: the working tree held a 21-room `lane-W1-rooms.md` from a previous
-wave with a different assignment. My brief names 13 rooms and this report path,
-so this file replaces it. The replaced content belongs to no current brief.
+Scope note: the working tree held a `lane-W1-rooms.md` from a previous wave
+with a different assignment (sources 50/2/16/38/49/57). My brief names the 13
+rooms below and this report path, so this file replaces it.
 
-## Gate results (final, `qa/room-shot.mjs`, nvidia, WebGPU/high, target 0.38)
+Target at time of work: **0.41** (`qa/rooms/target.json`, ratcheted up from
+0.38 before this lane started). `--source` runs never raise it. I did not
+edit the gate.
 
-Target rose 0.35 → 0.38 (ratchet, `qa/rooms/target.json`) while this lane ran.
-`--source` runs never raise it.
+## Gate results (final, `qa/room-shot.mjs`, nvidia, WebGPU/high, target 0.41)
 
-| source | q | door | inside | verdict | cycles used |
-|---|---|---|---|---|---|
-| 59 Graalitoo article (stub) | 0.04 | 2% | — | EMPTY, honest | 0, no fix possible |
-| 31 FPS arms | 0.40 | 21% | — | PRESENT | 1 |
-| 10 Vibe3D registry | 0.55 | 37% | — | PRESENT | 0 |
-| 26 arcade menu | 0.42 | 18% | — | PRESENT | 0 |
-| 41 sketch hub | 0.59 | 31% | — | PRESENT | 0 |
-| 52 island village | 0.44 | 21% | — | PRESENT | 0 |
-| 1 mocap | 0.68 | 55% | — | PRESENT | 0 |
-| 34 contracts | 0.63 | 49% | — | PRESENT | 0 |
-| 3 stylised water | 0.59 | 46% | — | PRESENT | 0 |
-| 14 claudefare | 0.66 | 33% | — | PRESENT | 4 (declared overrun, see below) |
-| 25 shoreline (stub) | 0.03 | 2% | — | EMPTY, honest | 0, blocked by catalogue |
-| 43 lumera | 0.72 | 53% | — | PRESENT | 2 (one self-inflicted break, repaired) |
-| 62 AGR importer (external) | 0.05 | 2% | — | EMPTY, honest | 0, unreleased WIP |
+| source | q | door | verdict | cycles used |
+|---|---|---|---|---|
+| 59 Graalitoo article (stub) | 0.03 | 2% | EMPTY, honest | 0, nothing demonstrable |
+| 27 feel loop | 0.41 | 19% | PRESENT, on the line | 3 (0.37 → 0.27 → 0.32 → 0.41) |
+| 1 mocap plant step | 0.55 | 55% | PRESENT | 0 |
+| 10 prop ingestion gate | 0.44 | 37% | PRESENT | 0 |
+| 31 fps arms | 0.42 | 36% | PRESENT | 1 (0.38 → 0.42) |
+| 40 voxel windows | 0.45 | 31% | PRESENT | 0 |
+| 52 island schedules | 0.43 | 26% | PRESENT | 0 |
+| 58 dermis bust | 0.57 | 59% | PRESENT | 0 |
+| 3 stylised water | 0.60 | 48% | PRESENT | 0, comparator per catalogue blocker |
+| 14 claudefare | 0.42 | 33% | PRESENT | 1 (0.39 → 0.42) |
+| 25 shoreline (stub) | 0.02 | 2% | EMPTY, honest | 0, blocked by catalogue |
+| 43 lumera | 0.70 | 56% | PRESENT | 0 |
+| 62 AGR importer (external) | 0.04 | 2% | EMPTY, honest | 0, unreleased WIP |
 
-10 PRESENT, 3 EMPTY-by-design. No console errors in any final run (the old
-favicon 404 is gone — the page now inlines its icon).
+10 PRESENT, 3 EMPTY-by-design. No console errors attributable to my rooms in
+any run. One transient `page.goto` failure on the first 62 run (preview hiccup
+under parallel-lane load); retry passed with the same honest-EMPTY numbers.
 
 ## What I changed and why (3 files)
 
-- **31 FPS arms** (`source-31-fps-arms.ts`, 1 cycle). The 3x rig sat 4 m ahead
-  of the door camera and read 13% (q=0.32): truthfully present, just small.
-  Rescaled 3x → 2.2x, moved to 2.3 m ahead of the door camera, set on a low
-  plinth disc with a bright rim so the floating first-person rig has a floor
-  anchor. Demo maths (IK, pole, curl) untouched. 0.32 → 0.40 PRESENT, stable
-  across a later rebuild (0.42 then 0.40). Walk in: brown posed arm with gold
-  IK markers reaching for the blue handle, grey ghost beside it, all large.
-- **14 claudefare** (`source-14-claudefare.ts`, 4 touches — one over the
-  three-cycle budget, declared). The brief said q=0.34 and the room measured
-  the same. Touch 1 (legend boards on the back wall) scored identically zero
-  effect; diagnosis via a throwaway multi-viewpoint probe (deleted after)
-  showed why: this east-wing room carries the through-interior world shell
-  wall at local z=0 (see below) — everything behind it never reaches the
-  door, and a camera placed 1.5 m inside photographed a featureless wall.
-  Touch 2 moved the boards next to the spawn camera to prove they render
-  (they do). Touch 3 laid them flat as floor labels at the frame edges, where
-  they foreshorten to slivers (q=0.35). Touch 4 pulled both halves ±2.9 →
-  ±1.9 so the pair fills the door frame, and hung the labels over the guns at
-  gun depth, door-side of the wall. 0.34 → 0.66 PRESENT with the burst caught
-  live (motion 26%). Walk in: black disconnected before-gun left under a red
-  BEFORE label, tan connected after-gun right under a green AFTER label.
-- **43 lumera** (`source-43-lumera.ts`, 2 cycles). Stuck at q=0.35 with an
-  added light-parameter orb registering nothing — same wall, different
-  orientation: this room's barrier runs along its centre line and walled off
-  most of the AFTER bay (visible in the frame as flat grey where props should
-  be). Cycle 1 added the orb (plus one self-inflicted `root` deletion that
-  tsc and the gate caught together; repaired, tsc clean). Cycle 2 moved both
-  bays fully door-side (bayZ −0.8 → −3.6, boards 6.4 → 4.6 m deep), tightened
-  the light orbit onto the boards. 0.35 → 0.72 PRESENT. Walk in: two bays of
-  props with a bright orb sweeping over the right one, which relights while
-  the baked left one cannot.
+- **27 feel loop** (`source-27-feel-loop.ts`, 3 cycles). The live
+  cooldown/hitstop scoreboard never appeared in any doorway frame, so the
+  room's "control" was invisible and its only continuous motion source was
+  missing. Cycle 1 moved the board right of the striker post — half behind the
+  post, half out of frame (0.37 → 0.27). Cycle 2 moved it to a label stand on
+  legs centre-floor between camera and action — stand rendered, bars missing
+  (0.32). Root cause found: bars sat at z=-2.15/-3.45, 5 cm BEHIND the wall
+  panel from the door camera (sign error, present since the room was written —
+  the bars were never visible in any capture). Cycle 3 put both bars 5 cm
+  door-side of the panel (0.41, motion 1 → 10%). Drive-by fix in the same
+  cycles: the hitstop bar's flash position was `x = 0` (arena centre) instead
+  of the board — it now flashes on the board. HIT/STOP durations, swing,
+  knockback, flash and update order untouched.
+- **31 fps arms** (`source-31-fps-arms.ts`, 1 cycle). Square-on at 2.1x, one
+  flat-shaded capsule side filled the doorway and shading starved at 1%.
+  Turned the stage a quarter to the door (yaw PI + 0.45), 1.9x, half-step back
+  (z -3.9 → -3.4, plinth followed), plus one warm exhibit spot from the
+  upper-left-front where the world key leaves door-facing facets one flat tone
+  (0.38 → 0.42, coverage 30 → 36%, shading 1 → 2%). IK, pole, curl untouched.
+  Two self-inflicted edit slips repaired immediately (duplicated floor add,
+  both verified by re-read; `tsc` green throughout).
+- **14 claudefare** (`source-14-claudefare.ts`, 1 cycle). Steady state between
+  muzzle bursts is a photograph (motion 0% across back-to-back captures,
+  q=0.39 twice). Added ±2 cm idle sway at 2.1 rad/s to both viewmodel groups —
+  real viewmodels never sit dead still, amplitude far below the recoil it must
+  not mask (0.39 → 0.42, motion 0 → 2%). Burst cadence, materials, comparator
+  geometry untouched.
 
-## Per room (the rest: verified as-is, no edits)
+## Per room (walk-in read from doorway frames)
 
-- **59 (stub).** Catalogue: article body never retrievable, no method. Empty
-  room with the honest card is the correct outcome. No fix exists.
-- **10.** Two ingestion bays (as-shipped vs gated prop) with measured-number
-  placards. Highest detail in lane (7%). Human check: right-bay numbers are
-  computed from the built meshes.
-- **26.** 8-card ring (R = N(W+GAP)/TAU verbatim) with walk-around focus
-  pillar and clamped/unclamped swatches. Human check: rotation takes the
-  short way round; only the focus slot launches.
-- **41.** Four numbered pedestals vs the unnamed pile: the catalogue format
-  as a room. Human check: each pedestal resolves on its own.
-- **52.** Schedule-driven isle grown to fill the floor, roster/quest economy
-  behind it. Human check: villagers hold distinct jobs (market, log pile,
-  jetty, orchard).
-- **1.** Raw-FK skating vs hip-searched planting, two 3.4 m figures. Highest
-  door in lane (55%). Human check: support foot stays down through the plant.
-- **34.** Contracted pulses vs broadcast halves with quadratic falloff.
-  Human check: left pulses travel declared edges only, right floods.
-- **3.** Comparator-only split floor (flat colour vs depth ramp with foam and
-  wake) over one beach. Catalogue blocker recorded: no repo, no technique,
-  comparator list only — the room invents nothing under the title.
-- **25 (stub).** Blocked: unreleased technique, no source. Empty on purpose,
-  blocker on the card. No fix exists.
-- **62 (external).** Unreleased UE WIP: launcher plus comparator atoms, no
-  in-browser claim. EMPTY is the correct verdict.
+- **59 (stub).** Numbers only, not eyeballed: 2% door. Correct outcome —
+  article body never retrieved, catalogue carries no method, card says UNKNOWN.
+- **27.** Striker arm mid-swing over the teal dummy in the railed arena, label
+  stand centre frame with the green cooldown block and a red hitstop sliver
+  visible. PRESENT on the line — a human should check the bar reads as a
+  *filling* bar rather than a sliding block (it anchors rightward as it grows).
+- **1.** Two ~3.4 m figures mid plant-step on a shared ground sheet, plant
+  discs under both support feet; raw-FK skate vs hip-search stance reads at a
+  glance. PRESENT, no touch.
+- **10.** Two bays, drum + bollard each; warm preview bulb left, gated tight
+  collider right, measured placards computed from the meshes. PRESENT.
+- **31.** Posed brown arm reaching at the blue handle with curled fingers,
+  grey ghost behind, gold joint markers, rimmed plinth. PRESENT after 1 cycle.
+- **40.** Two voxel towers with amber emissive windows just inside the door;
+  scripted carve runs on a timer (motion 5%). PRESENT. The limitation on the
+  card (scripted carve, NOT emergent failure) is the honest half of this room.
+- **52.** Isle filling the floor wall to near-wall: huts, farm rows, jetty
+  boat, walking villagers (hues 18, highest in lane). PRESENT.
+- **58.** Generic mannequin bust large in frame with strand hair and mottled
+  skin, mid-blink channel. PRESENT. No image input exists anywhere — the point.
+- **3.** Pale split water floor wall to wall, boat on the after side, foam and
+  wake moving (motion 8%). Catalogue blocker recorded (no repository,
+  comparator only); room invents nothing. PRESENT.
+- **14.** BEFORE/AFTER gun slabs with rubric labels, dark gunmetal vs single
+  skin, sway alive in steady state. PRESENT but thin (0.42). BEFORE label
+  slightly clipped at frame right — flagged below, untouched.
+- **25 (stub).** Numbers only: 2% door. Blocked (unreleased), empty on
+  purpose, blocker on the card. No fix exists.
+- **43.** Grey bays with orbiting glare, props relighting warm on the after
+  side (motion 57%, shading 18% — the gate's model citizen). PRESENT.
+- **62 (external).** Numbers only: 2% door. Unreleased UE WIP: launcher plus
+  honest limitation, no in-browser claim. EMPTY is correct.
 
 ## Found outside my files (reported, not touched)
 
-- **Through-interior world shell walls, confirmed with pixel evidence in two
-  more rooms** (`src/world/world.ts`, lines ~188–203; prior lane reported the
-  X-wing case). The side-wall branch keys dimensions off `|sx| > 0.5` and for
-  rooms extending along X builds a full-width, full-height barrier at local
-  z≈0: room 14 (east wing) hides everything behind it from the door (back-wall
-  boards measured exactly 0 added red/green pixels over three captures; a
-  camera at local z=−1.5 facing the back wall photographed a featureless
-  field), and room 43 carries the same barrier along its centre line, walling
-  off most of the AFTER bay. Both rooms are now staged door-side of it and
-  read PRESENT, but a world-lane fix will change what every X-wing room's
-  doorway sees — those rooms' front-half workarounds will still read fine
-  afterwards, and their back halves will newly appear.
-- **Sibling collision (normal, recorded).** `src/atlas/atlas.ts`,
-  `source-23`, `source-35` and `src/world/venue.ts` were edited by other lanes
-  during this run; one mid-lane `tsc` failed on a sibling's `source-35` error
-  (repaired by its owner before my final check) and `dist` was rebuilt by
-  another lane at least once. Room-31/14/43 code is mine and unaffected, but
-  any capture here shares `dist` with every lane building at the time.
-- **Capture/build race.** One of my 14 captures loaded the page while my own
-  rebuild was still writing `dist` and measured the pre-edit room exactly.
-  Rebuild → wait → capture ordering matters; the affected run was discarded,
-  the room re-captured clean.
+- **BEFORE label clipped, source 14 doorway.** Text reads "no ligh…" at frame
+  right with a full-height vertical seam beside it — either the room's right
+  wall close to camera or a slab edge. If it is the wall, halves at ±1.9 are
+  near their limit; needs a world-lane eye, not a room-lane guess.
+- **Capture beat-aliasing is real.** 27's 1.4 s beat vs the 1.3 s frame gap
+  read motion 6% → 1% → 5% → 10% across identical-code runs; 14's 2 s burst
+  read 28% once, 0% twice. Two-frame sampling cannot score periodic exhibits
+  stably. Continuous motion sources (27's now-visible cooldown sweep, 14's
+  sway) damp it but do not remove it.
+- **Shared-preview cross-talk continues.** Three `build:nocheck` runs by this
+  lane interleaved with whoever else is capturing; every rebuild bakes the
+  whole tree including half-finished sibling rooms. All tabled numbers are
+  per-capture truth from the final tree state.
 
 ## What was NOT verified
 
 - Technique correctness anywhere: PRESENT/quality means visible and lively,
   never right. Nothing was validated against its source.
-- A real human walkthrough: no mouse walkthrough; camera paths only. The
-  "walk in" lines above describe what the capture frames show, not a visit.
-- WebGL/low appearance: all captures WebGPU/high. `quality` scaling is
-  code-read, never captured.
+- A real human walkthrough: no mouse walkthrough; camera teleports only. The
+  "walk in" lines above describe capture frames, not visits.
+- Stubs/externals (59/25/62) were not eyeballed — numbers only.
+- WebGL/low appearance: all captures WebGPU/high (nvidia). `quality` scaling
+  is code-read, never captured.
 - Frame rate and triangle/draw budgets: not measured in-browser for any room.
-- The wall-card text was spot-checked in frames, not read fully.
-- Finish-step commands: `npx tsc --noEmit` clean (exit 0, no output) at end
-  of lane; `room-shot --source` per table above. 14's fourth touch exceeds
-  the three-cycle guidance and is declared, not hidden.
+- Wall-card text was not re-read in frames this lane (prior wave verified the
+  venue cards render; my rooms' summary/limitation strings are code-read).
+- Finish-step commands: `npx tsc --noEmit` — empty output, exit 0 — at end of
+  lane; `room-shot --source` per table above under target 0.41. Cycle budget:
+  27 ×3, 31 ×1, 14 ×1, everything else ×0 — nothing exceeded, nothing hidden.

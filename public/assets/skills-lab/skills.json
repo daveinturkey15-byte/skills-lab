@@ -1,0 +1,1414 @@
+{
+ "generatedAt": "2026-09-18",
+ "note": "Name, description and shape only. Skill bodies are never copied into this repository.",
+ "skills": [
+  {
+   "name": "macos-personal-automation",
+   "dir": "macos-personal-automation",
+   "category": "apple",
+   "description": "Use when operating Apple/macOS personal apps from Hermes: Notes, Reminders, Messages, Find My, and GUI computer-use workflows.",
+   "lines": 90,
+   "references": 0
+  },
+  {
+   "name": "agentic-harness-discipline",
+   "dir": "agentic-harness-discipline",
+   "category": "autonomous-ai-agents",
+   "description": "Use when doing consequential, fuzzy, multi-step, or long-running agentic work. Converts requests into spec/goal/check loops, separates proposer from verifier, and encodes durable lessons to the right memory tier.",
+   "lines": 105,
+   "references": 1
+  },
+  {
+   "name": "autonomous-coding-agents",
+   "dir": "autonomous-coding-agents",
+   "category": "autonomous-ai-agents",
+   "description": "Use when delegating software work to autonomous coding CLIs such as Claude Code, Codex, OpenCode, or Antigravity, including setup, prompt handoff, monitoring, and verification.",
+   "lines": 86,
+   "references": 0
+  },
+  {
+   "name": "buzz-native-coordination",
+   "dir": "buzz-native-coordination",
+   "category": "autonomous-ai-agents",
+   "description": "Use for Buzz-native agent coordination and quiet routing.",
+   "lines": 209,
+   "references": 13
+  },
+  {
+   "name": "computer-use",
+   "dir": "computer-use",
+   "category": "autonomous-ai-agents",
+   "description": "Use when driving the user's desktop with computer_use.",
+   "lines": 352,
+   "references": 0
+  },
+  {
+   "name": "desky-jigglyclaw-coordination",
+   "dir": "desky-jigglyclaw-coordination",
+   "category": "autonomous-ai-agents",
+   "description": "Use for private Desky/Jigglyclaw coordination. Buzz primary; Discord fallback.",
+   "lines": 79,
+   "references": 1
+  },
+  {
+   "name": "exact-model-sidecar-orchestration",
+   "dir": "exact-model-sidecar-orchestration",
+   "category": "autonomous-ai-agents",
+   "description": "Use when a task requires one exact model/provider with no fallback.",
+   "lines": 153,
+   "references": 5
+  },
+  {
+   "name": "external-side-effect-handoffs",
+   "dir": "external-side-effect-handoffs",
+   "category": "autonomous-ai-agents",
+   "description": "Use for exact-once external side-effect handoffs.",
+   "lines": 80,
+   "references": 1
+  },
+  {
+   "name": "formal-coordination-safety",
+   "dir": "formal-coordination-safety",
+   "category": "autonomous-ai-agents",
+   "description": "Use for exact-once, privacy-safe multi-agent handoffs.",
+   "lines": 228,
+   "references": 10
+  },
+  {
+   "name": "gem-nano-agent-debug",
+   "dir": "gem-nano-agent-debug",
+   "category": "autonomous-ai-agents",
+   "description": "Debug, refine, or extend Dave's local Gem/Gemma Nano desktop assistant in tools/nano-agent. Use for Gem response quality, routing, live web/search decisions, memory, tool harnesses, Chrome Nano prompt sessions, widget/desktop UI, MCP tools, launch/status checks, or leaks of raw reasoning, JSON, tool output or model identity.",
+   "lines": 33,
+   "references": 0
+  },
+  {
+   "name": "hermes-agent",
+   "dir": "hermes-agent",
+   "category": "autonomous-ai-agents",
+   "description": "Use when configuring, extending, or contributing to Hermes Agent.",
+   "lines": 1141,
+   "references": 2
+  },
+  {
+   "name": "merge-reconciler",
+   "dir": "merge-reconciler",
+   "category": "autonomous-ai-agents",
+   "description": "Neutral third-party resolution of agent merge conflicts.",
+   "lines": 159,
+   "references": 0
+  },
+  {
+   "name": "multi-agent-code-generation",
+   "dir": "multi-agent-code-generation",
+   "category": "autonomous-ai-agents",
+   "description": "Use when delegating parallel coding work to sub-agents.",
+   "lines": 173,
+   "references": 3
+  },
+  {
+   "name": "multi-agent-project-handoffs",
+   "dir": "multi-agent-project-handoffs",
+   "category": "autonomous-ai-agents",
+   "description": "Use when taking over or verifying another agent's project work.",
+   "lines": 107,
+   "references": 4
+  },
+  {
+   "name": "parallel-delegation-orchestration",
+   "dir": "parallel-delegation-orchestration",
+   "category": "autonomous-ai-agents",
+   "description": "Prevent sub-agent file collisions and independently verify.",
+   "lines": 224,
+   "references": 5
+  },
+  {
+   "name": "read-only-parity-acceptance",
+   "dir": "read-only-parity-acceptance",
+   "category": "autonomous-ai-agents",
+   "description": "Use for read-only parity acceptance.",
+   "lines": 231,
+   "references": 6
+  },
+  {
+   "name": "runtime-control-plane-acceptance",
+   "dir": "runtime-control-plane-acceptance",
+   "category": "autonomous-ai-agents",
+   "description": "Use when staging or verifying agent control planes.",
+   "lines": 182,
+   "references": 8
+  },
+  {
+   "name": "runtime-health-acceptance",
+   "dir": "runtime-health-acceptance",
+   "category": "autonomous-ai-agents",
+   "description": "Use after a Hermes restart to prove runtime health.",
+   "lines": 179,
+   "references": 5
+  },
+  {
+   "name": "ascii-art",
+   "dir": "ascii-art",
+   "category": "creative",
+   "description": "ASCII art: pyfiglet, cowsay, boxes, image-to-ascii.",
+   "lines": 323,
+   "references": 0
+  },
+  {
+   "name": "ascii-video",
+   "dir": "ascii-video",
+   "category": "creative",
+   "description": "ASCII video: convert video/audio to colored ASCII MP4/GIF.",
+   "lines": 249,
+   "references": 8
+  },
+  {
+   "name": "comfyui",
+   "dir": "comfyui",
+   "category": "creative",
+   "description": "Use when generating or processing media with ComfyUI.",
+   "lines": 634,
+   "references": 4
+  },
+  {
+   "name": "comfyui-request-pipeline",
+   "dir": "comfyui-request-pipeline",
+   "category": "creative",
+   "description": "Automated ComfyUI image generation via cron-based file watching — no firewall, no persistent server. Submit requests as JSON files, cron picks them up, results land in an output directory.",
+   "lines": 183,
+   "references": 3
+  },
+  {
+   "name": "face-swap-insightface-compositing",
+   "dir": "face-swap-insightface-compositing",
+   "category": "creative",
+   "description": "Face swap onto an image, preserve body/scene.",
+   "lines": 44,
+   "references": 0
+  },
+  {
+   "name": "humanizer",
+   "dir": "humanizer",
+   "category": "creative",
+   "description": "Humanize text: strip AI-isms and add real voice.",
+   "lines": 648,
+   "references": 0
+  },
+  {
+   "name": "local-video-generation",
+   "dir": "local-video-generation",
+   "category": "creative",
+   "description": "Use for local AI video generation and delivery.",
+   "lines": 240,
+   "references": 13
+  },
+  {
+   "name": "manim-video",
+   "dir": "manim-video",
+   "category": "creative",
+   "description": "Manim CE animations: 3Blue1Brown math/algo videos.",
+   "lines": 276,
+   "references": 14
+  },
+  {
+   "name": "songwriting-and-ai-music",
+   "dir": "songwriting-and-ai-music",
+   "category": "creative",
+   "description": "Use when writing original songs or authorized AI-music prompts.",
+   "lines": 317,
+   "references": 0
+  },
+  {
+   "name": "touchdesigner-mcp",
+   "dir": "touchdesigner-mcp",
+   "category": "creative",
+   "description": "Use when controlling TouchDesigner through an authorized twozero MCP.",
+   "lines": 358,
+   "references": 21
+  },
+  {
+   "name": "visual-web-artifacts",
+   "dir": "visual-web-artifacts",
+   "category": "creative",
+   "description": "Use when creating browser-deliverable visual artifacts: HTML mockups, landing pages, diagrams, infographics, design-token specs, Excalidraw sketches, and p5.js demos.",
+   "lines": 64,
+   "references": 0
+  },
+  {
+   "name": "jupyter-live-kernel",
+   "dir": "jupyter-live-kernel",
+   "category": "data-science",
+   "description": "Iterative Python via live Jupyter kernel (hamelnb).",
+   "lines": 168,
+   "references": 0
+  },
+  {
+   "name": "dave-telegram-protocol",
+   "dir": "dave-telegram-protocol",
+   "category": "desky-jigglyclaw-coordination",
+   "description": "Use when messaging Dave on Telegram.",
+   "lines": 48,
+   "references": 0
+  },
+  {
+   "name": "akephalos",
+   "dir": "akephalos",
+   "category": "devops",
+   "description": "Set up and sync Akephalos (AKP) — the markdown-first passport for AI agents. Initialize passport bundles, register harnesses, manage durable memories, and sync with private shared repos.",
+   "lines": 448,
+   "references": 16
+  },
+  {
+   "name": "akp-adoption-scope-verification",
+   "dir": "akp-adoption-scope-verification",
+   "category": "devops",
+   "description": "Use for AKP scope and receipt verification.",
+   "lines": 56,
+   "references": 3
+  },
+  {
+   "name": "buzz-client-operations",
+   "dir": "buzz-client-operations",
+   "category": "devops",
+   "description": "Use when connecting, pairing, or implementing Buzz clients.",
+   "lines": 222,
+   "references": 9
+  },
+  {
+   "name": "connection-reliability-guardians",
+   "dir": "connection-reliability-guardians",
+   "category": "devops",
+   "description": "Use for quiet owner-facing connection guardians.",
+   "lines": 68,
+   "references": 1
+  },
+  {
+   "name": "cross-harness-parity-verification",
+   "dir": "cross-harness-parity-verification",
+   "category": "devops",
+   "description": "Use for cross-harness parity checks across agents and AKP.",
+   "lines": 51,
+   "references": 3
+  },
+  {
+   "name": "desktop-browser-settings-verification",
+   "dir": "desktop-browser-settings-verification",
+   "category": "devops",
+   "description": "Use when changing a live desktop browser's settings.",
+   "lines": 105,
+   "references": 0
+  },
+  {
+   "name": "deterministic-owner-watchdogs",
+   "dir": "deterministic-owner-watchdogs",
+   "category": "devops",
+   "description": "Use for deterministic owner-facing threshold watchdogs.",
+   "lines": 103,
+   "references": 1
+  },
+  {
+   "name": "discord-gateway",
+   "dir": "discord-gateway",
+   "category": "devops",
+   "description": "Set up, configure, and debug the Hermes Discord gateway — bot creation, intents, .env config, invite URLs, and restart workflows.",
+   "lines": 230,
+   "references": 2
+  },
+  {
+   "name": "hermes-usage-conscious-automation",
+   "dir": "hermes-usage-conscious-automation",
+   "category": "devops",
+   "description": "Use when building low-cost Hermes cron jobs and watchdogs.",
+   "lines": 242,
+   "references": 22
+  },
+  {
+   "name": "hermes-voice-integrations",
+   "dir": "hermes-voice-integrations",
+   "category": "devops",
+   "description": "Configure and extend Hermes voice modes, including CLI/gateway STT+TTS, Discord voice channels, and experimental OpenAI Realtime-style full-duplex integrations.",
+   "lines": 112,
+   "references": 2
+  },
+  {
+   "name": "hermes-windows-self-restart",
+   "dir": "hermes-windows-self-restart",
+   "category": "devops",
+   "description": "Use when Dave asks to check or restart a Windows Hermes gateway.",
+   "lines": 141,
+   "references": 0
+  },
+  {
+   "name": "hermes-windows-update",
+   "dir": "hermes-windows-update",
+   "category": "devops",
+   "description": "Use when Dave asks to update Hermes on his Windows machine.",
+   "lines": 139,
+   "references": 5
+  },
+  {
+   "name": "kanban-workflows",
+   "dir": "kanban-workflows",
+   "category": "devops",
+   "description": "Use when coordinating Hermes Kanban orchestration and worker execution: board setup, task decomposition, worker prompts, status flow, and verification.",
+   "lines": 64,
+   "references": 0
+  },
+  {
+   "name": "local-agent-client-pairing",
+   "dir": "local-agent-client-pairing",
+   "category": "devops",
+   "description": "Use for mobile/desktop pairing to a local agent bridge.",
+   "lines": 153,
+   "references": 11
+  },
+  {
+   "name": "model-catalog-picker-verification",
+   "dir": "model-catalog-picker-verification",
+   "category": "devops",
+   "description": "Use when verifying provider model picker entries.",
+   "lines": 53,
+   "references": 1
+  },
+  {
+   "name": "omp-session-operations",
+   "dir": "omp-session-operations",
+   "category": "devops",
+   "description": "Audit/manage omp private-profile privacy on dave-gaming-pc.",
+   "lines": 46,
+   "references": 1
+  },
+  {
+   "name": "openrouter-free-vision",
+   "dir": "openrouter-free-vision",
+   "category": "devops",
+   "description": "Find and verify currently free vision-capable OpenRouter models. Use when selecting a zero-priced image model or diagnosing OpenRouter vision availability, metadata, limits, or routing.",
+   "lines": 59,
+   "references": 0
+  },
+  {
+   "name": "pipeline-source-verification",
+   "dir": "pipeline-source-verification",
+   "category": "devops",
+   "description": "Use when rebase targets may be stale. Verify provenance.",
+   "lines": 53,
+   "references": 1
+  },
+  {
+   "name": "provider-api-management",
+   "dir": "provider-api-management",
+   "category": "devops",
+   "description": "Operate Hermes provider authentication, usage, model selection, and health checks. Use for OAuth/API-key setup, expired credentials, quota questions, provider switching, or sanitized inference verification.",
+   "lines": 539,
+   "references": 44
+  },
+  {
+   "name": "provider-cli-parity-verification",
+   "dir": "provider-cli-parity-verification",
+   "category": "devops",
+   "description": "Use for provider CLI parity checks.",
+   "lines": 87,
+   "references": 2
+  },
+  {
+   "name": "release-line-reconciliation",
+   "dir": "release-line-reconciliation",
+   "category": "devops",
+   "description": "Use when releases bypass main or stale PRs accumulate.",
+   "lines": 141,
+   "references": 4
+  },
+  {
+   "name": "release-preview-provenance",
+   "dir": "release-preview-provenance",
+   "category": "devops",
+   "description": "Use for exact-head release preview provenance.",
+   "lines": 75,
+   "references": 2
+  },
+  {
+   "name": "runtime-policy-verification",
+   "dir": "runtime-policy-verification",
+   "category": "devops",
+   "description": "Use for runtime policy changes; separate live evidence.",
+   "lines": 67,
+   "references": 4
+  },
+  {
+   "name": "sdlc-review",
+   "dir": "sdlc-review",
+   "category": "devops",
+   "description": "Review Kanban handoffs and route verified outcomes.",
+   "lines": 182,
+   "references": 0
+  },
+  {
+   "name": "skills-hub-operations",
+   "dir": "skills-hub-operations",
+   "category": "devops",
+   "description": "Use when finding or installing skills from the Skills Hub.",
+   "lines": 66,
+   "references": 1
+  },
+  {
+   "name": "windows-system-administration",
+   "dir": "windows-system-administration",
+   "category": "devops",
+   "description": "Use for Windows installs, services, and host recovery.",
+   "lines": 250,
+   "references": 13
+  },
+  {
+   "name": "wow-spp-local-mod-restore",
+   "dir": "wow-spp-local-mod-restore",
+   "category": "devops",
+   "description": "Repair Dave's local WoW 3.3.5a/SPP-style modded client and server state. Use for launching the Elwynn/WoW modded client, login failures, local MySQL/realmd/mangosd processes, character gold/items/proficiencies/spells, Blink cooldown/range/mana edits, mail or bag grants, new-character grants, DBC/MPQ mismatches, or full restarts.",
+   "lines": 42,
+   "references": 0
+  },
+  {
+   "name": "zai-glm-provider",
+   "dir": "zai-glm-provider",
+   "category": "devops",
+   "description": "Configure and diagnose Z.ai GLM access in Hermes, OpenCode, or OpenAI-compatible clients. Use for supported authentication, endpoint choice, rate limits, model routing, and sanitized health checks.",
+   "lines": 113,
+   "references": 1
+  },
+  {
+   "name": "agent-email-operations",
+   "dir": "agent-email-operations",
+   "category": "email",
+   "description": "Provision and operate agent-owned email identities across REST APIs, MCP, SMTP, and Hermes gateways, with secret-safe setup and verified delivery claims.",
+   "lines": 134,
+   "references": 1
+  },
+  {
+   "name": "email-inbox-triage",
+   "dir": "email-inbox-triage",
+   "category": "email",
+   "description": "Triage an inbox: prioritize threads, draft replies safely.",
+   "lines": 98,
+   "references": 0
+  },
+  {
+   "name": "himalaya",
+   "dir": "himalaya",
+   "category": "email",
+   "description": "Himalaya CLI: IMAP/SMTP email from terminal.",
+   "lines": 305,
+   "references": 2
+  },
+  {
+   "name": "ai-3d-asset-generation-loop",
+   "dir": "ai-3d-asset-generation-loop",
+   "category": "game-development",
+   "description": "Use when generating 3D game assets or worlds with AI and verifying them visually.",
+   "lines": 203,
+   "references": 0
+  },
+  {
+   "name": "atomic-acres-asset-authoring",
+   "dir": "atomic-acres-asset-authoring",
+   "category": "game-development",
+   "description": "Use when authoring AI-assisted Atomic Acres assets.",
+   "lines": 174,
+   "references": 2
+  },
+  {
+   "name": "atomic-acres-procedural-art-authoring",
+   "dir": "atomic-acres-procedural-art-authoring",
+   "category": "game-development",
+   "description": "Use when authoring procedural Three.js art for Atomic Acres: reusable code-only generators (forge-kit parts, materials, capture) or a bounded single-file micro-addition to a Farcrysis-style module.",
+   "lines": 152,
+   "references": 9
+  },
+  {
+   "name": "blender-gauntlet-loop",
+   "dir": "blender-gauntlet-loop",
+   "category": "game-development",
+   "description": "Use when building a whole Blender scene or hero asset to photographic bar via graybox, fixed-camera review cycles and fresh critics.",
+   "lines": 126,
+   "references": 0
+  },
+  {
+   "name": "comfyui-3d-native-pipeline",
+   "dir": "comfyui-3d-native-pipeline",
+   "category": "game-development",
+   "description": "Use to turn a concept image into a textured, game-ready glTF mesh locally with ComfyUI's built-in Trellis.2 / Pixal3D 3D nodes - no custom node packs, no paid API.",
+   "lines": 247,
+   "references": 0
+  },
+  {
+   "name": "game-animation-asset-pipeline",
+   "dir": "game-animation-asset-pipeline",
+   "category": "game-development",
+   "description": "Use for game-ready mocap, text-to-motion, realtime motion planners recorded offline, H3 sprites, and image-to-3D.",
+   "lines": 362,
+   "references": 0
+  },
+  {
+   "name": "game-hud-menu-overhaul",
+   "dir": "game-hud-menu-overhaul",
+   "category": "game-development",
+   "description": "Redesign and modernize a game HUD, main menu, lobby, loadout, overlays, and responsive UI without losing gameplay controls, multiplayer states, or accessibility. Use for minimal-tech UI overhauls, monolithic HTML/CSS extraction, map-card order/naming, in-match class switching, pre-match or game-select shells, and UI visual-regression work.",
+   "lines": 91,
+   "references": 1
+  },
+  {
+   "name": "game-recording-to-engine-import",
+   "dir": "game-recording-to-engine-import",
+   "category": "game-development",
+   "description": "Import a game's map into Unreal, turn a game recording into a cinematic, extract a level from a shipped game (CoD/C2M/C2UE), or build a COD importer via AGR/T6GR record-then-import or LiveLink streaming. Only for game-to-engine recording and map-extraction work; not for ordinary Unreal or Three.js tasks.",
+   "lines": 155,
+   "references": 3
+  },
+  {
+   "name": "game-release-benchmark-guard",
+   "dir": "game-release-benchmark-guard",
+   "category": "game-development",
+   "description": "Freeze an approved game build as an immutable benchmark, keep a byte-exact rollback channel, and block promotions that lose retained gameplay, netcode, rendering or release contracts. Use for live/stable channel changes, best-known-build calls, renderer migrations, regression audits, release reconciliation and rollback planning.",
+   "lines": 49,
+   "references": 1
+  },
+  {
+   "name": "generated-asset-rigging",
+   "dir": "generated-asset-rigging",
+   "category": "game-development",
+   "description": "Rig this model: auto-rig a generated mesh with no skeleton, Trellis/Tripo output to game. Mesh prep, rigger choice, verification, GLB export. Not animation on an existing rig (game-animation-asset-pipeline) nor face/likeness capture (likeness-to-game-character).",
+   "lines": 126,
+   "references": 2
+  },
+  {
+   "name": "img2threejs",
+   "dir": "img2threejs",
+   "category": "game-development",
+   "description": "Turn an object or character reference image into a quality-gated, animation-ready procedural Three.js model built in code. Use for image-to-3D reconstruction, detail-accurate object rebuilds, stylized/likeness-maximized human characters, sculpt specs, and staged code generation.",
+   "lines": 614,
+   "references": 0
+  },
+  {
+   "name": "likeness-to-game-character",
+   "dir": "likeness-to-game-character",
+   "category": "game-development",
+   "description": "Put my face in the game: custom character likeness from a photo to game character in Three.js/WebGPU. Covers photo to game character heads, avatar from a photo fallbacks, ARKit morphs, MPFB2 bodies and Mixamo/CMU retargeting.",
+   "lines": 167,
+   "references": 3
+  },
+  {
+   "name": "making-decent-games",
+   "dir": "making-decent-games",
+   "category": "game-development",
+   "description": "Use when the request is a whole game, a new game, or a vague 'make this game better': converts the request into ordered quality gates, an integrator-first build order, and a hand-off to the specialist skill that owns the hard part. Not for requests a named specialist already owns.",
+   "lines": 200,
+   "references": 4
+  },
+  {
+   "name": "open-world-city-art-loop",
+   "dir": "open-world-city-art-loop",
+   "category": "game-development",
+   "description": "Use when a brief asks for GTA-style open-world city or street art - blocks, facades, road surface, kerbs, street furniture, signage, traffic - in a procedural Three.js WebGPU/TSL stack. Covers the street-cell decomposition, choosing an inspectable bar, the originality boundary, and a frame budget the reference itself fails.",
+   "lines": 285,
+   "references": 0
+  },
+  {
+   "name": "photoreal-procedural-scene-forge",
+   "dir": "photoreal-procedural-scene-forge",
+   "category": "game-development",
+   "description": "Use when a whole scene or object must be built entirely from code and read as a photograph - no downloaded meshes or textures. Covers the physical light rig and derived exposure, per-family PBR ranges, millimetre-authored procedural wear, a headless capture harness, the two-critic measured gauntlet, and the lofted vehicle recipe.",
+   "lines": 188,
+   "references": 4
+  },
+  {
+   "name": "procedural-sdf-raymarched-worlds",
+   "dir": "procedural-sdf-raymarched-worlds",
+   "category": "game-development",
+   "description": "Use for math-driven procedural worlds with no imported meshes or textures - raymarched SDFs, analytic PBR, fBM fields - in Three.js WebGPU/TSL, D3D12/HLSL (TheForge) or headless compute. Covers the raymarch-vs-rasterise call, depth and collision integration, and ring-fencing the pass.",
+   "lines": 288,
+   "references": 2
+  },
+  {
+   "name": "reference-image-catalog",
+   "dir": "reference-image-catalog",
+   "category": "game-development",
+   "description": "Use when building a large frozen reference-image library (weapon POV/side profiles, map shots, asset sheets) to serve as the visual bar for builder/critic gauntlet loops in game projects. Covers shot-matrix enumeration, prompt templating, manifest pinning, and gauntlet integration.",
+   "lines": 131,
+   "references": 0
+  },
+  {
+   "name": "threejs-rtx-runtime-route",
+   "dir": "threejs-rtx-runtime-route",
+   "category": "game-development",
+   "description": "Use when a Three.js project wants RTX or ray tracing: pick native runtime vs in-browser, and ship a classic ray-traced preset well.",
+   "lines": 707,
+   "references": 0
+  },
+  {
+   "name": "threejs-source-prop-ingestion",
+   "dir": "threejs-source-prop-ingestion",
+   "category": "game-development",
+   "description": "Import editable Three.js prop factories from Vibe3D npm registries, including @thai-kit/props, with pinned provenance and measured runtime adaptation.",
+   "lines": 55,
+   "references": 0
+  },
+  {
+   "name": "threejs-webgpu-interior-lighting-look",
+   "dir": "threejs-webgpu-interior-lighting-look",
+   "category": "game-development",
+   "description": "Use to make a dark browser interior - subway, bunker, corridor, warehouse - read as high-end without GI, ray tracing or lightmaps: emissive fixtures, value composition, fog falloff, decal grime and a filmic post chain in Three.js WebGPU/TSL, with combat readability kept.",
+   "lines": 202,
+   "references": 0
+  },
+  {
+   "name": "threejs-webgpu-water",
+   "dir": "threejs-webgpu-water",
+   "category": "game-development",
+   "description": "Use for interactive Three.js WebGPU/TSL water: oceans, lakes, pools and ponds. Covers wave spectrum vs buoyancy parity, physical water colour by Beer-Lambert absorption, bubble backscatter, persistent breaking foam, shoreline and swimmable volume, per-arena water rosters, and the budgets and captures that admit any of it.",
+   "lines": 343,
+   "references": 1
+  },
+  {
+   "name": "webgpu-tsl-arena-forging",
+   "dir": "webgpu-tsl-arena-forging",
+   "category": "game-development",
+   "description": "Architect and verify Three.js game arenas on WebGPURenderer/TSL with strict quality gates. Use for WebGL-to-WebGPU migrations, ShaderMaterial-to-TSL conversion, ArenaVisualDefinition work, light leaks, missing or floating geometry, low-quality assets, offscreen antialiasing, atmosphere, shadows, or map-forging team coordination.",
+   "lines": 39,
+   "references": 2
+  },
+  {
+   "name": "codebase-inspection",
+   "dir": "codebase-inspection",
+   "category": "github",
+   "description": "Inspect codebases w/ pygount: LOC, languages, ratios.",
+   "lines": 121,
+   "references": 0
+  },
+  {
+   "name": "github-issue-to-pr",
+   "dir": "github-issue-to-pr",
+   "category": "github",
+   "description": "Carry a GitHub issue to a verified PR with honest CI state.",
+   "lines": 78,
+   "references": 0
+  },
+  {
+   "name": "github-workflows",
+   "dir": "github-workflows",
+   "category": "github",
+   "description": "Use when operating GitHub repositories end-to-end: authentication, repo inspection, issues, PR creation, PR review, CI triage, releases, and GitHub API work.",
+   "lines": 119,
+   "references": 2
+  },
+  {
+   "name": "gif-search",
+   "dir": "gif-search",
+   "category": "media",
+   "description": "Search/download GIFs from Tenor via curl + jq.",
+   "lines": 92,
+   "references": 0
+  },
+  {
+   "name": "heartmula",
+   "dir": "heartmula",
+   "category": "media",
+   "description": "HeartMuLa: Suno-like song generation from lyrics + tags.",
+   "lines": 172,
+   "references": 0
+  },
+  {
+   "name": "songsee",
+   "dir": "songsee",
+   "category": "media",
+   "description": "Audio spectrograms/features (mel, chroma, MFCC) via CLI.",
+   "lines": 84,
+   "references": 0
+  },
+  {
+   "name": "ai-model-operations",
+   "dir": "ai-model-operations",
+   "category": "mlops",
+   "description": "Use when managing ML/AI models across Hugging Face, local inference servers, quantization, evaluation, experiment tracking, provider balances, and model-specific tooling.",
+   "lines": 74,
+   "references": 1
+  },
+  {
+   "name": "generative-model-provenance",
+   "dir": "generative-model-provenance",
+   "category": "mlops",
+   "description": "Use when researching downloadable generative models.",
+   "lines": 88,
+   "references": 1
+  },
+  {
+   "name": "local-benchmark-verification",
+   "dir": "local-benchmark-verification",
+   "category": "mlops",
+   "description": "Use for reproducible local benchmark verification.",
+   "lines": 51,
+   "references": 1
+  },
+  {
+   "name": "local-inference-compatibility-gating",
+   "dir": "local-inference-compatibility-gating",
+   "category": "mlops",
+   "description": "Use before selecting local inference runtimes or models.",
+   "lines": 74,
+   "references": 1
+  },
+  {
+   "name": "local-model-benchmarking",
+   "dir": "local-model-benchmarking",
+   "category": "mlops",
+   "description": "Use when comparing local LLMs on fixed GPU hardware.",
+   "lines": 37,
+   "references": 13
+  },
+  {
+   "name": "local-model-runtime-recovery",
+   "dir": "local-model-runtime-recovery",
+   "category": "mlops",
+   "description": "Use when recovering local model servers canonically.",
+   "lines": 55,
+   "references": 4
+  },
+  {
+   "name": "local-model-stack-acceptance",
+   "dir": "local-model-stack-acceptance",
+   "category": "mlops",
+   "description": "Use for large local AI model-stack acceptance.",
+   "lines": 118,
+   "references": 8
+  },
+  {
+   "name": "local-qwen-mtp-configuration",
+   "dir": "local-qwen-mtp-configuration",
+   "category": "mlops",
+   "description": "Verify and configure local Qwen MTP 72k server for Hermes.",
+   "lines": 59,
+   "references": 3
+  },
+  {
+   "name": "local-vision-fallback",
+   "dir": "local-vision-fallback",
+   "category": "mlops",
+   "description": "Use when Dave explicitly requests local vision analysis.",
+   "lines": 91,
+   "references": 0
+  },
+  {
+   "name": "model-artifact-provenance",
+   "dir": "model-artifact-provenance",
+   "category": "mlops",
+   "description": "Use when verifying model files or matched benchmarks.",
+   "lines": 66,
+   "references": 0
+  },
+  {
+   "name": "model-runtime-verification",
+   "dir": "model-runtime-verification",
+   "category": "mlops",
+   "description": "Use for model/runtime pairing and GPU benchmark evidence.",
+   "lines": 59,
+   "references": 1
+  },
+  {
+   "name": "native-av-generation",
+   "dir": "native-av-generation",
+   "category": "mlops",
+   "description": "Use for native audiovisual video generation and sync.",
+   "lines": 102,
+   "references": 3
+  },
+  {
+   "name": "quantization-benchmarking",
+   "dir": "quantization-benchmarking",
+   "category": "mlops",
+   "description": "Use for fixed-constraint local LLM quantization comparisons.",
+   "lines": 54,
+   "references": 4
+  },
+  {
+   "name": "travel-media-rebuild",
+   "dir": "travel-media-rebuild",
+   "category": "mlops",
+   "description": "Use when rebuilding rejected pet travel videos with ComfyUI.",
+   "lines": 130,
+   "references": 6
+  },
+  {
+   "name": "uk-local-ai-gpu-deal-watch",
+   "dir": "uk-local-ai-gpu-deal-watch",
+   "category": "mlops",
+   "description": "Scan the UK new and used market for NVIDIA CUDA GPUs with 16GB+ VRAM for Dave's local-AI rig; compare price, VRAM, inference value, power, fit, risk, and multi-GPU usefulness.",
+   "lines": 182,
+   "references": 0
+  },
+  {
+   "name": "obsidian",
+   "dir": "obsidian",
+   "category": "note-taking",
+   "description": "Read, search, create, and edit notes in the Obsidian vault.",
+   "lines": 69,
+   "references": 0
+  },
+  {
+   "name": "obsidian-desktop",
+   "dir": "obsidian-desktop",
+   "category": "note-taking",
+   "description": "Launch, verify, and troubleshoot Obsidian vaults on the desktop (Windows). Companion to the obsidian skill which handles file operations.",
+   "lines": 89,
+   "references": 1
+  },
+  {
+   "name": "aetheris-monitor",
+   "dir": "aetheris-monitor",
+   "category": "productivity",
+   "description": "Use when inspecting, recovering, or extending Dave's AETHERIS monitor.",
+   "lines": 177,
+   "references": 2
+  },
+  {
+   "name": "airtable",
+   "dir": "airtable",
+   "category": "productivity",
+   "description": "Airtable REST API via curl. Records CRUD, filters, upserts.",
+   "lines": 230,
+   "references": 0
+  },
+  {
+   "name": "box",
+   "dir": "box",
+   "category": "productivity",
+   "description": "Box manages cloud files, sharing, search, and metadata.",
+   "lines": 118,
+   "references": 10
+  },
+  {
+   "name": "conversation-retention-privacy",
+   "dir": "conversation-retention-privacy",
+   "category": "productivity",
+   "description": "Use when deleting chats, memory, transcripts, or messages.",
+   "lines": 108,
+   "references": 4
+  },
+  {
+   "name": "document-to-action-items",
+   "dir": "document-to-action-items",
+   "category": "productivity",
+   "description": "Extract cited obligations, deadlines, tasks from documents.",
+   "lines": 82,
+   "references": 0
+  },
+  {
+   "name": "docx",
+   "dir": "docx",
+   "category": "productivity",
+   "description": "Create, read, edit, template, and review Word .docx files.",
+   "lines": 197,
+   "references": 1
+  },
+  {
+   "name": "google-workspace",
+   "dir": "google-workspace",
+   "category": "productivity",
+   "description": "Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python.",
+   "lines": 339,
+   "references": 2
+  },
+  {
+   "name": "hermes-media-delivery",
+   "dir": "hermes-media-delivery",
+   "category": "productivity",
+   "description": "How to reliably deliver local files (images, audio, video) to users via Hermes on different platforms. Covers the MEDIA: prefix, platform-specific path quirks, and gotchas.",
+   "lines": 40,
+   "references": 0
+  },
+  {
+   "name": "maps",
+   "dir": "maps",
+   "category": "productivity",
+   "description": "Geocode, POIs, routes, timezones via OpenStreetMap/OSRM.",
+   "lines": 196,
+   "references": 0
+  },
+  {
+   "name": "meeting-action-items",
+   "dir": "meeting-action-items",
+   "category": "productivity",
+   "description": "Turn meeting notes into cited decisions, owners, tickets.",
+   "lines": 88,
+   "references": 0
+  },
+  {
+   "name": "messaging-progress-ux",
+   "dir": "messaging-progress-ux",
+   "category": "productivity",
+   "description": "Use when designing low-noise messaging and delivery workflows.",
+   "lines": 323,
+   "references": 13
+  },
+  {
+   "name": "nano-pdf",
+   "dir": "nano-pdf",
+   "category": "productivity",
+   "description": "Use when editing a PDF with nano-pdf after external-processing approval.",
+   "lines": 62,
+   "references": 0
+  },
+  {
+   "name": "notion",
+   "dir": "notion",
+   "category": "productivity",
+   "description": "Notion API + ntn CLI: pages, databases, markdown, Workers.",
+   "lines": 449,
+   "references": 1
+  },
+  {
+   "name": "ocr-and-documents",
+   "dir": "ocr-and-documents",
+   "category": "productivity",
+   "description": "Extract text from PDFs/scans (pymupdf, marker-pdf).",
+   "lines": 176,
+   "references": 0
+  },
+  {
+   "name": "pdf",
+   "dir": "pdf",
+   "category": "productivity",
+   "description": "PDF files: create, read, merge, fill, OCR, edit text.",
+   "lines": 126,
+   "references": 3
+  },
+  {
+   "name": "petdex",
+   "dir": "petdex",
+   "category": "productivity",
+   "description": "Install and select animated petdex mascots for Hermes.",
+   "lines": 90,
+   "references": 0
+  },
+  {
+   "name": "powerpoint",
+   "dir": "powerpoint",
+   "category": "productivity",
+   "description": "Create, read, edit .pptx decks with python-pptx.",
+   "lines": 221,
+   "references": 0
+  },
+  {
+   "name": "product-price-monitor",
+   "dir": "product-price-monitor",
+   "category": "productivity",
+   "description": "Watch product, flight, or listing prices; alert on target.",
+   "lines": 80,
+   "references": 0
+  },
+  {
+   "name": "session-librarian",
+   "dir": "session-librarian",
+   "category": "productivity",
+   "description": "Organize sessions by prompt: find, rename, archive, prune.",
+   "lines": 106,
+   "references": 0
+  },
+  {
+   "name": "teams-meeting-pipeline",
+   "dir": "teams-meeting-pipeline",
+   "category": "productivity",
+   "description": "Use when operating Teams meeting summaries and Graph subscriptions.",
+   "lines": 119,
+   "references": 0
+  },
+  {
+   "name": "usage-reports",
+   "dir": "usage-reports",
+   "category": "productivity",
+   "description": "Format and generate Hermes usage reports (Codex, DeepSeek, session stats).",
+   "lines": 28,
+   "references": 0
+  },
+  {
+   "name": "vault-ops",
+   "dir": "vault-ops",
+   "category": "productivity",
+   "description": "Use after Obsidian vault merges, structural changes, or content imports.",
+   "lines": 125,
+   "references": 4
+  },
+  {
+   "name": "weekly-review-planning",
+   "dir": "weekly-review-planning",
+   "category": "productivity",
+   "description": "Weekly reset: commitments, stalled work, next-week plan.",
+   "lines": 82,
+   "references": 0
+  },
+  {
+   "name": "xlsx",
+   "dir": "xlsx",
+   "category": "productivity",
+   "description": "Create, read, edit Excel .xlsx workbooks and CSVs.",
+   "lines": 197,
+   "references": 1
+  },
+  {
+   "name": "SkillScan",
+   "dir": "skillscan",
+   "category": "quality",
+   "description": ">",
+   "lines": 98,
+   "references": 0
+  },
+  {
+   "name": "visual-gauntlet-loop",
+   "dir": "visual-gauntlet-loop",
+   "category": "quality",
+   "description": "Use for bounded builder/critic loops on real artifacts.",
+   "lines": 84,
+   "references": 0
+  },
+  {
+   "name": "competitor-news-monitor",
+   "dir": "competitor-news-monitor",
+   "category": "research",
+   "description": "Watch named companies for material news; cited digests.",
+   "lines": 89,
+   "references": 0
+  },
+  {
+   "name": "document-to-private-knowledge",
+   "dir": "document-to-private-knowledge",
+   "category": "research",
+   "description": "Use for cited document ingestion into private knowledge.",
+   "lines": 69,
+   "references": 1
+  },
+  {
+   "name": "grounded-citations",
+   "dir": "grounded-citations",
+   "category": "research",
+   "description": "Ground answers and documents in cited, verifiable sources.",
+   "lines": 258,
+   "references": 2
+  },
+  {
+   "name": "research-intelligence-workflows",
+   "dir": "research-intelligence-workflows",
+   "category": "research",
+   "description": "Use when collecting, monitoring, synthesizing, or writing research from papers, arXiv, blogs/RSS, prediction markets, YouTube transcripts, and local knowledge bases.",
+   "lines": 76,
+   "references": 0
+  },
+  {
+   "name": "robot-twin-drawing",
+   "dir": "robot-twin-drawing",
+   "category": "robotics",
+   "description": "Prepare and evaluate Reachy Mini plus SO101 drawing experiments in a digital twin, with calibrated camera/tool frames and an explicit simulation-to-hardware handoff.",
+   "lines": 62,
+   "references": 0
+  },
+  {
+   "name": "openhue",
+   "dir": "openhue",
+   "category": "smart-home",
+   "description": "Use when controlling Philips Hue lights with OpenHue CLI.",
+   "lines": 117,
+   "references": 0
+  },
+  {
+   "name": "xurl",
+   "dir": "xurl",
+   "category": "social-media",
+   "description": "Use when operating X/Twitter through the official xurl CLI.",
+   "lines": 450,
+   "references": 0
+  },
+  {
+   "name": "yuanbao",
+   "dir": "yuanbao",
+   "category": "social-media",
+   "description": "Yuanbao (元宝) groups: @mention users, query info/members.",
+   "lines": 109,
+   "references": 0
+  },
+  {
+   "name": "additive-module-authoring",
+   "dir": "additive-module-authoring",
+   "category": "software-development",
+   "description": "Use when building additive visual FX modules.",
+   "lines": 191,
+   "references": 0
+  },
+  {
+   "name": "ai-assisted-repository-review",
+   "dir": "ai-assisted-repository-review",
+   "category": "software-development",
+   "description": "Use when reviewing a repository's code, assets, tests, rules, architecture, or release hygiene with an external AI reviewer while Hermes independently verifies every consequential claim.",
+   "lines": 333,
+   "references": 22
+  },
+  {
+   "name": "atomic-acres-gameplay-patterns",
+   "dir": "atomic-acres-gameplay-patterns",
+   "category": "software-development",
+   "description": "Use when fixing Atomic Acres gameplay bugs or freezes.",
+   "lines": 122,
+   "references": 3
+  },
+  {
+   "name": "atomic-acres-live-reconciliation",
+   "dir": "atomic-acres-live-reconciliation",
+   "category": "software-development",
+   "description": "Use when Atomic Acres live output regresses.",
+   "lines": 131,
+   "references": 6
+  },
+  {
+   "name": "atomic-acres-release-coordination",
+   "dir": "atomic-acres-release-coordination",
+   "category": "software-development",
+   "description": "Use for any Atomic Acres or Black Ops-style game code, CI, PR, merge, release, Pages, or multi-machine contribution work. Enforces the repository-owned contribution ledger and serialized production workflow.",
+   "lines": 143,
+   "references": 0
+  },
+  {
+   "name": "bounded-product-acceptance",
+   "dir": "bounded-product-acceptance",
+   "category": "software-development",
+   "description": "Use for bounded product acceptance.",
+   "lines": 81,
+   "references": 1
+  },
+  {
+   "name": "browser-game-dev-server-troubleshooting",
+   "dir": "browser-game-dev-server-troubleshooting",
+   "category": "software-development",
+   "description": "Debug Vite/browser game dev server runtime errors — WebGPU secure-context gating, port/process discovery on Windows, renderer fallback routes, and LAN vs localhost access patterns.",
+   "lines": 137,
+   "references": 0
+  },
+  {
+   "name": "browser-game-runtime-debugging",
+   "dir": "browser-game-runtime-debugging",
+   "category": "software-development",
+   "description": "Use when debugging browser game freezes, textures, or input.",
+   "lines": 198,
+   "references": 6
+  },
+  {
+   "name": "browser-multiplayer-netcode",
+   "dir": "browser-multiplayer-netcode",
+   "category": "software-development",
+   "description": "Design, debug, and verify browser-hosted real-time multiplayer: WebRTC topology, adaptive replication, host authority, lag compensation, hit confirmation, diagnostics, and WAN evidence.",
+   "lines": 104,
+   "references": 2
+  },
+  {
+   "name": "dogfood",
+   "dir": "dogfood",
+   "category": "software-development",
+   "description": "Use when performing authorized exploratory QA of web apps.",
+   "lines": 172,
+   "references": 1
+  },
+  {
+   "name": "github",
+   "dir": "github",
+   "category": "software-development",
+   "description": "GitHub via gh CLI: PRs, issues, reviews, repos, auth.",
+   "lines": 57,
+   "references": 10
+  },
+  {
+   "name": "hermes-agent-skill-authoring",
+   "dir": "hermes-agent-skill-authoring",
+   "category": "software-development",
+   "description": "Use when authoring Hermes SKILL.md files in a repository.",
+   "lines": 210,
+   "references": 0
+  },
+  {
+   "name": "hermes-desktop-app-development",
+   "dir": "hermes-desktop-app-development",
+   "category": "software-development",
+   "description": "Use when editing or building the Hermes Desktop app source.",
+   "lines": 81,
+   "references": 1
+  },
+  {
+   "name": "hermes-desktop-plugins",
+   "dir": "hermes-desktop-plugins",
+   "category": "software-development",
+   "description": "Write desktop app plugins that add UI panes and commands.",
+   "lines": 165,
+   "references": 0
+  },
+  {
+   "name": "hermetic-tool-discipline",
+   "dir": "hermetic-tool-discipline",
+   "category": "software-development",
+   "description": "Use when operating Hermes tools. Patch, path, batch fixes.",
+   "lines": 134,
+   "references": 12
+  },
+  {
+   "name": "hitl-candidate-verification",
+   "dir": "hitl-candidate-verification",
+   "category": "software-development",
+   "description": "Use for HITL candidate verification.",
+   "lines": 128,
+   "references": 1
+  },
+  {
+   "name": "inspecting-hermes-desktop-dom",
+   "dir": "inspecting-hermes-desktop-dom",
+   "category": "software-development",
+   "description": "Use when inspecting a development Hermes Desktop DOM over CDP.",
+   "lines": 177,
+   "references": 0
+  },
+  {
+   "name": "live-release-state-verification",
+   "dir": "live-release-state-verification",
+   "category": "software-development",
+   "description": "Use when verifying deployed releases versus candidates.",
+   "lines": 60,
+   "references": 0
+  },
+  {
+   "name": "multimodal-harness-debugging",
+   "dir": "multimodal-harness-debugging",
+   "category": "software-development",
+   "description": "Use when debugging pasted images or vision routing.",
+   "lines": 111,
+   "references": 3
+  },
+  {
+   "name": "orchestration-repository-hardening",
+   "dir": "orchestration-repository-hardening",
+   "category": "software-development",
+   "description": "Use when hardening multi-agent orchestration repositories.",
+   "lines": 79,
+   "references": 4
+  },
+  {
+   "name": "realtime-browser-qa",
+   "dir": "realtime-browser-qa",
+   "category": "software-development",
+   "description": "Use when designing, debugging, or verifying Playwright/browser QA for games, simulations, WebGL scenes, physics, animation-heavy UIs, or other frame-driven applications. Also for whole-world mechanical sweeps: traversability/passability gates and draw-call budgets.",
+   "lines": 216,
+   "references": 13
+  },
+  {
+   "name": "repository-request-reconciliation",
+   "dir": "repository-request-reconciliation",
+   "category": "software-development",
+   "description": "Use when reconciling requests across branches and releases.",
+   "lines": 115,
+   "references": 3
+  },
+  {
+   "name": "session-handoff-and-continuity",
+   "dir": "session-handoff-and-continuity",
+   "category": "software-development",
+   "description": "Use to gracefully hand-off work across sessions and models.",
+   "lines": 117,
+   "references": 3
+  },
+  {
+   "name": "simplify-code",
+   "dir": "simplify-code",
+   "category": "software-development",
+   "description": "Use when simplifying recent code changes with parallel review.",
+   "lines": 272,
+   "references": 0
+  },
+  {
+   "name": "software-development-workflows",
+   "dir": "software-development-workflows",
+   "category": "software-development",
+   "description": "Use when planning, debugging, testing, reviewing, or instrumenting software changes with Hermes; covers reusable engineering methods rather than project-specific code.",
+   "lines": 147,
+   "references": 1
+  },
+  {
+   "name": "the-forge-game-engine",
+   "dir": "the-forge-game-engine",
+   "category": "software-development",
+   "description": "The Forge — C++23/DirectX 12 robot-arm teleop game with SO-ARM101 digital twin, chess pieces, and custom physics. Use for any Forge build, debug, physics, rendering, or arm/teleop task.",
+   "lines": 180,
+   "references": 24
+  },
+  {
+   "name": "the-forge-robot-arm-game",
+   "dir": "the-forge-robot-arm-game",
+   "category": "software-development",
+   "description": "Develop, debug, and launch The Forge — a DirectX 12 C++ robot arm teleoperation game with chess-piece physics, SO-ARM101 digital twin, and real hardware bridge.",
+   "lines": 433,
+   "references": 8
+  },
+  {
+   "name": "threejs-frame-loop-audit",
+   "dir": "threejs-frame-loop-audit",
+   "category": "software-development",
+   "description": "Use to audit and fix Three.js frame-loop cost, GPU leaks and visual defects.",
+   "lines": 174,
+   "references": 0
+  },
+  {
+   "name": "threejs-game-development",
+   "dir": "threejs-game-development",
+   "category": "software-development",
+   "description": "Build or improve Three.js games: gameplay loops, assets, animation, lighting, audio, debugging, performance, and end-to-end QA. Use specialist skills for WebGPU arenas, HUDs, multiplayer, and releases.",
+   "lines": 131,
+   "references": 11
+  },
+  {
+   "name": "threejs-procedural-vegetation",
+   "dir": "threejs-procedural-vegetation",
+   "category": "software-development",
+   "description": "Use when placing dense THREE.js foliage via InstancedMesh.",
+   "lines": 444,
+   "references": 4
+  },
+  {
+   "name": "typescript-bundler-development-patterns",
+   "dir": "typescript-bundler-development-patterns",
+   "category": "software-development",
+   "description": "Use when tsc/bundler diverge or masked circular imports hit.",
+   "lines": 45,
+   "references": 1
+  },
+  {
+   "name": "unreal-content-pipeline",
+   "dir": "unreal-content-pipeline",
+   "category": "software-development",
+   "description": "Use when building or verifying an Unreal content pipeline.",
+   "lines": 409,
+   "references": 6
+  },
+  {
+   "name": "verification-after-handoffs",
+   "dir": "verification-after-handoffs",
+   "category": "software-development",
+   "description": "Use after handoffs to freshly verify changed paths.",
+   "lines": 57,
+   "references": 2
+  },
+  {
+   "name": "workspace-bound-verification",
+   "dir": "workspace-bound-verification",
+   "category": "software-development",
+   "description": "Use when canonical tests run in exact environment.",
+   "lines": 85,
+   "references": 3
+  },
+  {
+   "name": "blocked-page-recovery",
+   "dir": "blocked-page-recovery",
+   "category": "web",
+   "description": "Use when a fetch fails: 403/429, paywall, WAF, bot wall.",
+   "lines": 138,
+   "references": 0
+  }
+ ]
+}

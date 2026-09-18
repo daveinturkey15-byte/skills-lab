@@ -310,7 +310,7 @@ export const room: RoomDefinition = {
     // Door-side repeat of the same chart. The back-wall hanging only lands for
     // visitors already inside; the doorway frame cuts above it, so entering
     // visitors get the curves beside the legend on the proven sightline.
-    const nearGeometry = new THREE.PlaneGeometry(3.5, 1.1);
+    const nearGeometry = new THREE.PlaneGeometry(4.6, 1.44);
     disposables.push(nearGeometry);
     const nearBoard = new THREE.Mesh(nearGeometry, chartMaterial);
     nearBoard.position.set(-2.6, 1.7, -2.4);

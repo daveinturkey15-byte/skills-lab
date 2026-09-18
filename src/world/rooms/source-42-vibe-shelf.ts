@@ -39,16 +39,29 @@ export const room: RoomDefinition = {
     mats.push(plinthMat);
     const bandGeo = new T.BoxGeometry(2.5, 0.25, 2.5);
     geos.push(bandGeo);
+    // Back row stands on a riser: from the low doorway camera it would
+    // otherwise hide directly behind the front row in the same columns.
+    const riserGeo = new T.BoxGeometry(13.6, 1.6, 3.2);
+    geos.push(riserGeo);
+    const riserMat = new T.MeshStandardMaterial({ color: 0x3a434a, roughness: 0.9 });
+    mats.push(riserMat);
+    const riser = new T.Mesh(riserGeo, riserMat);
+    riser.position.set(0, 0.8, 3.5);
+    root.add(riser);
     for (let i = 0; i < 6; i += 1) {
-      const cx = -4 + (i % 3) * 4;
-      const cz = -1.5 + Math.floor(i / 3) * 5;
+      const row = Math.floor(i / 3);
+      // Staggered columns: the back row sits in the front row's gaps, so no
+      // emblem hides directly behind another from the low doorway camera.
+      const cx = -3.4 + (i % 3) * 3.4 + row * 1.7;
+      const cz = -1.5 + row * 5;
+      const lift = row * 1.6;
       const plinth = new T.Mesh(plinthGeo, plinthMat);
-      plinth.position.set(cx, 0.5, cz);
+      plinth.position.set(cx, 0.5 + lift, cz);
       root.add(plinth);
       const bandMat = new T.MeshStandardMaterial({ color: cols[i], roughness: 0.5, emissive: cols[i], emissiveIntensity: 0.25 });
       mats.push(bandMat);
       const band = new T.Mesh(bandGeo, bandMat);
-      band.position.set(cx, 1.05, cz);
+      band.position.set(cx, 1.05 + lift, cz);
       root.add(band);
 
       // One emblem per tool, big and distinct from the door.
@@ -85,8 +98,9 @@ export const room: RoomDefinition = {
         emblem = new T.Mesh(g, new T.MeshStandardMaterial({ color: cols[i], roughness: 0.4 }));
         mats.push(emblem.material as THREE.Material);
       }
-      emblem.position.set(cx, 2.3, cz);
-      emblem.userData.spin = 0.2 + i * 0.06;
+      emblem.position.set(cx, 2.3 + lift, cz);
+      emblem.scale.setScalar(1.25);
+      emblem.userData.spin = 0.4 + i * 0.12;
       root.add(emblem);
       void names;
     }

@@ -1,12 +1,12 @@
 /**
  * Source 27 — Three.js game skill pack (majidmanzarpour), feel-loop extract.
- *
  * Restages the lab demo's extracted method — hitstop freezing the response
  * clock, impact feedback driven by that frozen clock, a cooldown gating the
  * next hit, explicit update order — at human scale: a striker arm on the left
  * hits a target dummy on the right every 1.4 s, with flash, knockback and a
- * live cooldown/hitstop scoreboard flanking the arena where the doorway sees
- * it (the back wall reads blank from this door, verified in captures).
+ * live cooldown/hitstop scoreboard on a stand right of the striker post where
+ * the doorway sees it (the back wall reads blank from this door, and the left
+ * of the dummy sits out of the doorway frame — both verified in captures).
  */
 import type * as THREE from 'three';
 import type { RoomDefinition } from '../contract';
@@ -105,34 +105,48 @@ export const room: RoomDefinition = {
     flash.rotation.y = Math.PI;
     root.add(flash);
 
-    // Cooldown + hitstop scoreboard flanking the arena on the right, facing
-    // the door. It stood on the back wall first, but that wall reads blank
-    // from this doorway in captures, so the readout moved to where the bars
-    // are actually seen; sizes shrink to fit the nearer address.
-    const wallGeo = new T.PlaneGeometry(5.2, 1.2);
+    // Cooldown + hitstop scoreboard on a label stand between the camera and
+    // the action, facing the door. It stood on the back wall first (reads
+    // blank from this door), then left of the dummy (out of the doorway
+    // frame), then right of the striker post (half behind the post, half out
+    // of frame) — all verified in captures. Centre-floor on a stand is the
+    // slot the doorway camera actually sees; the legs make it an exhibit
+    // label, and the continuously sweeping cooldown bar keeps visible motion
+    // in every capture regardless of where the 1.4 s beat lands.
+    const wallGeo = new T.PlaneGeometry(1.9, 1.2);
     geos.push(wallGeo);
     const wallMat = new T.MeshBasicMaterial({ color: 0x141b1e });
     mats.push(wallMat);
     const wall = new T.Mesh(wallGeo, wallMat);
-    wall.position.set(4.3, 2.0, -2.2);
+    wall.position.set(-1.0, 1.1, -3.5);
     wall.rotation.y = Math.PI;
     root.add(wall);
-    const coolGeo = new T.PlaneGeometry(4.6, 0.32);
+    const coolGeo = new T.PlaneGeometry(1.55, 0.3);
     geos.push(coolGeo);
     const coolMat = new T.MeshBasicMaterial({ color: 0x46c08a });
     mats.push(coolMat);
     const cool = new T.Mesh(coolGeo, coolMat);
-    cool.position.set(4.3, 2.25, -2.15);
+    cool.position.set(-1.0, 1.35, -3.55);
     cool.rotation.y = Math.PI;
     root.add(cool);
-    const stopGeo = new T.PlaneGeometry(4.6, 0.32);
+    const stopGeo = new T.PlaneGeometry(1.55, 0.3);
     geos.push(stopGeo);
     const stopMat = new T.MeshBasicMaterial({ color: 0xe14b4b });
     mats.push(stopMat);
     const stop = new T.Mesh(stopGeo, stopMat);
-    stop.position.set(4.3, 1.78, -2.15);
+    stop.position.set(-1.0, 0.88, -3.55);
     stop.rotation.y = Math.PI;
     root.add(stop);
+    // Stand legs, staging only.
+    for (const legX of [-1.7, -0.3]) {
+      const legGeo = new T.CylinderGeometry(0.035, 0.035, 0.55, 8);
+      geos.push(legGeo);
+      const legMat = new T.MeshStandardMaterial({ color: 0x8a949a, roughness: 0.6 });
+      mats.push(legMat);
+      const leg = new T.Mesh(legGeo, legMat);
+      leg.position.set(legX, 0.27, -3.5);
+      root.add(leg);
+    }
 
     const HIT = 1.4;
     const STOP = 0.12;
@@ -151,12 +165,11 @@ export const room: RoomDefinition = {
       // Explicit order: cooldown, hitstop, physics, feedback decay.
       const coolFrac = Math.min(1, clock / HIT);
       cool.scale.x = Math.max(0.001, coolFrac);
-      cool.position.x = 4.3 - 2.3 * (1 - coolFrac);
+      cool.position.x = -1.0 - 0.775 * (1 - coolFrac);
       if (hitstopLeft > 0) {
         hitstopLeft -= step;
         stop.scale.x = 1;
-        stop.position.x = 0;
-        armPivot.rotation.z = -0.5;
+        stop.position.x = -1.0;
         flashMat.opacity = 0.95;
         return;
       }

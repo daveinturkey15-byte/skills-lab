@@ -30,6 +30,21 @@ interface DemoManifestEntry {
   };
 }
 
+interface SkillEntry {
+  name: string;
+  category: string;
+  description: string;
+  lines: number;
+  references: number;
+}
+
+/**
+ * Skill doors are numbered from here so they can never collide with a catalogue
+ * source, and so an id in a report is instantly recognisable as a skill rather
+ * than a source.
+ */
+const SKILL_DOOR_BASE = 900;
+
 interface CatalogSource {
   sourceId: number;
   title: string;
@@ -153,11 +168,48 @@ export async function collectRooms(baseUrl: string): Promise<RoomDefinition[]> {
     });
   }
 
+  /* ------------------ 4. skills with no source of their own ------------- */
+  //
+  // The world was keyed by catalogue source, so a skill only got a door if some
+  // external post happened to map to it. Measured: 11 of 22 game-development
+  // skills had none - including every skill written from this workspace's own
+  // failures, which are the most valuable ones we have. A showcase that only
+  // represents what other people published is not a showcase of what we know.
+  try {
+    const res = await fetch(`${baseUrl}assets/skills-lab/skills.json`, { cache: 'no-store' });
+    if (res.ok) {
+      const { skills = [] } = (await res.json()) as { skills: SkillEntry[] };
+      const covered = new Set<string>();
+      for (const s of sources) for (const m of s.skillMappings ?? []) covered.add(m.skill);
+
+      let n = 0;
+      for (const skill of skills) {
+        if (skill.category !== 'game-development' || covered.has(skill.name)) continue;
+        const id = SKILL_DOOR_BASE + n;
+        n += 1;
+        if (rooms.has(id)) continue;
+        rooms.set(id, {
+          sourceId: id,
+          skill: skill.name,
+          title: skill.name.replace(/-/g, ' '),
+          summary: skill.description || `The ${skill.name} skill.`,
+          kind: 'stub',
+          venue: 'world',
+          limitation:
+            `Skill door: ${skill.lines} lines, ${skill.references} reference file(s). `
+            + 'No external source maps to this one - it was written from our own work, '
+            + 'so there is no third-party demo to adapt and the room must be built.',
+        });
+      }
+    }
+  } catch { /* no manifest: the world is still the catalogue's, just smaller */ }
+
   // Venue is decided in one place from the catalogue, not per room: a hand
   // authored file cannot then forget to set it and silently become a world
   // room when what it holds is a document.
   for (const room of rooms.values()) {
     const src = byId.get(room.sourceId);
+    // A skill door has no catalogue row; it keeps the venue it was given.
     if (src) room.venue = venueFor(src).venue;
   }
 

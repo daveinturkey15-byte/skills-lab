@@ -10,22 +10,22 @@
  * plate's own frame, untouched. The source's texel-snapped toroidal follow
  * window is not shown because a room floor never follows anyone — stated,
  * not smuggled.
+ *
+ * Staging geometry: the doorway camera stands at local z = -4 (layout spawn
+ * is 4 m inside the door wall) at 1.6 m eye height looking +Z, and the inside
+ * camera stands at the room centre looking the same way — so the exhibit
+ * lives in the back half (centre z = +2), tilted 34° toward the door with
+ * its bottom edge anchored in a dark base box. An earlier staging at z = -3.5
+ * put the plates at the camera plane, half behind it and half under the
+ * floor, and the doorway read as two floating balls.
  */
 import type * as THREE from 'three';
 import type { RoomContext, RoomDefinition } from '../contract';
 const PLATE_W = 6.2;
 const PLATE_D = 8;
-// The doorway camera stands at local z = -4 (4 m inside the door wall) at
-// 1.6 m eye height, and this wing's world shell carries a full-height
-// barrier at local z = 0: everything past the room's middle never reaches
-// the door (the flat floor read as a sliver because only its near 2 m are
-// door-side of the wall). So both plates live entirely in the door half,
-// tilted 34° toward the door as drafting tables, bottom edge 2.8 m ahead of
-// the camera. Staging only; field, brush, bank and path below run in
-// plate-local coordinates and never know about the tilt or the address.
-const EXHIBIT_Z = -3.5;
+const EXHIBIT_Z = 2.0;
 const TILT = 0.6;
-const PIVOT_Y = 0.3;
+const PIVOT_Y = 2.55;
 const MAX_DEPTH = 0.5;
 const RELAX_STEP = 0.4;
 const RELAX_RATE = 0.05;
@@ -174,23 +174,38 @@ export const room: RoomDefinition = {
       pivot.position.set(side * 3.35, PIVOT_Y, EXHIBIT_Z);
       pivot.rotation.x = -TILT;
       pivot.add(mesh);
+      root.add(pivot);
       plates.push({ side, pivot, mesh, base, field: new DeformationField(resolution, PLATE_D, side > 0) });
     }
 
-    // Walkers are instruments, not subjects: human-scale blue balls riding the
-    // tilted surface so they read against the snow from the door. Placement
-    // maps the plate-local path point through the pivot, so the rigid tilt
-    // never leaks into field coordinates. Colour and size are staging; the
-    // driven path below is the technique's lissajous, unchanged in kind.
-    const markerGeometry = new THREE.SphereGeometry(0.7, 16, 12);
+    // Walkers are instruments, not subjects: lime balls riding the tilted
+    // surface so they read against both the snow and the blue groove from the
+    // door. Placement maps the plate-local path point through the pivot, so
+    // the rigid tilt never leaks into field coordinates. Colour and size are
+    // staging; the driven path below is the technique's lissajous, unchanged
+    // in kind.
+    const markerGeometry = new THREE.SphereGeometry(0.8, 16, 12);
     disposables.push(markerGeometry);
-    const markerMaterial = new THREE.MeshBasicMaterial({ color: 0x2f7fe0, toneMapped: false });
+    const markerMaterial = new THREE.MeshBasicMaterial({ color: 0x44ff44, toneMapped: false });
     disposables.push(markerMaterial);
     const walkers = [-1, 1].map(() => {
       const marker = new THREE.Mesh(markerGeometry, markerMaterial);
       root.add(marker);
       return marker;
     });
+
+    // Dark base boxes the tilted plates anchor into: staging only. They lift
+    // the exhibit off the shell floor so the plates read as objects with a
+    // boundary, and their edges give the doorway frame something to hold.
+    const baseGeometry = new THREE.BoxGeometry(6.6, 0.7, 2.4);
+    disposables.push(baseGeometry);
+    const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x1c2428, roughness: 0.95 });
+    disposables.push(baseMaterial);
+    for (const side of [-1, 1]) {
+      const base = new THREE.Mesh(baseGeometry, baseMaterial);
+      base.position.set(side * 3.35, 0.35, EXHIBIT_Z - 3.0);
+      root.add(base);
+    }
 
     const applyField = (plate: Plate): void => {
       const position = plate.mesh.geometry.getAttribute('position');

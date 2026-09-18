@@ -1,155 +1,148 @@
 # Lane W3 — rooms report
 
-12 rooms owned (sources 6, 7, 19, 37, 49, 58, 28, 48, 5, 17, 32, 46).
-2 room files edited, one fix cycle each; 10 room files verified untouched;
-no other lane's file touched. All captures by `qa/room-shot.mjs --source <id>`
-against `http://localhost:5199/skills-lab/`, which I verified serves this
-repository's own `dist` (identical `index.html` bundle hash at capture time),
-NVIDIA adapter, `high` quality.
+12 rooms owned (brief `W3-rooms.md`, current wave): 45, 42, 6, 18, 34, 47, 54,
+28, 5, 17, 32, 46. 2 room files edited (45: 1 cycle; 42: 3 cycles); 10 room
+files verified untouched. No other lane's file touched. No git write command
+run; no process killed; no dependency installed or upgraded.
 
-`npx tsc --noEmit`: exit 0, empty output (after the last edit).
+Note: this path previously held uncommitted content for a different source set
+(20/33/58/7/…, never committed). The current brief names this path as the W3
+report, so this file now reports the briefed set. The superseded content is not
+preserved here — it belongs to a rotated assignment, and the room files it
+describes are owned by other lanes.
 
-Gate note: the quality target ratcheted 0.38 → 0.41 mid-lane via another
-lane's `--all` wave. My brief's numbers were recorded at 0.38; everything
-below is re-captured at 0.41. I never ran `--all` (only `--all` ratchets).
+All captures by `node qa/room-shot.mjs --base
+http://localhost:5199/skills-lab/ --source <id>` (never `--all`, so the ratchet
+never moved on my account). Live target for every capture below: **0.41**
+(ratcheted up from the brief's 0.38 by another lane's `--all` wave before I
+started). NVIDIA adapter, `high` quality. I verified the preview serves this
+repository's own `dist` (`SERVES_CURRENT_DIST true`: served `index.html`
+byte-identical to local `dist/index.html` after the final build).
+
+`npx tsc --noEmit`: exit 0, empty output (after the last edit). Mid-lane it
+failed twice with `Cannot find name 'coolFrac'` in
+`src/world/rooms/source-27-feel-loop.ts` — another lane's in-flight breakage,
+not mine (W1 owns 27); it was resolved without my involvement and the final
+run is clean.
 
 ## Verdicts (target 0.41)
 
-| source | q | cov | det | hue | mot | verdict | cycles |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 6 img2threejs contract | 0.57 | 41% | 4% | 9 | 2% | PRESENT | 1 |
-| 32 WAN 2.2 (stub) | 0.04 | 3% | 1% | 0 | 0% | EMPTY, honest | 0 |
-| 37 Z-up cm to Y-up m | 0.44 | 17% | 3% | 6 | 9% | PRESENT | 0 |
-| 49 motion scaffold | 0.45 | 21% | 6% | 7 | 3% | PRESENT | 1 |
-| 58 DERMIS bust | 0.42 | 27% | 6% | 5 | 1% | PRESENT, fragile | 0 |
-| 46 bubble ocean | 0.46 | 21% | 5% | 3 | 29% | PRESENT | 0 |
-| 7 night street | 0.46 | 27% | 6% | 8 | 1% | PRESENT | 0 |
-| 19 raytracer | 0.51 | 34% | 6% | 8 | 0% | PRESENT | 0 |
-| 5 sprite atlas | 0.55 | 41% | 5% | 4 | 4% | PRESENT | 0 |
-| 17 quality bar | 0.62 | 35% | 10% | 8 | 2% | PRESENT | 0 |
-| 28 dissolve | 0.77 | 34% | 17% | 5 | 11% | PRESENT | 0 |
-| 48 interior look | 0.77 | 67% | 15% | 3 | 0% | PRESENT | 0 |
+| source | q | door | inside | det | hue | mot | verdict | cycles |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 45 generated-shell cleanup | 0.53 | 24% | 31% | 7% | 7 | 17% | PRESENT | 1 |
+| 42 vibe-stack shelf | 0.45 | 21% | 41% | 6% | 6 | 12% | PRESENT | 3 |
+| 6 img2threejs contract | 0.45 | 41% | 21% | 4% | 9 | 2% | PRESENT | 0 |
+| 18 grass meadow | 0.51 | 20% | 45% | 15% | 4 | 15% | PRESENT | 0 |
+| 34 subsystem contracts | 0.49 | 49% | 37% | 6% | 13 | 0% | PRESENT | 0 |
+| 47 street cell | 0.56 | 46% | 39% | 12% | 3 | 0% | PRESENT | 0 |
+| 54 pickup comparator | 0.46 | 31% | 20% | 6% | 3 | 9% | PRESENT | 0 |
+| 28 threshold dissolve | 0.63 | 34% | 18% | 16% | 5 | 13% | PRESENT | 0 |
+| 5 sprite atlas | 0.44 | 41% | 20% | 5% | 4 | 4% | PRESENT | 0 |
+| 17 quality bar | 0.50 | 35% | 61% | 10% | 8 | 1% | PRESENT | 0 |
+| 32 WAN 2.2 (stub) | 0.04 | 3% | 18% | 1% | 0 | 0% | EMPTY, honest | 0 |
+| 46 bubble ocean | 0.42 | 21% | 39% | 5% | 3 | 29% | PRESENT | 0 |
 
-11 PRESENT, 1 door honest by design (stub, see below).
+11 PRESENT, 1 honest stub by design. No console errors on any of my runs.
+Baselines for the ten untouched rooms were captured against the pre-edit
+`dist`; the rebuild after my 45/42 edits cannot change their renders (rooms
+never import each other — the contract guarantee), so those numbers stand.
 
 ## Per room
 
-**6 (webgpu).** Two 3x jerry cans on plinths: mesh-only failure left, gated
-spec-plus-runtime right with brass socket markers, wire collider and bobbing
-socket probe, red FAIL / green PASS bars behind. Cycle 1: bays sat at local
-z +3.6 (≈16 m through-door read, q=0.33, det 1%, hue 2, mot 0%); moved to
-z −1.5 (≈10 m) and put the gated half on a slow turntable (ungated stays put
-as the control). Technique maths untouched. 0.33 → 0.57. Look for: the gated
-can turning showing collider and probe; red bar left, green bar right.
-Caveat: the doorway frame includes room 3's water plane lower-left (world
-finding 1) — the PRESENT is earned mostly by the cans (the +0.24 delta is all
-staging), but a standalone share was not isolated. `limitation` unchanged and
-still accurate (no image input anywhere).
+**45 (webgpu).** Two voxel shells fill the doorway frame: smooth green
+welded-and-filled beside faceted red raw, the punched hole readable on entry.
+Cycle 1: baseline 0.40 BELOW BAR (coverage 14%, brief's 0.27 THIN long since
+fixed by an earlier staging); scaled both shells 1.25 → 1.5 and centred them
+(y 2.2 → 2.6, z 0.5 → 0.1, ring and seal patch riding the same delta so the
+hole markers stay aligned). Technique maths (voxel field, weld ordering, fill,
+smooth) untouched. 0.40 → 0.53. Look for: faceted-vs-smooth contrast, the dark
+hole mouth, the pulsing orange ring. Side note: the world orients this room
+180°, so local −X (raw) appears frame-right — verified against the file, not a
+colour bug. At the cap for this room by choice: one cycle was enough.
 
-**49 (webgpu).** Two 2.8 m hinge chains on a measurement disc: per-frame snap
-left, critically-damped spring right, tip trails drawing the difference.
-Cycle 1: q=0.38, down on detail (3%) with the flat disc reading as blank;
-added three range rings on the disc and a rolling-window cursor lapping the
-stage (the window the next plan step would take — the one concept with no
-visual). Spring/snap maths and 1.6 s phase untouched. 0.38 → 0.45. Look for:
-the amber cursor circling while both chains chase targets, green trail
-gliding where red corners. `limitation` unchanged (no network, five schematic
-hinges).
+**42 (webgpu).** Tiered shelf: three plinths forward, three raised on a riser
+behind in staggered columns, each with a large spinning emblem and an emissive
+band; the seventh tool's plinth lies on its side by the back wall, excluded.
+Cycles: (1) baseline 0.35 BELOW BAR with the back row fully occluded — added
+the riser, moved the front row toward the door, enlarged emblems 1.25×,
+doubled spin rates. 0.35 → 0.53, but the doorway showed only three cropped
+emblems, nearer and cut by the frame; (2) pulled the front row back, narrowed
+the columns, raised the riser to 1.6 m so the back tier clears the front row.
+0.53 → 0.46 with a calmer frame; (3) staggered the back columns half a pitch
+into the front row's gaps. 0.46 → 0.45. At the 3-cycle cap: hands off.
+Unresolved and owned: from the doorway only three emblems read clearly — the
+raised back tier is dim at 11 m and two of its emblems still hide in the front
+row's silhouette. The inside view is rich (41%) and all six separate once you
+walk in. A human should enter, turn, and count six spinning emblems; if the
+back tier still merges, the next move is brighter emblem lighting, not more
+geometry. `limitation` unchanged and still accurate (index only, re-verify
+licences before any install).
 
-**37 (webgpu).** Before bay (records fed raw, lying on their side) vs after
-bay (converted, revealed behind a progress fill). Untouched; q=0.44 at the
-current target. Coverage 17% is thin but the read is correct: from the door
-the left half floats wrong and the right half stands. 0 cycles spent; a second
-look would go at moving bays forward, but PRESENT means hands off. Look for:
-blocks popping in behind the green progress bar.
+**6 (webgpu).** Two 3× jerry cans on plinths: mesh-only failure beside gated
+spec-plus-runtime with brass socket markers, wire collider and verdict bars.
+Untouched; 0.45. Look for: red FAIL bar left, green PASS bar right.
 
-**58 (webgpu).** Generic mannequin bust with strand hair, mottled skin, hazel
-irises, single blink, head sway; chapter boards flank, diagnostic bars behind.
-Untouched; q=0.42, margin 0.01 — the lane's most fragile pass, and motion 1%
-means an unlucky two-frame probe could dip it under. Left alone per do-not-
-grind; if it falls, the cheapest honest lever is a wider blink or sway, not
-new content. Look for: the blink every ~4 s; no likeness input anywhere (the
-point).
+**18 (webgpu).** The floor is a wind-blown meadow over a ridge, thinning into
+cheaper rings with distance. Untouched; 0.51 with 15% detail, the lane's most
+detailed doorway. Look for: density falling off toward the walls.
+
+**34 (webgpu).** Six subsystem blocks exchange typed pulses over declared
+edges left, broadcast to everyone right. Untouched; 0.49 on 49% doorway
+coverage. Motion 0% on the probe — the pulses idle between probe frames, which
+is fine. Look for: pulses travelling edges left, flooding right.
+
+**47 (webgpu).** One street cell, treated at the door and grey beyond, in
+surface-priority order. Untouched; 0.56. Look for: road aggregate and tar
+seams giving way to greybox down the cell.
+
+**54 (webgpu).** Many-part pickup with modelled underbody on a turntable,
+outliner bars on the wall. Untouched; 0.46. Comparator posture holds: the
+authorship claim is the poster's, unproven here, per `limitation`. Look for:
+exhaust and chassis detail under the turntable truck.
+
+**28 (webgpu).** Intact teal panel beside dissolving amber panel with a bright
+edge band, one animated threshold. Untouched; 0.63, the lane's highest. Look
+for: the amber panel visibly dissolving with a light rim.
+
+**5 (webgpu).** Locally-drawn clip on flat magenta beside keyed pose-extreme
+atlas, filmstrip below with playhead. Untouched; 0.44. Licence posture
+verified against the catalogue before touching anything: no H3 model, weights
+or output anywhere; `limitation` carries the UK exclusion plainly. Look for:
+magenta keying out on the atlas half.
+
+**17 (webgpu).** Sparse flat diorama left, dense wind-blown layered one with a
+distant ridge right. Untouched; 0.50 with 61% inside coverage. NOT Cadle's
+scene (unretrievable — catalogue blocker); our own comparator, stated in file
+and `limitation`. Look for: density and depth right, flatness left.
 
 **46 (webgpu).** Two basins over one wave field: flat white tint wrong left,
-absorption-filtered green scatter right, shared foam proxy. Untouched; q=0.46,
-motion 29% (vertex paint every update). Stays inside its licence box: restated
-textbook physics, sine crests not FFT, no product code — `limitation` says so.
-Look for: white foam left vs green-shifted water right.
-
-**7 (webgpu).** Over-lit street left vs budgeted emissive-first street right,
-re-staged demo maths on a dark apron. Untouched; q=0.46. `limitation` owns the
-missing post chain. Look for: window glow doing the work on the right.
-
-**19 (webgpu).** CPU Whitted trace printed 10.5 m on the back wall, three
-traced spheres rebuilt at human scale on plinths in front. Untouched; q=0.51.
-Spheres idle-rotate (motion 0% on the probe — rotation too slow to register,
-which is fine; the trace is the exhibit). Look for: print-to-plinth
-correspondence left to right.
-
-**5 (webgpu).** Raw locally-drawn clip on magenta beside keyed pose-extreme
-atlas, filmstrip below with playhead. Untouched; q=0.55. Licence posture
-verified against the catalogue before touching anything: no H3 model, weights
-or output anywhere; `limitation` carries the UK exclusion plainly. 2D
-billboard, never a rig. Look for: magenta keying out on the atlas half.
-
-**17 (webgpu).** Sparse flat diorama left, dense wind-blown layered one with
-distant ridge right. Untouched; q=0.62. NOT Cadle's scene (unretrievable —
-catalogue blocker); our own comparator, stated in file and `limitation`.
-Look for: density and depth right, flatness left. Same corner-overlap geometry
-as rooms 5/6/7 (world finding 1) applies to this slot; no foreign content
-confirmed in its frame.
-
-**28 (webgpu).** Intact teal panel beside dissolving amber panel with bright
-edge band, one animated threshold. Untouched; q=0.77, the lane's joint best.
-CPU per-vertex stand-in for a GPU graph, stated in `limitation`. Look for: the
-amber panel visibly dissolving with a light rim.
-
-**48 (webgpu).** Two walk-between half-corridors: flat-lit failure left,
-graded dark-interior look right (value band, emissive fixtures, distance
-darkening, matte grime, motes, one exposure event). Untouched; q=0.77 on 67%
-coverage — the technique IS the room. `limitation` owns the absent post chain.
-Look for: the far end going dark because nothing lights it.
+absorption-filtered green scatter right, shared foam proxy, motion 29% from
+vertex paint. Untouched; 0.42 — the thinnest PRESENT in the lane, 0.01 over
+the bar. Stays inside its licence box: restated textbook physics, sine crests
+not FFT, no product code — `limitation` says so. No cycles spent: it clears
+the bar and the blocker constrains what may be built here. Look for: white
+foam left vs green-shifted water right.
 
 **32 (stub).** No `create`, per the catalogue blocker (weights unpinned,
 licence unverified against weights, no GPU generation this lane may run).
 EMPTY is the correct verdict; geometry here would fake a diffusion run. No
 cycles spent, none owed. Door and wall card carry the blocker.
 
-## World-level findings (not mine to fix — reporting, not editing)
-
-1. **First-rank corner rooms interpenetrate.** `planDoors` (`src/world/layout.ts:76-108`)
-   deals the same rank across all four wings at the same `along`, so adjacent
-   wings' rank-0 rooms sit 8.49 m centre-to-centre (measured from the gate's
-   own `__worldRooms`: pairs 1&8, 2&5, 3&6, 4&7; plus eight 12.53 m pairs e.g.
-   11&6, 14&3) while shells are 14×16 m. A 9×9 m shared volume follows by
-   construction. Consequence in my lane: room 3's water plane fills the
-   lower-left of room 6's doorway frame, and room 6's inside frame shows a
-   foreign terracotta/sage/brown figure (palette matches room 11's hero
-   staging, 12.5 m behind the back wall) standing in front of room 6's own
-   wall card. My rooms keep within their 14×16×6 bounds; the overlap is in the
-   layout, and only the layout can fix it.
-2. **Do not read my PRESENTs as correctness claims.** 6's 0.57 includes
-   neighbour pixels (finding 1); 58's 0.42 has 0.01 margin. Both are floors,
-   per the gate's own wording.
-3. **Parallel image reads in this harness can come back swapped** (seen again
-   this lane: two doorway PNGs returned each other's pixels in one block).
-   Every visual claim above was verified serially; numbers are from
-   `report-<id>.json`, not from pixels.
-
 ## What I verified vs did not
 
-Verified: `tsc --noEmit` exit 0 empty after the last edit; every q/cov/det/
-hue/mot number above from the current gate on the real adapter after a rebuild
-from the edited tree (preview hash-matched to `dist`); catalogue blockers for
-5/17/32/46 read before any decision; dispose paths walk the same registries
-the builders fill; no `any`, no cross-room imports, no renderer/post access,
-no third-party expression; seed-determinism untouched (turntable and cursor
-are pure functions of elapsed time); `git status` confirms only my two room
-files plus this report changed under my hand.
+Verified: `tsc --noEmit` exit 0, empty output after the last edit; every
+q/door/inside/det/hue/mot number above from the current gate on the real
+adapter (NVIDIA) at target 0.41 against a `dist` I hash-checked to this tree
+after the final build; catalogue blockers for 5/17/32/46 read before any
+decision; new geometry/materials in 42 ride the same `geos`/`mats` disposables
+the builder fills (45 adds no allocations — a rigid restage); no `any`, no
+cross-room imports, no renderer/post access, no third-party expression;
+seed-determinism preserved (all staging is constant); `git status` confirms my
+hand touched only the two room files plus this report; I never ran `--all`, so
+the 0.41 ratchet is not mine.
 
-Did not verify: walking the rooms with a real player; WebGL-fallback
-appearance; frame rate with four live rooms; the inside frames beyond room 6
-(foreign figure unattributed by isolation test — palette/distance match to
-room 11 only); whether rooms 5/7's frames contain neighbour pixels (geometry
-says possible, pixels unconfirmed); other lanes' rooms beyond the findings.
+Did not verify: walking the rooms with a real player (notably 42's back tier
+readability from all standing positions, and 45's inside view between the two
+large shells); WebGL-fallback appearance (`low` quality paths); frame rate
+with four live rooms; triangle/draw-call counts beyond keeping additions to
+one riser box and rigid transforms; any other lane's rooms.

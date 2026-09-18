@@ -164,6 +164,10 @@ export const room: RoomDefinition = {
         // every 1.6 s almost never lands inside a walk-in glance, so the
         // rubric's third question — does the muzzle light read — never got
         // answered; a burst keeps the same firing idea and stays visible.
+        // Plus a faint idle sway on both halves: real viewmodels never sit
+        // dead still, and without it the room is a photograph between bursts
+        // (motion 0% across back-to-back captures). Amplitude is 2 cm —
+        // readable as alive, far below the recoil it must not mask.
         const phase = time % 2.0;
         const pulse = (start: number): number => {
           const p = phase - start;
@@ -173,8 +177,11 @@ export const room: RoomDefinition = {
         muzzleLight.intensity = flashOn * 60;
         flashMat.opacity = flashOn * 0.95;
         const recoil = flashOn * 0.12;
+        const sway = Math.sin(time * 2.1) * 0.02;
         good.group.position.z = baseZ + recoil;
         bad.group.position.z = baseZ + recoil;
+        good.group.position.x = halfX + sway;
+        bad.group.position.x = -halfX + sway;
       },
       dispose: () => {
         for (const d of disposables) d.dispose();
